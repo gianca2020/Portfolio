@@ -109,18 +109,19 @@ export function buildMenuTree(content: Portfolio): MenuNode {
         preview: { type: 'info', icon: 'document', title: 'View Resume', detail: 'Read it right here, one screen at a time.' },
       },
       downloadResume('resume/download'),
-      {
-        kind: 'action',
-        id: 'resume/recruiter',
-        label: 'Recruiter View',
-        action: { type: 'recruiter-view' },
-        preview: {
-          type: 'info',
-          icon: 'recruiter',
-          title: 'Recruiter View',
-          detail: 'A clean one-page overview. No click wheel required.',
-        },
-      },
+      // Recruiter View is temporarily disabled (see App.tsx). To restore, uncomment.
+      // {
+      //   kind: 'action',
+      //   id: 'resume/recruiter',
+      //   label: 'Recruiter View',
+      //   action: { type: 'recruiter-view' },
+      //   preview: {
+      //     type: 'info',
+      //     icon: 'recruiter',
+      //     title: 'Recruiter View',
+      //     detail: 'A clean one-page overview. No click wheel required.',
+      //   },
+      // },
     ],
   }
 
