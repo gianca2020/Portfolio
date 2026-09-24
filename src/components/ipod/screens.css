@@ -1,0 +1,70 @@
+/*
+ * Content-screen styles that utilities can't express cleanly. Kept in the
+ * `components` layer so Tailwind utilities still win on conflicts.
+ */
+@layer components {
+  /* Native scrolling (wheel, trackpad, touch) with the native scrollbar hidden;
+   * the iPod scrollbar is drawn by <Scrollbar>. Programmatic steps are instant. */
+  .lcd-scroll {
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scroll-behavior: auto;
+    scrollbar-width: none;
+    touch-action: pan-y;
+  }
+  .lcd-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Detail content always reserves the 8px scrollbar gutter (so text never
+   * re-wraps); full-width strips reclaim it while nothing overflows. */
+  .detail-content {
+    margin-right: 7px;
+  }
+  .detail-content[data-overflow='false'] .detail-bleed {
+    margin-right: -7px;
+  }
+
+  /* Mirror reflection under a cover: the wrapper fades, the child is flipped. */
+  .lcd-reflection {
+    overflow: hidden;
+    pointer-events: none;
+    -webkit-mask-image: linear-gradient(to bottom, rgb(0 0 0 / 0.42), rgb(0 0 0 / 0) 88%);
+    mask-image: linear-gradient(to bottom, rgb(0 0 0 / 0.42), rgb(0 0 0 / 0) 88%);
+  }
+  .lcd-reflection > * {
+    transform: scaleY(-1);
+  }
+
+  /* Cover Flow: the one black screen on the iPod. */
+  .cover-flow {
+    --flow-bg: #000000;
+    --flow-ink: #ffffff;
+    --flow-ink-2: #b0b0b0; /* 9.7:1 on black */
+    background: var(--flow-bg);
+  }
+  .cover-flow .lcd-reflection {
+    -webkit-mask-image: linear-gradient(to bottom, rgb(0 0 0 / 0.5), rgb(0 0 0 / 0) 80%);
+    mask-image: linear-gradient(to bottom, rgb(0 0 0 / 0.5), rgb(0 0 0 / 0) 80%);
+  }
+
+  /* Now Playing progress / volume bar, in the firmware's measured colours: a
+   * white → grey inset track with a grey rule, and a lighter blue fill than the
+   * menu selection bar. Colour lives here, not in utilities (they would win). */
+  .np-track {
+    border-color: var(--color-track-rule);
+    background: linear-gradient(to bottom, var(--color-track-top), var(--color-track-bottom));
+    box-shadow:
+      inset 0 1px 1.5px rgb(0 0 0 / 0.22),
+      inset 0 -1px 0 rgb(255 255 255 / 0.6);
+  }
+  .np-fill {
+    background: linear-gradient(
+      to bottom,
+      var(--color-fill-top),
+      var(--color-fill-mid) 50%,
+      var(--color-fill-bottom)
+    );
+  }
+}

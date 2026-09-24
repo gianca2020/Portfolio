@@ -1,0 +1,510 @@
+/* ───────────────────────────────────────────────────────────────────────────
+ * iPod hardware + stage
+ *
+ * The device is laid out in millimetres of the real iPod classic: `--u` is px
+ * per mm, so `calc(var(--u) * N)` is N mm at any size. Geometry taken from
+ * DEVICE_MM is set inline by the components; this file holds the materials
+ * (aluminium, glass, plastic) and the stage. Colours come from the finish
+ * tokens in index.css; the few derived tokens below are per-finish lighting.
+ * ─────────────────────────────────────────────────────────────────────────── */
+
+/* Typed so it inherits as px, and so the device still renders (at 5 px/mm) outside the stage. */
+@property --u {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 5px;
+}
+
+/* ── Stage ────────────────────────────────────────────────────────────────── */
+
+.ipod-stage {
+  --stage-vh: 100vh;
+  --stage-safe-top: env(safe-area-inset-top, 0px);
+  --stage-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --stage-gutter-left: max(16px, env(safe-area-inset-left, 0px));
+  --stage-gutter-right: max(16px, env(safe-area-inset-right, 0px));
+  /* Clears the fixed Recruiter View button (≈34 px tall at max(12px, safe-top)) and the name tag. */
+  --stage-reserve-top: max(56px, calc(var(--stage-safe-top) + 46px));
+  --stage-reserve-bottom: max(16px, var(--stage-safe-bottom));
+  /* Hint line under the device: 16 px gap + one 16 px line. */
+  --stage-hint-block: 32px;
+  --stage-pool: rgba(255, 255, 255, 0.7);
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: var(--stage-reserve-top) var(--stage-gutter-right) var(--stage-reserve-bottom) var(--stage-gutter-left);
+  color: var(--stage-ink);
+  background:
+    radial-gradient(ellipse 65% 55% at 50% 45%, var(--stage-pool), transparent 70%),
+    linear-gradient(to bottom, var(--stage-top), var(--stage-bottom));
+}
+
+.ipod-stage[data-finish='black'] {
+  --stage-pool: rgba(255, 255, 255, 0.05);
+}
+
+@supports (height: 100dvh) {
+  .ipod-stage {
+    --stage-vh: 100dvh;
+  }
+}
+
+.ipod-stage__body {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 100%;
+}
+
+.ipod-stage__device {
+  position: relative;
+  animation: ipod-enter 280ms cubic-bezier(0.2, 0.7, 0.3, 1) backwards;
+}
+
+[data-reduced-motion='true'] .ipod-stage__device {
+  animation: none;
+}
+
+@keyframes ipod-enter {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--u) * 2));
+  }
+}
+
+.ipod-nametag {
+  /* Width of the fixed Recruiter View button (≤ 142 px) plus an 8 px gap. */
+  --nametag-button-clearance: 150px;
+
+  position: absolute;
+  top: max(14px, calc(var(--stage-safe-top) + 2px));
+  left: var(--stage-gutter-left);
+  /* Clear of the Recruiter View button, which sits max(12px, safe-right) in from the right. */
+  max-width: calc(
+    100% - var(--stage-gutter-left) - max(12px, env(safe-area-inset-right, 0px)) - var(--nametag-button-clearance)
+  );
+  line-height: 1.25;
+}
+
+.ipod-nametag p {
+  margin: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.ipod-nametag__name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--stage-ink);
+}
+
+.ipod-nametag__title {
+  font-size: 11px;
+  color: var(--stage-ink-muted);
+}
+
+/* Below 300 px the button is a 34 px icon key (recruiter-button.css, same breakpoint). */
+@media (max-width: 299px) {
+  .ipod-nametag {
+    --nametag-button-clearance: 42px;
+  }
+}
+
+.ipod-hint {
+  margin: 16px 0 0;
+  max-width: 100%;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--stage-ink-muted);
+  text-align: center;
+  text-wrap: balance;
+}
+
+.ipod-hint__coarse {
+  display: none;
+}
+
+@media (pointer: coarse) {
+  .ipod-hint__fine {
+    display: none;
+  }
+
+  .ipod-hint__coarse {
+    display: inline;
+  }
+}
+
+/* The hint may wrap to two lines on the narrowest phones. */
+@media (max-width: 380px) {
+  .ipod-stage {
+    --stage-hint-block: 48px;
+  }
+}
+
+/* Wide screens: the device can't reach the corner button, so trade clearance for breathing room. */
+@media (min-width: 960px) {
+  .ipod-stage {
+    --stage-reserve-top: 48px;
+    --stage-reserve-bottom: max(28px, var(--stage-safe-bottom));
+  }
+}
+
+/* Landscape phones / short wide windows: the device is height-bound and narrow, well clear of the corners. */
+@media (min-aspect-ratio: 7/4) and (max-height: 640px) {
+  .ipod-stage {
+    --stage-reserve-top: max(16px, calc(var(--stage-safe-top) + 8px));
+  }
+}
+
+@media (max-height: 520px) {
+  .ipod-stage {
+    --stage-hint-block: 0px;
+  }
+
+  .ipod-hint {
+    display: none;
+  }
+}
+
+/* ── Chassis: the front plate ─────────────────────────────────────────────── */
+
+.ipod {
+  /* Fine bead-blast grain with a faint horizontal brush, as a tileable grey noise map
+   * (two feTurbulence layers, 70/30). Blended with `overlay` so it only modulates the metal. */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='a' x='0' y='0' width='1' height='1' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' seed='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 1' result='g'/%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.004 .7' numOctaves='2' seed='9' stitchTiles='stitch'/%3E%3CfeColorMatrix values='1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 1' result='b'/%3E%3CfeComposite in='g' in2='b' operator='arithmetic' k2='.7' k3='.3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23a)'/%3E%3C/svg%3E");
+  --grain-strength: 0.42;
+
+  /* Lighting of the plate: light from above, the bevel rolling away from it. The flat's stops sit at the plate
+   * gradient's 0 / 45% / 100%, a few levels lighter below the top, so the band edge stays a faint step. */
+  --plate-flat-top: color-mix(in srgb, var(--chassis-hi) 75%, var(--chassis-mid));
+  --plate-flat-mid: color-mix(in srgb, var(--chassis-mid) 90%, var(--chassis-hi));
+  --plate-flat-low: color-mix(in srgb, var(--chassis-mid) 58%, var(--chassis-lo));
+  --plate-glint: rgba(255, 255, 255, 0.45);
+  --plate-shade: rgba(0, 0, 0, 0.07);
+  --rim-light: rgba(255, 255, 255, 0.55);
+
+  /* Window cut-out chamfer: the lower edge faces the light, the upper edge away from it. */
+  --cutout-lit: rgba(255, 255, 255, 0.75);
+  --cutout-side: rgba(0, 0, 0, 0.12);
+  --cutout-shade: rgba(0, 0, 0, 0.24);
+
+  /* Wheel and centre button sit a hair below the plate. */
+  --plate-lip: rgba(255, 255, 255, 0.5);
+  --wheel-inset: rgba(0, 0, 0, 0.08);
+  --wheel-lip: rgba(255, 255, 255, 0.75);
+  --button-inset: rgba(0, 0, 0, 0.13);
+  --button-inset-pressed: rgba(0, 0, 0, 0.24);
+  --button-lip: rgba(255, 255, 255, 0.45);
+  --button-pressed: rgba(0, 0, 0, 0.05);
+
+  position: relative;
+  isolation: isolate;
+  flex: none;
+  border-radius: var(--plate-corner);
+  -webkit-tap-highlight-color: transparent;
+  background:
+    linear-gradient(to bottom, var(--plate-glint), transparent calc(var(--u) * 4.7)),
+    /* edge roll-off: only the outer 3 mm darken, so the wider lower band doesn't read as a separate panel */
+    linear-gradient(
+      to right,
+      var(--plate-shade),
+      transparent calc(var(--u) * 3),
+      transparent calc(100% - var(--u) * 3),
+      var(--plate-shade)
+    ),
+    linear-gradient(to top, var(--plate-shade), transparent calc(var(--u) * 3)),
+    linear-gradient(
+      to bottom,
+      var(--chassis-hi),
+      var(--chassis-mid) 45%,
+      color-mix(in srgb, var(--chassis-mid) 50%, var(--chassis-lo))
+    );
+  box-shadow:
+    /* the polished back's bright rim, just inside its hairline edge */
+    inset 0 0 0 max(0.5px, calc(var(--u) * 0.1)) var(--rim-light),
+    0 0 0 max(0.5px, calc(var(--u) * 0.12)) var(--chassis-edge),
+    /* contact, near and ambient shadows */
+    0 calc(var(--u) * 0.35) calc(var(--u) * 0.7) rgba(0, 0, 0, 0.14),
+    0 calc(var(--u) * 2.5) calc(var(--u) * 5) calc(var(--u) * -1)
+      color-mix(in srgb, var(--chassis-shadow) 70%, transparent),
+    0 calc(var(--u) * 9) calc(var(--u) * 16) calc(var(--u) * -4) var(--chassis-shadow);
+}
+
+.ipod[data-finish='black'] {
+  --grain-strength: 0.32;
+  --plate-glint: rgba(255, 255, 255, 0.1);
+  --plate-shade: rgba(0, 0, 0, 0.22);
+  --rim-light: rgba(255, 255, 255, 0.12);
+  --cutout-lit: rgba(255, 255, 255, 0.2);
+  --cutout-side: rgba(0, 0, 0, 0.35);
+  --cutout-shade: rgba(0, 0, 0, 0.5);
+  --plate-lip: rgba(255, 255, 255, 0.08);
+  --wheel-inset: rgba(0, 0, 0, 0.5);
+  --wheel-lip: rgba(255, 255, 255, 0.05);
+  --button-inset: rgba(0, 0, 0, 0.35);
+  --button-inset-pressed: rgba(0, 0, 0, 0.55);
+  --button-lip: rgba(255, 255, 255, 0.1);
+  --button-pressed: rgba(0, 0, 0, 0.18);
+}
+
+/* Blended (continuous-curvature) corners where supported; a squircle needs a larger radius to match. */
+@supports (corner-shape: squircle) {
+  .ipod {
+    corner-shape: squircle;
+    border-radius: calc(var(--plate-corner) * 1.35);
+  }
+
+  .ipod__grain {
+    corner-shape: squircle;
+  }
+}
+
+.ipod__face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.ipod__grain {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--grain) 0 0 / 220px 220px;
+  mix-blend-mode: overlay;
+  opacity: var(--grain-strength);
+  pointer-events: none;
+}
+
+.ipod__slot {
+  position: absolute;
+}
+
+/* ── LCD: black glass window + lit panel ──────────────────────────────────── */
+
+.ipod-lcd {
+  --lcd-hairline: max(0.5px, calc(var(--u) * 0.06));
+
+  position: absolute;
+  inset: 0;
+  border-radius: var(--glass-radius);
+  background: var(--bezel);
+  box-shadow:
+    0 0 0 var(--lcd-hairline) rgba(0, 0, 0, 0.55),
+    inset 0 calc(var(--u) * 0.3) calc(var(--u) * 0.8) rgba(0, 0, 0, 0.6);
+}
+
+/* The aluminium cut-out: a second hairline ≈0.2 mm outside the glass edge. */
+.ipod-lcd::before {
+  content: '';
+  position: absolute;
+  inset: calc(var(--u) * -0.2 - var(--lcd-hairline));
+  border: var(--lcd-hairline) solid;
+  border-color: var(--cutout-shade) var(--cutout-side) var(--cutout-lit);
+  border-radius: calc(var(--glass-radius) + var(--u) * 0.2 + var(--lcd-hairline));
+  pointer-events: none;
+}
+
+.ipod-lcd__lit {
+  --lcd-scale: 0.9;
+
+  position: absolute;
+  overflow: hidden;
+  background: var(--color-lcd, #fff);
+}
+
+/* The panel sits a little below the glass: a faint dark edge and top shadow. */
+.ipod-lcd__lit::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow:
+    inset 0 0 0 max(0.5px, calc(var(--u) * 0.05)) rgba(0, 0, 0, 0.4),
+    inset 0 calc(var(--u) * 0.2) calc(var(--u) * 0.45) rgba(0, 0, 0, 0.16);
+}
+
+.ipod-lcd__canvas {
+  transform: scale(var(--lcd-scale));
+  transform-origin: 0 0;
+}
+
+.ipod-lcd__glass {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(122deg, var(--glass-sheen), transparent 46%);
+  box-shadow: inset 0 0 0 max(0.5px, calc(var(--u) * 0.05)) rgba(255, 255, 255, 0.06);
+}
+
+/* ── Click wheel ──────────────────────────────────────────────────────────── */
+
+.ipod-wheel {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  touch-action: none;
+  overscroll-behavior: contain;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ipod-wheel[data-rotating],
+.ipod-wheel[data-rotating] * {
+  cursor: grabbing;
+}
+
+/* Matte plastic, set a hair below the plate: gap hairline, shadowed top edge, lit lower lip. */
+.ipod-wheel__surface {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  cursor: grab;
+  background: linear-gradient(to bottom, var(--wheel-hi), var(--wheel-lo));
+  box-shadow:
+    0 0 0 max(0.5px, calc(var(--u) * 0.09)) var(--wheel-gap),
+    0 calc(var(--u) * 0.12) 0 max(0.5px, calc(var(--u) * 0.09)) var(--plate-lip),
+    inset 0 calc(var(--u) * 0.3) calc(var(--u) * 0.6) var(--wheel-inset),
+    inset 0 calc(var(--u) * -0.15) calc(var(--u) * 0.3) var(--wheel-lip);
+}
+
+/* Soft pressure shading under the finger while turning, positioned by angle from JS. */
+.ipod-wheel__thumb {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      circle at var(--thumb-x, 50%) var(--thumb-y, 16%),
+      var(--wheel-press),
+      transparent calc(var(--u) * 3.2)
+    ),
+    radial-gradient(
+      circle at var(--thumb-x, 50%) var(--thumb-y, 16%),
+      var(--wheel-press),
+      transparent calc(var(--u) * 6.5)
+    );
+  opacity: 0;
+  transition: opacity 280ms ease-out;
+}
+
+.ipod-wheel__thumb[data-active] {
+  opacity: 1;
+  transition-duration: 60ms;
+}
+
+.ipod-wheel__legends {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  fill: var(--wheel-label);
+  pointer-events: none;
+}
+
+/* MENU / ⏮ / ⏭ / ⏯: invisible hit areas over the legends; the ring itself is the button. */
+.ipod-wheel__key {
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: calc(var(--u) * 4.2);
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ipod-wheel__key::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(closest-side, var(--wheel-press), transparent),
+    radial-gradient(closest-side, var(--wheel-press) 35%, transparent);
+  opacity: 0;
+  transition: opacity 140ms ease-out;
+}
+
+.ipod-wheel__key:active::before {
+  opacity: 1;
+  transition-duration: 0s;
+}
+
+.ipod-wheel[data-rotating] .ipod-wheel__key::before {
+  opacity: 0;
+}
+
+.ipod-wheel__key:focus-visible {
+  outline-offset: 0;
+}
+
+/* Select: the same aluminium as the front, recessed slightly into the wheel. */
+.ipod-wheel__hub {
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  background: linear-gradient(to bottom, var(--button-hi), var(--button-lo));
+  box-shadow:
+    0 0 0 max(0.5px, calc(var(--u) * 0.09)) var(--button-gap),
+    inset 0 calc(var(--u) * 0.25) calc(var(--u) * 0.5) var(--button-inset),
+    inset 0 calc(var(--u) * -0.15) calc(var(--u) * 0.3) var(--button-lip);
+  transition: box-shadow 140ms ease-out;
+}
+
+.ipod-wheel__hub::before,
+.ipod-wheel__hub::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.ipod-wheel__hub::before {
+  background: var(--grain) 0 0 / 220px 220px;
+  mix-blend-mode: overlay;
+  opacity: var(--grain-strength);
+}
+
+.ipod-wheel__hub::after {
+  background: var(--button-pressed);
+  opacity: 0;
+  transition: opacity 140ms ease-out;
+}
+
+.ipod-wheel__hub:active {
+  box-shadow:
+    0 0 0 max(0.5px, calc(var(--u) * 0.09)) var(--button-gap),
+    inset 0 calc(var(--u) * 0.45) calc(var(--u) * 0.9) var(--button-inset-pressed),
+    inset 0 calc(var(--u) * -0.1) calc(var(--u) * 0.2) var(--button-lip);
+  transition-duration: 0s;
+}
+
+.ipod-wheel__hub:active::after {
+  opacity: 1;
+  transition-duration: 0s;
+}
+
+[data-reduced-motion='true'] .ipod-wheel__thumb,
+[data-reduced-motion='true'] .ipod-wheel__key::before,
+[data-reduced-motion='true'] .ipod-wheel__hub,
+[data-reduced-motion='true'] .ipod-wheel__hub::after {
+  transition: none;
+}

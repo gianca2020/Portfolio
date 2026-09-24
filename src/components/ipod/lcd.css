@@ -1,0 +1,89 @@
+/*
+ * LCD software styles that utilities can't express cleanly (multi-layer
+ * backgrounds, keyframes, filters). Kept in the `components` layer so Tailwind
+ * utilities still win on conflicts. All colours come from the tokens in index.css.
+ */
+@layer components {
+  /* Status bar: a 19px silver gradient over the 1px divider at y = 19. */
+  .lcd-statusbar {
+    background:
+      linear-gradient(
+          to bottom,
+          var(--color-bar-top) 0%,
+          var(--color-bar-mid-hi) 45%,
+          var(--color-bar-mid-lo) 50%,
+          var(--color-bar-bottom) 100%
+        )
+        top / 100% 19px no-repeat,
+      var(--color-bar-rule);
+  }
+
+  /* Split view: the list panel casts its shadow onto the artwork. */
+  .lcd-split-panel {
+    box-shadow: 0 0 20px #000000;
+  }
+
+  /* The 6G list scrollbar: solid, not glassy. */
+  .lcd-scrollbar {
+    border: 1px solid var(--color-bar-bottom);
+    background: var(--color-lcd-wash);
+  }
+  .lcd-scrollbar__thumb {
+    background: var(--color-lcd-ink-3);
+  }
+
+  /* Slow pan/zoom on cover art. Direction and zoom come from --kb-* (see lcd/motion.ts). */
+  .lcd-kenburns {
+    transform-origin: 50% 50%;
+    animation: lcd-ken-burns var(--kb-duration, 18s) linear infinite alternate both;
+  }
+
+  /* Cross-fade: the new layer dissolves in over the old one. */
+  .lcd-fade-in {
+    animation: lcd-fade-in 130ms linear both;
+  }
+
+  /* Legibility scrim under captions on full-bleed art: dark enough for 4.5:1 white type even on a pale cover. */
+  .lcd-scrim {
+    background: linear-gradient(to top, rgb(0 0 0 / 0.72), rgb(0 0 0 / 0.5) 60%, rgb(0 0 0 / 0));
+    text-shadow: 0 1px 1px rgb(0 0 0 / 0.45);
+  }
+
+  /* White type on the slate placeholder. */
+  .lcd-slate-text {
+    text-shadow: 0 1px 1px rgb(0 0 0 / 0.38);
+  }
+
+  /* Glossy placeholder glyph: lifted off the slate like the firmware's icons. */
+  .lcd-glossy {
+    filter: drop-shadow(0 1px 0.5px rgb(0 0 0 / 0.35)) drop-shadow(0 3px 5px rgb(0 0 0 / 0.28));
+  }
+
+  /* "No photo" profile tile: engraved initials on brushed grey. */
+  .lcd-monogram {
+    letter-spacing: -0.02em;
+    background: linear-gradient(160deg, #f1f1f2, #c4c6c9);
+    color: #8d9095;
+    text-shadow:
+      0 1px 0 rgb(255 255 255 / 0.9),
+      0 -1px 0 rgb(0 0 0 / 0.12);
+  }
+}
+
+@keyframes lcd-ken-burns {
+  from {
+    transform: translate3d(var(--kb-x0, -2%), var(--kb-y0, 1.5%), 0) scale(var(--kb-from, 1.08));
+  }
+  to {
+    transform: translate3d(var(--kb-x1, 2%), var(--kb-y1, -1.5%), 0) scale(var(--kb-to, 1.18));
+  }
+}
+
+@keyframes lcd-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

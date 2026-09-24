@@ -1,0 +1,187 @@
+@import 'tailwindcss';
+
+/* ───────────────────────────────────────────────────────────────────────────
+ * Design tokens
+ *
+ * Two layers:
+ *  1. LCD tokens (@theme → Tailwind utilities such as `bg-lcd`, `text-lcd-ink`,
+ *     `font-ipod`). The iPod's software looked the same on every finish, so
+ *     these never change with the chassis theme.
+ *  2. Chassis tokens (plain custom properties) that switch with the finish via
+ *     `[data-finish='silver' | 'black']` on the stage.
+ *
+ * LCD content is authored on the native 320 × 240 grid: use px there.
+ * ─────────────────────────────────────────────────────────────────────────── */
+
+@theme {
+  /* Type — the 2007 iPod classic UI is Helvetica (Bold 16px menus, Bold 13px status
+   * title, Regular 13px subtitles). Arimo shares Helvetica's advance widths exactly. */
+  --font-ipod: Helvetica, Arimo, Arial, sans-serif;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+  /* LCD surface & ink (measured from firmware 1.1.2 frames) */
+  --color-lcd: #ffffff; /* screen background */
+  --color-lcd-ink: #000000; /* primary text */
+  --color-lcd-ink-2: #393c39; /* secondary bold text: artist, album, counters (11.2:1) */
+  --color-lcd-ink-3: #6b6d6b; /* subtitle grey on two-line rows, captions (5.2:1) */
+  --color-lcd-rule: #dedfde; /* row separators */
+  --color-lcd-wash: #efefef; /* tracks, subtle panels */
+
+  /* Status bar: 19px gradient + 1px divider */
+  --color-bar-top: #ffffff;
+  --color-bar-mid-hi: #dedbde;
+  --color-bar-mid-lo: #ced3d6;
+  --color-bar-bottom: #9c9e9c;
+  --color-bar-rule: #5a595a;
+
+  /* Selection bar. Firmware body is #08a6e7 → #0065d6, scaled to 76% at the top and
+   * 86% at the bottom so white text clears 4.5:1 edge to edge: 4.55:1 at the top,
+   * rising to 6.9:1 at the bottom. Hairlines are exact. */
+  --color-select-top: #067eb0;
+  --color-select-bottom: #0057b8;
+  --color-select-hi: #94c7de; /* 1px top line */
+  --color-select-edge: #004184; /* 1px bottom line */
+  --color-select-ink: #ffffff;
+
+  /* Status glyphs */
+  --color-play-edge: #185194; /* navy top/bottom of the play triangle */
+  --color-play-core: #39c3f7; /* bright cyan band through the middle */
+  --color-battery-outline: #636163;
+  --color-battery-hi: #defbce;
+  --color-battery-top: #a5e37b;
+  --color-battery-bottom: #4a9229;
+
+  /* Right-panel placeholder art (no album art): slate gradient + white glyph & caption */
+  --color-slate-top: #94aabd;
+  --color-slate-bottom: #42515a;
+
+  /* Now Playing progress bar */
+  --color-track-top: #ffffff;
+  --color-track-bottom: #dedfde;
+  --color-track-rule: #bdbabd;
+  --color-fill-top: #7c98fc;
+  --color-fill-mid: #3275ea;
+  --color-fill-bottom: #49a5fc;
+
+  /* Accent used outside the LCD (links, focus ring) */
+  --color-ipod-blue: #1f64d0;
+}
+
+:root {
+  color-scheme: light;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+
+  /* ── Chassis: silver (default) ──
+   * Colours sampled from photos of the 6th-gen silver model (bead-blasted
+   * anodized aluminium front, off-white click wheel, aluminium centre button). */
+  --stage-top: #f3f3f4;
+  --stage-bottom: #d7d8db;
+  --stage-ink: #3a3a3c;
+  --stage-ink-muted: #5a5b5f; /* 4.76:1 on stage-bottom (where the hint sits), 6.1:1 on stage-top */
+
+  --chassis-hi: #e3e4e6;
+  --chassis-mid: #cfd0d2;
+  --chassis-lo: #a8a9ac;
+  --chassis-edge: #8e9094; /* hairline rim of the polished back */
+  --chassis-shadow: rgba(24, 26, 32, 0.38);
+
+  --bezel: #141314; /* glass with the LCD off */
+  --glass-sheen: rgba(255, 255, 255, 0.07);
+
+  --wheel-hi: #f7f7f8;
+  --wheel-lo: #ececed;
+  --wheel-gap: rgba(0, 0, 0, 0.32); /* hairline where the wheel meets the plate */
+  --wheel-label: #808185; /* printed legends; 3.2:1 on the wheel (real print ≈ #9a9a9c) */
+  --wheel-press: rgba(0, 0, 0, 0.07);
+
+  --button-hi: #dcdde0; /* aluminium, same finish as the front — not white */
+  --button-lo: #c3c4c7;
+  --button-gap: rgba(0, 0, 0, 0.28);
+
+  --focus-ring: #1f64d0;
+}
+
+[data-finish='black'] {
+  --stage-top: #2a2a2d;
+  --stage-bottom: #111113;
+  --stage-ink: #e6e6e8;
+  --stage-ink-muted: #a8a9ad; /* 6.1:1 on stage-top, 8.0:1 on stage-bottom */
+
+  --chassis-hi: #46474a;
+  --chassis-mid: #343537;
+  --chassis-lo: #1f2022;
+  --chassis-edge: #0c0c0d;
+  --chassis-shadow: rgba(0, 0, 0, 0.6);
+
+  --bezel: #0e0e0f;
+
+  --wheel-hi: #1f1f21;
+  --wheel-lo: #141415;
+  --wheel-gap: rgba(0, 0, 0, 0.6);
+  --wheel-label: #ececed; /* near-white legends on the black wheel */
+  --wheel-press: rgba(255, 255, 255, 0.06);
+
+  --button-hi: #46474a;
+  --button-lo: #2c2d30;
+  --button-gap: rgba(0, 0, 0, 0.55);
+
+  --focus-ring: #7fb2ff;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--stage-bottom);
+}
+
+body {
+  overscroll-behavior-y: none;
+}
+
+/* Visible, consistent focus for keyboard users everywhere. */
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+/* ── Shared LCD primitives ────────────────────────────────────────────────── */
+
+/* The blue selection bar (menu rows, detail action rows). */
+.lcd-selected {
+  color: var(--color-select-ink);
+  background: linear-gradient(to bottom, var(--color-select-top), var(--color-select-bottom));
+  box-shadow:
+    inset 0 1px 0 var(--color-select-hi),
+    inset 0 -1px 0 var(--color-select-edge);
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.22);
+}
+
+/* Silver band — the status bar's gradient (also used for section headers). */
+.lcd-band {
+  background: linear-gradient(
+    to bottom,
+    var(--color-bar-top) 0%,
+    var(--color-bar-mid-hi) 45%,
+    var(--color-bar-mid-lo) 50%,
+    var(--color-bar-bottom) 100%
+  );
+  box-shadow: inset 0 -1px 0 var(--color-bar-rule);
+}
+
+/* Slate placeholder art (split-view right panel when there is no artwork). */
+.lcd-slate {
+  color: #ffffff;
+  background: linear-gradient(160deg, var(--color-slate-top), var(--color-slate-bottom));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+  }
+}

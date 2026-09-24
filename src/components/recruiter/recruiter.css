@@ -1,0 +1,128 @@
+/* ───────────────────────────────────────────────────────────────────────────
+ * Recruiter View palette, page canvas and print stylesheet.
+ *
+ * Layout and type are Tailwind utilities in the components; colours are the
+ * --rv-* tokens below (used as `text-(--rv-ink)` etc.). Contrast ratios are
+ * against --rv-bg. Tokens are also set on <html> (via a forgiving :where() so
+ * browsers without :has() still get them on .rv) so the canvas behind the page
+ * matches.
+ * ─────────────────────────────────────────────────────────────────────────── */
+
+:where(html:has(.rv), .rv) {
+  --rv-bg: #ffffff;
+  --rv-ink: #1a1b1e; /* 17.2:1 */
+  --rv-ink-2: #46474c; /* 9.3:1 */
+  --rv-ink-3: #696a70; /* 5.4:1 (4.9:1 on --rv-wash) */
+  --rv-rule: #e4e5e8;
+  --rv-rule-strong: #c9cace;
+  --rv-wash: #f3f4f6;
+  --rv-accent: var(--color-ipod-blue, #1f64d0); /* 5.5:1; white on it 5.5:1 */
+  --rv-accent-hover: #1a55b3;
+  --rv-accent-ink: #ffffff;
+  --rv-focus: var(--color-ipod-blue, #1f64d0);
+}
+
+@media (prefers-color-scheme: dark) {
+  :where(html:has(.rv), .rv) {
+    --rv-bg: #141518;
+    --rv-ink: #ececef; /* 15.5:1 */
+    --rv-ink-2: #b8b9bf; /* 9.3:1 */
+    --rv-ink-3: #96979e; /* 6.3:1 */
+    --rv-rule: #2a2c31;
+    --rv-rule-strong: #43454c;
+    --rv-wash: #1e2024;
+    --rv-accent: #86b6ff; /* 8.8:1 */
+    --rv-accent-hover: #a9cbff;
+    --rv-accent-ink: #0b1830; /* 8.6:1 on --rv-accent */
+    --rv-focus: #86b6ff;
+  }
+}
+
+html:has(.rv) {
+  color-scheme: light dark;
+  background: var(--rv-bg);
+  /* Keep focused elements and scrolled-to content clear of the sticky top bar. */
+  scroll-padding-top: calc(4.5rem + env(safe-area-inset-top));
+}
+
+html:has(.rv) body {
+  background: var(--rv-bg);
+  /* The stage turns overscroll off for the wheel; a scrolling document should bounce/refresh as usual. */
+  overscroll-behavior-y: auto;
+}
+
+.rv :focus-visible {
+  outline-color: var(--rv-focus);
+}
+
+/* The h1 takes focus programmatically on open; it is not a control, so no ring. */
+.rv [tabindex='-1']:focus {
+  outline: none;
+}
+
+.rv-text-link {
+  text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
+  text-decoration-thickness: 1px;
+}
+
+.rv-text-link:hover {
+  text-decoration-color: currentColor;
+}
+
+/* ── Print: black on white, no chrome, entries kept whole ───────────────── */
+
+@media print {
+  :where(html:has(.rv), .rv) {
+    --rv-bg: #ffffff;
+    --rv-ink: #000000;
+    --rv-ink-2: #1f1f1f;
+    --rv-ink-3: #404040;
+    --rv-rule: #b5b5b5;
+    --rv-rule-strong: #b5b5b5;
+    --rv-wash: transparent;
+    --rv-accent: #000000;
+  }
+
+  html:has(.rv) {
+    color-scheme: light;
+    /* Type and spacing are rem-based, so this scales the whole résumé to paper. */
+    font-size: 12.5px;
+    scroll-padding-top: 0;
+  }
+
+  .rv {
+    min-height: 0;
+  }
+
+  .rv-topbar,
+  .rv-footer {
+    display: none;
+  }
+
+  .rv a {
+    text-decoration: none;
+  }
+
+  .rv-link-button {
+    display: inline;
+    height: auto;
+    padding: 0;
+    border: 0;
+  }
+
+  .rv-entry,
+  .rv dt,
+  .rv dd {
+    break-inside: avoid;
+  }
+
+  .rv h2,
+  .rv h3,
+  .rv dt {
+    break-after: avoid;
+  }
+
+  @page {
+    margin: 14mm 15mm;
+  }
+}

@@ -1,0 +1,76 @@
+/*
+ * Recruiter View button skin. Built from the stage tokens so it sits quietly on
+ * either finish: a small brushed-metal key, not a pill or a call-to-action.
+ * Unlayered, so these rules beat Tailwind's (layered) utilities on the element.
+ * Text contrast, --stage-ink on the key: silver ≥ 7.9:1 (6.8:1 pressed); black ≥ 11.9:1.
+ * color-mix() is within Tailwind v4's browser baseline, so there are no fallbacks.
+ */
+
+.recruiter-button {
+  color: var(--stage-ink);
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--stage-top) 90%, transparent),
+    color-mix(in srgb, var(--stage-bottom) 90%, transparent)
+  );
+  border: 1px solid color-mix(in srgb, var(--stage-ink) 24%, transparent);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.1);
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    border-color 120ms ease-out,
+    box-shadow 120ms ease-out;
+}
+
+@media (hover: hover) {
+  .recruiter-button:hover {
+    background: linear-gradient(
+      to bottom,
+      var(--stage-top),
+      color-mix(in srgb, var(--stage-bottom) 55%, var(--stage-top))
+    );
+    border-color: color-mix(in srgb, var(--stage-ink) 45%, transparent);
+    box-shadow: 0 1px 3px rgb(0 0 0 / 0.16);
+  }
+}
+
+.recruiter-button:active {
+  background: color-mix(in srgb, var(--stage-bottom) 90%, var(--stage-ink));
+  box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.2);
+}
+
+.recruiter-button:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* Narrow stages: the full-width key (~140px) would cover the name tag at the
+ * top left, so keep only the icon. The link's aria-label still names it.
+ * chassis.css narrows the name tag's clearance at the same breakpoint. */
+@media (max-width: 299px) {
+  .recruiter-button {
+    width: 34px;
+    padding: 0;
+    justify-content: center;
+  }
+  .recruiter-button__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .recruiter-button {
+    transition: none;
+  }
+}
+
+@media print {
+  .recruiter-button {
+    display: none;
+  }
+}
