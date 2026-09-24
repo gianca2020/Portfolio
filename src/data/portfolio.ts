@@ -246,6 +246,7 @@ export const portfolio: Portfolio = {
       'Accessible, localized interfaces',
     ],
     initials: 'GF',
+    photo: `${base}me.jpg`,
     education: {
       school: 'CUNY Queens College',
       degree: 'B.S. Computer Science',
