@@ -1,6 +1,8 @@
 import { useEffect, useRef, type CSSProperties, type RefObject } from 'react'
 import { portfolio } from '../../data/portfolio'
-import { RecruiterButton } from '../recruiter/RecruiterButton'
+// Recruiter View is temporarily disabled (see App.tsx). To restore, uncomment
+// this import and the <RecruiterButton /> below.
+// import { RecruiterButton } from '../recruiter/RecruiterButton'
 import './chassis.css'
 import { DEVICE_MM } from './constants'
 import { IPod } from './IPod'
@@ -91,7 +93,7 @@ function IPodStage({ active }: { active: boolean }) {
       <h1 className="sr-only">
         {profile.name} — {profile.title}. Interactive iPod classic portfolio.
       </h1>
-      <RecruiterButton />
+      {/* <RecruiterButton /> */}
       {/* Repeats the heading visually; hidden from assistive tech to avoid reading it twice. */}
       <div className="ipod-nametag" aria-hidden="true">
         <p className="ipod-nametag__name">{profile.name}</p>

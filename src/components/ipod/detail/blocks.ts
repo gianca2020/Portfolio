@@ -140,7 +140,8 @@ export function resumeBlocks(content: Portfolio): DetailBlock[] {
     // No detail: the ↗ already says "new tab" (and a relative PDF path has no host to show).
     { type: 'action', label: 'Open PDF', icon: 'document', action: { type: 'open-url', href: resume.href } },
     downloadResume(content),
-    { type: 'action', label: 'Recruiter View', icon: 'recruiter', action: { type: 'recruiter-view' } },
+    // Recruiter View is temporarily disabled (see App.tsx). To restore, uncomment.
+    // { type: 'action', label: 'Recruiter View', icon: 'recruiter', action: { type: 'recruiter-view' } },
   ]
 }
 

@@ -131,6 +131,30 @@
   --focus-ring: #7fb2ff;
 }
 
+/* ── Chassis: hot pink ──
+ * A light finish, so it reuses silver's above-lit derived lighting (the `.ipod`
+ * defaults in chassis.css); only the hues shift. The plate is a vivid Y2K
+ * magenta-pink, while the click wheel and centre button stay pale pink so the
+ * printed legends keep contrast. The stage is kept soft so the device pops. */
+[data-finish='pink'] {
+  --stage-top: #fde4ef;
+  --stage-bottom: #f7c2da;
+  --stage-ink: #4a1f37;
+  --stage-ink-muted: #7a2f56; /* 5.8:1 on stage-bottom (where the hint sits) */
+
+  --chassis-hi: #f58ab8;
+  --chassis-mid: #ec5c98;
+  --chassis-lo: #d43b7c;
+  --chassis-edge: #b82e69; /* hairline rim of the polished back */
+  --chassis-shadow: rgba(80, 12, 45, 0.36);
+
+  --wheel-hi: #fde3ee;
+  --wheel-lo: #f8d0e2;
+
+  --button-hi: #f07cae; /* aluminium, same hot-pink finish as the front */
+  --button-lo: #e05494;
+}
+
 html,
 body {
   margin: 0;

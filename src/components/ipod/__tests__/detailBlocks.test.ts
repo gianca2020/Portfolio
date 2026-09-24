@@ -80,12 +80,13 @@ describe('screen blocks', () => {
     expect(groups).toEqual(portfolio.skills.map((g) => g.name))
   })
 
-  it('Resume lists every role and offers PDF, download and Recruiter View', () => {
+  it('Resume lists every role and offers PDF and download', () => {
     const blocks = resumeBlocks(portfolio)
     expect(blocks.filter((b) => b.type === 'entry')).toHaveLength(
       portfolio.experience.length + portfolio.projects.filter((p) => !p.placeholder).length,
     )
-    expect(actions(blocks).map((a) => a.action.type)).toEqual(['open-url', 'download', 'recruiter-view'])
+    // Recruiter View is temporarily disabled (see App.tsx); re-add 'recruiter-view' when restored.
+    expect(actions(blocks).map((a) => a.action.type)).toEqual(['open-url', 'download'])
     const openPdf = actions(blocks)[0]
     expect(openPdf).toMatchObject({ label: 'Open PDF', action: { href: portfolio.resume.href } })
     expect(openPdf.detail).toBeUndefined()
