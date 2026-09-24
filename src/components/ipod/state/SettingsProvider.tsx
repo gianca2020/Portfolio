@@ -1,7 +1,15 @@
 import { useCallback, useEffect, useMemo, useState, useSyncExternalStore, type ReactNode } from 'react'
 import { soundEngine } from '../SoundEngine'
 import type { SettingKey } from '../types'
-import { DEFAULT_SETTINGS, SettingsContext, type Settings, type SettingsValue } from './settingsContext'
+import {
+  DEFAULT_SETTINGS,
+  SettingsContext,
+  nextTheme,
+  parseTheme,
+  themeLabel,
+  type Settings,
+  type SettingsValue,
+} from './settingsContext'
 
 const STORAGE_KEY = 'gf-ipod-portfolio:settings'
 const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)'
@@ -13,7 +21,7 @@ function loadSettings(): Settings {
     const parsed = JSON.parse(raw) as Partial<Settings>
     return {
       sound: typeof parsed.sound === 'boolean' ? parsed.sound : DEFAULT_SETTINGS.sound,
-      theme: parsed.theme === 'black' || parsed.theme === 'silver' ? parsed.theme : DEFAULT_SETTINGS.theme,
+      theme: parseTheme(parsed.theme),
       reduceMotion: typeof parsed.reduceMotion === 'boolean' ? parsed.reduceMotion : null,
     }
   } catch {
@@ -51,7 +59,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
           case 'sound':
             return { ...prev, sound: !prev.sound }
           case 'theme':
-            return { ...prev, theme: prev.theme === 'silver' ? 'black' : 'silver' }
+            return { ...prev, theme: nextTheme(prev.theme) }
           case 'reduceMotion':
             return { ...prev, reduceMotion: !(prev.reduceMotion ?? systemReducedMotion) }
         }
@@ -66,7 +74,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
         case 'sound':
           return settings.sound ? 'On' : 'Off'
         case 'theme':
-          return settings.theme === 'silver' ? 'Silver' : 'Black'
+          return themeLabel(settings.theme)
         case 'reduceMotion':
           return reducedMotion ? 'On' : 'Off'
       }
