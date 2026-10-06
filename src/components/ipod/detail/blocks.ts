@@ -106,6 +106,7 @@ export function aboutBlocks(content: Portfolio): DetailBlock[] {
     contactAction(contact.email, 'mail'),
     contactAction(contact.github, 'github'),
     contactAction(contact.linkedin, 'linkedin'),
+    contactAction(contact.website, 'website'),
     downloadResume(content),
   ]
 }

@@ -55,6 +55,17 @@ const ART: Record<PreviewIcon, Art> = {
     shape: (paint) => <rect x="2" y="5" width="20" height="14.5" rx="2.2" fill={paint} />,
     cut: <path d="M3.4 6.6 12 13.2l8.6-6.6" strokeWidth="1.9" {...cutStroke} />,
   },
+  /** A globe: solid disc with meridians, equator and two latitudes knocked out. */
+  website: {
+    shape: (paint) => <circle cx="12" cy="12" r="10.4" fill={paint} />,
+    cut: (
+      <g strokeWidth="1.4" {...cutStroke}>
+        <path d="M12 1.6v20.8M1.6 12h20.8" />
+        <path d="M12 1.6c-5.2 3.4-5.2 17.4 0 20.8M12 1.6c5.2 3.4 5.2 17.4 0 20.8" />
+        <path d="M3.6 7.4h16.8M3.6 16.6h16.8" />
+      </g>
+    ),
+  },
   download: {
     shape: (paint) => (
       <>

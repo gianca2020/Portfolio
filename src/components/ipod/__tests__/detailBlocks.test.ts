@@ -74,7 +74,7 @@ describe('experienceBlocks', () => {
 describe('screen blocks', () => {
   it('About Me ends with contact and résumé actions', () => {
     const blocks = aboutBlocks(portfolio)
-    expect(actions(blocks).map((a) => a.label)).toEqual(['Email', 'GitHub', 'LinkedIn', 'Download Resume'])
+    expect(actions(blocks).map((a) => a.label)).toEqual(['Email', 'GitHub', 'LinkedIn', 'Website', 'Download Resume'])
     expect(headings(blocks)).toEqual(['Focus', 'Interests', 'Skills', 'Education'])
     const groups = blocks.flatMap((b) => (b.type === 'tags' && b.label ? [b.label] : []))
     expect(groups).toEqual(portfolio.skills.map((g) => g.name))
@@ -157,13 +157,14 @@ describe('action row speech', () => {
   })
 
   it('describes the highlighted row with its position', () => {
-    expect(describeActionRow(rows, 1)).toBe('GitHub, opens in a new tab, 2 of 4')
-    expect(describeActionRow(rows, 3)).toBe('Download Resume, 4 of 4')
+    expect(describeActionRow(rows, 1)).toBe('GitHub, opens in a new tab, 2 of 5')
+    expect(describeActionRow(rows, 3)).toBe('Website, opens in a new tab, 4 of 5')
+    expect(describeActionRow(rows, 4)).toBe('Download Resume, 5 of 5')
   })
 
   it('has nothing to add for a reading position', () => {
     expect(describeActionRow(rows, -1)).toBeUndefined()
-    expect(describeActionRow(rows, 4)).toBeUndefined()
+    expect(describeActionRow(rows, 5)).toBeUndefined()
   })
 })
 

@@ -15,6 +15,7 @@ export type SettingKey = 'sound' | 'theme' | 'reduceMotion'
 export type PreviewIcon =
   | 'github'
   | 'linkedin'
+  | 'website'
   | 'mail'
   | 'download'
   | 'document'
