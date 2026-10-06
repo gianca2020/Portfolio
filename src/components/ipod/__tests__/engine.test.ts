@@ -79,7 +79,7 @@ describe('spokenState', () => {
   })
 
   it('says nothing extra for action rows', () => {
-    expect(menu('contact', 0).announcement).toBe('Contact: GitHub, 1 of 4')
+    expect(menu('contact', 0).announcement).toBe('Contact: GitHub, 1 of 5')
   })
 
   it('uses the screen’s own description when it has one, still naming the screen', () => {

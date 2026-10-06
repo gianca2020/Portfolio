@@ -42,6 +42,15 @@ export const LinkedInIcon = (props: IconProps) => (
   </Icon>
 )
 
+/** A globe: equator, central meridian and two curved meridians. */
+export const GlobeIcon = (props: IconProps) => (
+  <Icon {...props}>
+    <circle cx="8" cy="8" r="6.5" />
+    <path d="M1.5 8h13M8 1.5v13" />
+    <path d="M8 1.5c-3.4 2-3.4 11 0 13M8 1.5c3.4 2 3.4 11 0 13" />
+  </Icon>
+)
+
 export const GradCapIcon = (props: IconProps) => (
   <Icon {...props}>
     <path d="M1.25 6 8 3l6.75 3L8 9 1.25 6z" />

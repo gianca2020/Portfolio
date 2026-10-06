@@ -265,11 +265,12 @@ export const portfolio: Portfolio = {
       display: 'in/giancarlo-forero',
       href: 'https://www.linkedin.com/in/giancarlo-forero-58956623a',
     },
+    website: { label: 'Website', display: 'giancarloforero.tech', href: 'https://www.giancarloforero.tech' },
   },
   resume: {
     href: `${base}resume/Giancarlo_Forero_Resume.pdf`,
     fileName: 'Giancarlo_Forero_Resume.pdf',
-    updated: 'Sep 2026',
+    updated: 'Oct 2026',
   },
   nowBuilding,
   sourceUrl: 'https://github.com/gianca2020/Portfolio',

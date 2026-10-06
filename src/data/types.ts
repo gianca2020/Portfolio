@@ -137,6 +137,7 @@ export interface ContactInfo {
   email: ContactLink
   github: ContactLink
   linkedin: ContactLink
+  website: ContactLink
 }
 
 export interface ResumeFile {

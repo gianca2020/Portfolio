@@ -149,6 +149,13 @@ export function buildMenuTree(content: Portfolio): MenuNode {
       },
       {
         kind: 'action',
+        id: 'contact/website',
+        label: contact.website.label,
+        action: { type: 'open-url', href: contact.website.href },
+        preview: { type: 'info', icon: 'website', title: contact.website.label, detail: contact.website.display, hint: 'Opens in a new tab' },
+      },
+      {
+        kind: 'action',
         id: 'contact/email',
         label: contact.email.label,
         action: { type: 'open-url', href: contact.email.href },

@@ -1,7 +1,7 @@
 import type { ComponentType, Ref, SVGProps } from 'react'
 import type { ContactInfo, ContactLink, Profile } from '../../data/types'
 import { isUpcoming, shortUrl } from './format'
-import { GitHubIcon, GradCapIcon, LinkedInIcon, MailIcon } from './icons'
+import { GitHubIcon, GlobeIcon, GradCapIcon, LinkedInIcon, MailIcon } from './icons'
 import { Separator } from './Separator'
 import { Time } from './Time'
 
@@ -26,6 +26,7 @@ export function ProfileHeader({ profile, contact, headingRef }: ProfileHeaderPro
     { link: contact.email, Icon: MailIcon, external: false },
     { link: contact.github, Icon: GitHubIcon, external: true },
     { link: contact.linkedin, Icon: LinkedInIcon, external: true },
+    { link: contact.website, Icon: GlobeIcon, external: true },
   ]
 
   return (
