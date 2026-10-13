@@ -11,25 +11,56 @@ import type { ArtworkSpec, Experience, Portfolio, Project, SkillGroup, Track } f
 
 const base = import.meta.env.BASE_URL
 
-// ── Artwork ────────────────────────────────────────────────────────────────
+// -- Artwork --
 const art = {
-  polly: { monogram: 'P', palette: ['#1f3a5f', '#f4efe6', '#e8a33d'], motif: 'waveform' },
-  up: { monogram: 'UP!', palette: ['#ebe4d2', '#1d4d3a', '#d9502f'], motif: 'bars' },
-  portfolio: { monogram: 'GF', palette: ['#d7d8db', '#1c1c1e', '#2f6fd6'], motif: 'rings' },
-  puberry: { monogram: 'Pb', palette: ['#7a1f3d', '#fbeef2', '#f2a541'], motif: 'grid' },
-  augenta: { monogram: 'A', palette: ['#111a22', '#e8eef2', '#5cc8b0'], motif: 'orbit' },
-  cuny: { monogram: 'CUNY', palette: ['#1d3f8f', '#ffffff', '#f5b700'], motif: 'stripes' },
-  club: { monogram: 'QC', palette: ['#2b2d42', '#f8f4e3', '#ef8354'], motif: 'rings' },
+  iris: {
+    image: `${base}projects/iris-logo.svg`,
+    imageAlt: 'The Iris logo -- an eye that blinks as the dot of the "i"',
+    monogram: 'IRIS',
+    palette: ['#0b1f1c', '#eafffb', '#36e0cc'],
+    motif: 'rings' as const,
+  },
+  polly: { monogram: 'P', palette: ['#1f3a5f', '#f4efe6', '#e8a33d'], motif: 'waveform' as const },
+  up: { monogram: 'UP!', palette: ['#ebe4d2', '#1d4d3a', '#d9502f'], motif: 'bars' as const },
+  portfolio: { monogram: 'GF', palette: ['#d7d8db', '#1c1c1e', '#2f6fd6'], motif: 'rings' as const },
+  puberry: { monogram: 'Pb', palette: ['#7a1f3d', '#fbeef2', '#f2a541'], motif: 'grid' as const },
+  augenta: { monogram: 'A', palette: ['#111a22', '#e8eef2', '#5cc8b0'], motif: 'orbit' as const },
+  cuny: { monogram: 'CUNY', palette: ['#1d3f8f', '#ffffff', '#f5b700'], motif: 'stripes' as const },
+  club: { monogram: 'QC', palette: ['#2b2d42', '#f8f4e3', '#ef8354'], motif: 'rings' as const },
 } satisfies Record<string, ArtworkSpec>
 
-// ── Projects ───────────────────────────────────────────────────────────────
+// -- Projects --
 const projects: Project[] = [
+  {
+    id: 'iris',
+    name: 'Iris',
+    tagline: 'A hands-free Chrome extension that lets people with severe motor impairments browse the web with their eyes, blinks and voice.',
+    description: 'A Chrome extension built in a 3-day sprint at HackKnight 2026 that separates aiming from clicking: gaze and head position pick numbered page targets, a double blink confirms, and a voice agent handles requests like "find the login button." The team placed 2nd overall and won Most Popular Hack.',
+    date: 'Oct 2026',
+    role: 'Gemini integration and the page-understanding pipeline, plus product branding',
+    stack: ['TypeScript', 'Gemini API', 'Cloudflare Workers', 'MediaPipe', 'ElevenLabs', 'Chrome Extension (Manifest V3)'],
+    highlights: [
+      'Placed 2nd overall and won Most Popular Hack, voted by fellow hackers, at HackKnight 2026.',
+      'Built the Gemini-powered page-understanding pipeline end to end: shared protocol schemas, a Cloudflare Worker with auth and rate-limiting, and the extension-side capture and masking broker that match spoken requests to real numbered page targets.',
+      'Shipped the project\'s first backend endpoint, standing up the Cloudflare Worker and Gemini integration before the rest of the team built on top of it.',
+      'Designed and built the animated Iris logo, an eye that blinks and glances as the dot of the "i", with reduced-motion support.',
+    ],
+    metrics: [
+      { value: '2nd Place', label: 'HackKnight 2026' },
+      { value: 'Most Popular', label: 'hacker-voted award' },
+      { value: '<600 ms', label: 'Gemini target-match latency' },
+    ],
+    links: {
+      github: 'https://github.com/bryan3342/iris_sentinel',
+      demo: 'https://devpost.com/software/iris-58cvyt',
+    },
+    artwork: art.iris,
+  },
   {
     id: 'polly-debate-ai',
     name: 'Polly Debate AI',
     tagline: 'An AI debate coach that reads your voice and face in real time.',
-    description:
-      'A full-stack debate coaching platform that analyzes live speech and facial expression while you practice, then turns it into feedback.',
+    description: 'A full-stack debate coaching platform that analyzes live speech and facial expression while you practice, then turns it into feedback.',
     date: 'Oct 2025',
     role: 'React + WebRTC front end, Flask streaming back end',
     stack: ['Python', 'React', 'Flask', 'OpenCV', 'DeepFace', 'Google Speech-to-Text', 'WebRTC'],
@@ -37,7 +68,7 @@ const projects: Project[] = [
       'Real-time speech and facial-expression analysis with Google Speech-to-Text and DeepFace.',
       'Owned the React + WebRTC front end for live video capture.',
       'Flask back end streams frames through OpenCV at 30+ FPS.',
-      'Improved users’ debate performance metrics by 56%.',
+      'Improved users\' debate performance metrics by 56%.',
     ],
     metrics: [
       { value: '30+ FPS', label: 'live frame analysis' },
@@ -54,8 +85,7 @@ const projects: Project[] = [
     id: 'up-investments',
     name: 'UP! Investments',
     tagline: 'Compare flip, long-term and short-term rental returns on a property.',
-    description:
-      'A real-estate investment analysis platform that compares ROI across three strategies using live property data and market trends.',
+    description: 'A real-estate investment analysis platform that compares ROI across three strategies using live property data and market trends.',
     date: 'Oct 2025',
     stack: ['React', 'Node.js', 'Tailwind CSS', 'Cloudflare Workers'],
     highlights: [
@@ -75,18 +105,16 @@ const projects: Project[] = [
     artwork: art.up,
   },
   {
-    // Third slot: this site. Replace or append more projects freely (View Source uses `sourceUrl` below).
     id: 'ipod-portfolio',
     name: 'iPod Portfolio',
-    tagline: 'This site — a portfolio that runs like an iPod classic.',
-    description:
-      'An interactive portfolio modeled on the 6th-generation iPod classic: hierarchical menus, a working rotary click wheel and synthesized clicks.',
+    tagline: 'This site -- a portfolio that runs like an iPod classic.',
+    description: 'An interactive portfolio modeled on the 6th-generation iPod classic: hierarchical menus, a working rotary click wheel and synthesized clicks.',
     date: 'Sep 2026',
     stack: ['React', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'Web Audio API'],
     highlights: [
-      'Rotary click wheel built on atan2 angle tracking with ±180° wraparound handling.',
+      'Rotary click wheel built on atan2 angle tracking with +/-180 degree wraparound handling.',
       'One typed content model drives the iPod menus and the Recruiter View.',
-      'Click sounds synthesized with the Web Audio API — no audio files.',
+      'Click sounds synthesized with the Web Audio API -- no audio files.',
       'Full keyboard, screen-reader and reduced-motion support.',
     ],
     links: { github: 'https://github.com/gianca2020/Portfolio' },
@@ -94,7 +122,7 @@ const projects: Project[] = [
   },
 ]
 
-// ── Experience ─────────────────────────────────────────────────────────────
+// -- Experience --
 const experience: Experience[] = [
   {
     id: 'puberry',
@@ -107,7 +135,7 @@ const experience: Experience[] = [
     kind: 'work',
     summary: 'Shipped Duels, a trivia feature in 3 languages, to 1M students.',
     highlights: [
-      'Led the mobile-responsive redesign of 3 user portals (student, teacher, parent), an 8-step registration and authentication flow, and the daily check-in interface — validated across 3 iOS breakpoints and deployed to production.',
+      'Led the mobile-responsive redesign of 3 user portals (student, teacher, parent), an 8-step registration and authentication flow, and the daily check-in interface -- validated across 3 iOS breakpoints and deployed to production.',
       'Built the front end for Duels, a turn-based trivia feature localized in English, Spanish and Greek, on a platform serving 1 million students.',
       'Implemented shared client-side input validation, fixed localization defects that rendered raw translation keys in production, and engineered focus-based polling for live roster updates.',
     ],
@@ -136,7 +164,7 @@ const experience: Experience[] = [
     stack: ['React', 'TypeScript', 'Cloudflare Pages', 'REST APIs', 'CI testing'],
     metrics: [
       { value: '3', label: 'agent harnesses' },
-      { value: '1 → N', label: 'single-user to multi-tenant' },
+      { value: '1 -> N', label: 'single-user to multi-tenant' },
     ],
     artwork: art.augenta,
   },
@@ -173,7 +201,7 @@ const experience: Experience[] = [
     kind: 'leadership',
     summary: 'Ran a $15K+ club budget and took 40+ students to HackHarvard.',
     highlights: [
-      'Managed the $8,000+ HackHarvard 2024 trip budget — travel, lodging and registration for 40+ students.',
+      'Managed the $8,000+ HackHarvard 2024 trip budget -- travel, lodging and registration for 40+ students.',
       'Oversaw a $15,000+ annual club budget, coordinating 10+ technical events (hackathons, workshops, speaker sessions) with 200+ total attendees.',
       'Organized and led an HTML/CSS workshop for 30+ students on front-end fundamentals and best practices.',
     ],
@@ -185,7 +213,7 @@ const experience: Experience[] = [
   },
 ]
 
-// ── Skills ─────────────────────────────────────────────────────────────────
+// -- Skills --
 const skills: SkillGroup[] = [
   { name: 'Languages', items: ['TypeScript', 'JavaScript', 'Python', 'Java', 'C++', 'SQL', 'HTML/CSS', 'Bash'] },
   { name: 'Frontend', items: ['React', 'Next.js (App Router)', 'Vite', 'Tailwind CSS', 'Chart.js', 'WebRTC'] },
@@ -217,16 +245,17 @@ const skills: SkillGroup[] = [
   },
 ]
 
-// ── Now Playing easter egg ─────────────────────────────────────────────────
+// -- Now Playing easter egg --
 const nowBuilding: Track[] = [
-  { id: 'duels', title: 'Duels (en / es / el)', artist: 'Giancarlo Forero', album: 'Puberry · Summer ’26', duration: 204, artwork: art.puberry },
+  { id: 'target-match', title: 'Target Match (Gemini Mix)', artist: 'Giancarlo Forero', album: 'Iris', duration: 196, artwork: art.iris },
+  { id: 'duels', title: 'Duels (en / es / el)', artist: 'Giancarlo Forero', album: 'Puberry · Summer \'26', duration: 204, artwork: art.puberry },
   { id: 'multi-tenant', title: 'Multi-Tenant Orgs', artist: 'Giancarlo Forero', album: 'Augenta AI', duration: 178, artwork: art.augenta },
   { id: 'thirty-fps', title: '30+ FPS', artist: 'Giancarlo Forero', album: 'Polly Debate AI', duration: 221, artwork: art.polly },
   { id: 'sub-200', title: 'Sub-200 ms', artist: 'Giancarlo Forero', album: 'UP! Investments', duration: 167, artwork: art.up },
   { id: 'click-wheel', title: 'Click Wheel (Rotary Mix)', artist: 'Giancarlo Forero', album: 'iPod Portfolio', duration: 185, artwork: art.portfolio },
 ]
 
-// ── Portfolio ──────────────────────────────────────────────────────────────
+// -- Portfolio --
 export const portfolio: Portfolio = {
   profile: {
     name: 'Giancarlo Forero',
@@ -235,7 +264,7 @@ export const portfolio: Portfolio = {
     location: 'New York, NY',
     headline: 'Software engineer building production software across full-stack web, AI and cloud.',
     bio: [
-      'I’m a computer science student at CUNY Queens College who likes shipping real software to real users — most recently a trivia feature for a platform serving a million students.',
+      'I\'m a computer science student at CUNY Queens College who likes shipping real software to real users -- most recently a trivia feature for a platform serving a million students.',
       'I work across the stack: React and TypeScript front ends, Python and Node back ends, AI integrations, and serverless infrastructure on Cloudflare and AWS.',
     ],
     focus: ['Full-stack development', 'AI engineering', 'Cloud systems', 'Production software'],

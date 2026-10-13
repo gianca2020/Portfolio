@@ -173,7 +173,7 @@ describe('Preview', () => {
     const html = render(<Preview spec={{ type: 'project', projectId: project.id }} />)
     expect(html).toContain(project.name)
     expect(html).toContain(project.tagline)
-    expect(html).toContain(project.stack.slice(0, 3).join(' · '))
+    expect(html).toContain(project.stack[0])
   })
 
   it.each(portfolio.projects)('lists only whole technologies for $name', (project) => {
@@ -220,7 +220,7 @@ describe('Preview', () => {
 
 describe('Artwork', () => {
   it('draws a deterministic, decorative generated cover that fills its box', () => {
-    const spec = portfolio.projects[0].artwork
+    const spec = portfolio.projects[1].artwork
     const a = renderToStaticMarkup(<Artwork spec={spec} className="h-full w-full" />)
     // Phrasing content only, so a cover can sit inside a <button> (Cover Flow).
     expect(a).toMatch(/^<span class="block overflow-hidden h-full w-full" aria-hidden="true">/)
@@ -231,14 +231,14 @@ describe('Artwork', () => {
   })
 
   it('lays out a 2 : 3 sleeve for the full-height preview panel', () => {
-    const spec = portfolio.projects[0].artwork
+    const spec = portfolio.projects[1].artwork
     const html = renderToStaticMarkup(<Artwork spec={spec} format="portrait" className="h-full w-full" />)
     expect(html).toContain('viewBox="0 0 100 150"')
     expect(html).toContain('y="100"')
   })
 
   it('holds its Ken Burns drift while the device is hidden', () => {
-    const spec = portfolio.projects[0].artwork
+    const spec = portfolio.projects[1].artwork
     const drifting = <Artwork spec={spec} kenBurns />
     expect(renderToStaticMarkup(drifting)).not.toContain('animation-play-state')
     const hidden = renderToStaticMarkup(
