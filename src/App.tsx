@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { Analytics } from '@vercel/analytics/react'
 import { IPodPage } from './components/ipod/IPodPage'
 // Recruiter View is temporarily disabled. To restore it, uncomment the import,
 // the route logic, and the render below (and the entry points in IPodPage.tsx,
@@ -18,6 +19,7 @@ export default function App() {
     <>
       <IPodPage active />
       {/* {recruiter && <RecruiterView />} */}
+      <Analytics />
     </>
   )
 }
