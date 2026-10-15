@@ -27,6 +27,7 @@ const art = {
   augenta: { monogram: 'A', palette: ['#111a22', '#e8eef2', '#5cc8b0'], motif: 'orbit' as const },
   cuny: { monogram: 'CUNY', palette: ['#1d3f8f', '#ffffff', '#f5b700'], motif: 'stripes' as const },
   club: { monogram: 'QC', palette: ['#2b2d42', '#f8f4e3', '#ef8354'], motif: 'rings' as const },
+  dapa: { monogram: 'FI', palette: ['#0f172a', '#f8fafc', '#f97316'], motif: 'waveform' as const },
 } satisfies Record<string, ArtworkSpec>
 
 // -- Projects --
@@ -57,6 +58,28 @@ const projects: Project[] = [
       demo: 'https://devpost.com/software/iris-58cvyt',
     },
     artwork: art.iris,
+  },
+  {
+    id: 'financial-inclusion-roi',
+    name: 'LEAD ASPIRE: Financial Inclusion ROI Engine',
+    tagline: 'Help banks evaluate the potential returns of serving underbanked communities.',
+    description: 'A financial-inclusion ROI prototype built for a Mastercard hackathon challenge. Combines Census, FDIC, HMDA, and CFPB data in Power BI dashboards to explore underserved markets, estimate customer lifetime value, and model potential returns.',
+    date: 'Oct 2026',
+    role: 'Client discovery, data architecture, and technical leadership',
+    stack: ['Microsoft Fabric', 'Power BI', 'Python'],
+    highlights: [
+      'Led discovery with Mastercard stakeholders, translating profitability concerns into requirements for market sizing, customer lifetime value, and ROI analysis.',
+      'Designed the data flow from public-data ingestion through Microsoft Fabric ETL into interactive Power BI dashboards.',
+      'Chose Fabric and Power BI to reduce custom pipeline and dashboard work within an eight-hour deadline.',
+      'Led a six-person team across data, backend, and design from discovery to a working prototype; presented it to Mastercard stakeholders and hackathon judges.',
+    ],
+    metrics: [
+      { value: '8 hours', label: 'discovery to prototype' },
+      { value: '6 people', label: 'cross-functional team' },
+      { value: '4', label: 'public data sources' },
+    ],
+    links: {},
+    artwork: art.dapa,
   },
   {
     id: 'polly-debate-ai',
