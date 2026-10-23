@@ -66,12 +66,12 @@ const projects: Project[] = [
     description: "Started as an 8-hour prototype at Microsoft's LEAD ASPIRE hackathon on a Mastercard Financial Inclusion brief, then built out over 11 days after Mastercard stakeholders asked the team to continue the work. ARTIC combines public banking and U.S. Census data to value every neighborhood, bank, and branch, uses an LLM to pick an evidence-backed campaign for each county, and designs a measured pilot so a bank can test the return before scaling.",
     date: 'Oct 2026',
     role: 'Customer discovery, AI decision layer, and ROI engine: requirements, LLM campaign selector, money model, and pilot design.',
-    stack: ['Python', 'Azure AI Foundry', 'Microsoft Fabric', 'pandas', 'Pydantic', 'Power BI', 'OpenRouter', 'pytest', 'GitHub Actions', 'Cloudflare Workers'],
+    stack: ['Python', 'Azure AI Foundry', 'Microsoft Fabric', 'TypeSafe Jev', 'OpenRouter', 'pandas', 'Pydantic', 'Apache Parquet', 'REST APIs', 'Power BI', 'pytest', 'GitHub Actions', 'Cloudflare Workers'],
     highlights: [
-      "Architected ARTIC's AI decision layer: a calibrated LLM selector with a rule-based fallback and an evaluation set that picks an evidence-backed Mastercard campaign per county, plus a research agent that covers every U.S. bank for about $10.",
+      "Architected ARTIC's AI decision layer on TypeSafe's Jev via OpenRouter: calibrated Choice and Score calls pick an evidence-backed Mastercard campaign per county, behind a typed client interface with a rule-based fallback, a failure circuit breaker, and an evaluation set.",
       "Built the ROI engine's money model in Python and pandas, valuing 96 banks and 1,287 branches in Houston from each bank's own FDIC margins and cost to serve, at about $292 in modeled five-year value per customer.",
       "Worked forward-deployed with Mastercard's Financial Inclusion team: helped run customer discovery and turned their constraints into requirements, including measured pilots instead of forecasts and data kept in each bank's own Azure tenant.",
-      'Led a six-person team through 130+ merged pull requests in 11 days, backed by 158 automated pytest tests in GitHub Actions CI and data pipelines over 7+ public sources, with all 50 U.S. states runnable.',
+      'Led a six-person team through 130+ merged pull requests in 11 days, with 158 pytest tests in GitHub Actions CI and Python data pipelines that pull the FDIC BankFind, U.S. Census ACS, HMDA, and CFPB APIs into Parquet for all 50 states.',
       'Designed randomized test-versus-control (A/B) pilots with matched pairs, statistical power simulation, locked key performance indicators (KPIs), and a stop rule, plus guardrails that keep race and ethnicity proxies out of campaign selection.',
       'Helped a teammate build the pitch deck for the final presentation to Mastercard and the hackathon judges.',
     ],
@@ -81,6 +81,7 @@ const projects: Project[] = [
       { value: '130+', label: 'merged PRs in 11 days' },
     ],
     links: {
+      github: 'https://github.com/bryan3342/lead-microsoft-project',
       live: 'https://lead-microsoft-project.bryanmejiaeducation.workers.dev',
     },
     artwork: art.artic,
