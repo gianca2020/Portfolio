@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { ArtworkSpec } from '../../data/types'
 import { Artwork } from './Artwork'
 import {
@@ -6,12 +6,11 @@ import {
   describeTrack,
   formatClock,
   formatRemaining,
-  nextVolume,
   PROGRESS_TICK_MS,
   progressOf,
   quadMatrix,
-  VOLUME_HUD_MS,
-  volumeSteps,
+  SCRUB_STEP_S,
+  scrubSteps,
 } from './detail/nowPlaying'
 import { useDeviceActive } from './state/deviceContext'
 import { usePlayback } from './state/playbackContext'
@@ -56,20 +55,11 @@ function Meter({ fraction }: { fraction: number }) {
   )
 }
 
-function Speaker({ loud }: { loud?: boolean }) {
-  return (
-    <svg viewBox="0 0 14 12" aria-hidden="true" className="h-[10px] w-[12px] shrink-0 text-lcd-ink-2">
-      <path d="M1 4h2.5L7 1v10L3.5 8H1z" fill="currentColor" />
-      {loud && <path d="M9 3.5a3.5 3.5 0 0 1 0 5M10.8 1.8a6 6 0 0 1 0 8.4" fill="none" stroke="currentColor" />}
-    </svg>
-  )
-}
-
-/** "Now Building" — the 6th-generation Now Playing screen, driven by the playback easter egg. */
+/** The 6th-generation Now Playing screen, driven by the playback easter egg. */
 export function NowPlaying({ node, active, api }: ScreenProps<ScreenNode>) {
   const playback = usePlayback()
   const deviceActive = useDeviceActive()
-  const { status, track, trackIndex, tracks, volume } = playback
+  const { status, track, trackIndex, tracks, duration } = playback
   const playing = status === 'playing'
 
   // Re-render ~4×/s while playing and on screen so the clock and bar advance. The
@@ -81,28 +71,14 @@ export function NowPlaying({ node, active, api }: ScreenProps<ScreenNode>) {
     return () => window.clearInterval(timer)
   }, [playing, deviceActive])
 
-  // Several wheel steps can land before the provider re-renders: track the volume locally.
-  const volumeRef = useRef(volume)
-  useLayoutEffect(() => {
-    volumeRef.current = volume
-  }, [volume])
-
-  const [showVolume, setShowVolume] = useState(false)
-  const hideTimer = useRef<number | undefined>(undefined)
-  useEffect(() => () => window.clearTimeout(hideTimer.current), [])
-
   useScreenController(api, active, {
     count: 1,
+    // The wheel scrubs through the song (Spotify's embed has no volume control to drive).
+    // scrub() works from the live clock, so quick successive steps build on each other.
     onMove: (delta, source) => {
-      const next = nextVolume(volumeRef.current, volumeSteps(delta, source))
-      if (next !== volumeRef.current) {
-        volumeRef.current = next
-        playback.setVolume(next)
-        api.click()
-      }
-      setShowVolume(true)
-      window.clearTimeout(hideTimer.current)
-      hideTimer.current = window.setTimeout(() => setShowVolume(false), VOLUME_HUD_MS)
+      if (!playback.canScrub) return true
+      playback.scrub(scrubSteps(delta, source) * SCRUB_STEP_S)
+      api.click()
       return true
     },
     onSkip: (delta) => {
@@ -110,11 +86,11 @@ export function NowPlaying({ node, active, api }: ScreenProps<ScreenNode>) {
       return true
     },
     onSelect: () => {},
-    // Spoken by the engine on ⏮ / ⏭, auto-advance and every volume step.
-    describe: () => describeTrack(track, volume),
+    // Spoken by the engine on ⏮ / ⏭, auto-advance and every scrub step.
+    describe: () => describeTrack(track, Math.min(playback.getElapsed(), duration), duration),
   })
 
-  const elapsed = Math.min(playback.getElapsed(), track.duration)
+  const elapsed = Math.min(playback.getElapsed(), duration)
 
   return (
     <section aria-label={node.title} className="absolute inset-0 overflow-hidden bg-lcd font-ipod text-lcd-ink">
@@ -137,24 +113,14 @@ export function NowPlaying({ node, active, api }: ScreenProps<ScreenNode>) {
       </div>
 
       <div className="absolute right-[14px] bottom-[9px] left-[14px] h-[26px]">
-        {showVolume ? (
-          <div className="flex h-[9px] items-center gap-[6px]">
-            <Speaker />
-            <Meter fraction={volume} />
-            <Speaker loud />
-          </div>
-        ) : (
-          <>
-            <div className="flex">
-              <Meter fraction={progressOf(elapsed, track.duration)} />
-            </div>
-            <div className="mt-[3px] flex items-baseline justify-between text-[11px] leading-[14px] text-lcd-ink-2">
-              <span>{formatClock(elapsed)}</span>
-              {!playing && <span className="font-semibold text-lcd-ink-3">Paused</span>}
-              <span>{formatRemaining(elapsed, track.duration)}</span>
-            </div>
-          </>
-        )}
+        <div className="flex">
+          <Meter fraction={progressOf(elapsed, duration)} />
+        </div>
+        <div className="mt-[3px] flex items-baseline justify-between text-[11px] leading-[14px] text-lcd-ink-2">
+          <span>{formatClock(elapsed)}</span>
+          {!playing && <span className="font-semibold text-lcd-ink-3">Paused</span>}
+          <span>{formatRemaining(elapsed, duration)}</span>
+        </div>
       </div>
     </section>
   )

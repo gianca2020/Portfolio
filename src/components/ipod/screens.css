@@ -49,7 +49,7 @@
     mask-image: linear-gradient(to bottom, rgb(0 0 0 / 0.5), rgb(0 0 0 / 0) 80%);
   }
 
-  /* Now Playing progress / volume bar, in the firmware's measured colours: a
+  /* Now Playing progress bar, in the firmware's measured colours: a
    * white → grey inset track with a grey rule, and a lighter blue fill than the
    * menu selection bar. Colour lives here, not in utilities (they would win). */
   .np-track {

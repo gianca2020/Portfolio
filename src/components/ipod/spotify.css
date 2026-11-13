@@ -1,0 +1,25 @@
+/*
+ * Spotify embed panel: a small mini-player in the bottom-right corner, over the
+ * stage and the design pages alike. Full width (inside the gutters) on phones.
+ */
+
+.spotify-player {
+  position: fixed;
+  z-index: 40;
+  right: max(12px, env(safe-area-inset-right));
+  bottom: max(12px, env(safe-area-inset-bottom));
+  width: min(320px, calc(100vw - 24px));
+  height: 80px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 6px 24px rgb(0 0 0 / 0.25);
+}
+
+.spotify-player[hidden] {
+  display: none;
+}
+
+.spotify-player iframe {
+  display: block;
+  border: 0;
+}

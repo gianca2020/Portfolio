@@ -25,14 +25,18 @@ const settings: SettingsValue = {
 const playback = (started: boolean): PlaybackValue => ({
   status: started ? 'playing' : 'stopped',
   started,
-  tracks: portfolio.nowBuilding,
+  tracks: portfolio.nowPlaying,
   trackIndex: 0,
-  track: portfolio.nowBuilding[0],
-  volume: 0.5,
+  track: portfolio.nowPlaying[0],
+  duration: portfolio.nowPlaying[0].duration,
+  canScrub: false,
   getElapsed: () => 0,
   toggle: () => {},
   skip: () => {},
-  setVolume: () => {},
+  scrub: () => {},
+  seekRequest: null,
+  reportEmbed: () => {},
+  followEmbed: () => {},
 })
 
 const api: ScreenApi = {

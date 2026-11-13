@@ -16,6 +16,8 @@ export interface StatusBarProps {
    * the artwork panel runs the full LCD height); 'full' → all 320px.
    */
   layout: 'split' | 'full'
+  /** Below the main menu: prefix the title with ‹ so MENU reads as "back". */
+  canGoBack?: boolean
 }
 
 /**
@@ -36,7 +38,7 @@ const PLAYBACK_GLYPH: Record<PlaybackStatus, ComponentType<SVGProps<SVGSVGElemen
  * left, title centred (Helvetica Bold 13), battery right. Decorative for
  * assistive tech — the engine's live region announces titles.
  */
-export function StatusBar({ title, playback, layout }: StatusBarProps) {
+export function StatusBar({ title, playback, layout, canGoBack }: StatusBarProps) {
   const reducedMotion = useLcdReducedMotion()
   const style: CSSProperties = {
     width: layout === 'split' ? SPLIT_PANEL_WIDTH : LCD_WIDTH,
@@ -52,6 +54,7 @@ export function StatusBar({ title, playback, layout }: StatusBarProps) {
         className="absolute top-0 truncate text-center text-[13px] leading-[19px] font-bold text-lcd-ink"
         style={{ left: TITLE_INSET, right: TITLE_INSET }}
       >
+        {canGoBack && <span className="mr-[3px] font-normal text-lcd-ink-2">‹</span>}
         {title}
       </p>
       <BatteryIcon className="absolute top-[4px] right-[5px] h-[13px] w-[26px]" />

@@ -1,11 +1,12 @@
 import { MotionConfig } from 'framer-motion'
-import { useState, type FocusEvent } from 'react'
+import { useEffect, useState, type FocusEvent } from 'react'
 import { Chassis } from './Chassis'
 import { ClickWheel } from './ClickWheel'
 import { menuTree, nodeIndex } from './data'
 import { LCD } from './LCD'
 import { ScreenStack } from './Screen'
 import { StatusBar } from './StatusBar'
+import type { ScreenSpec } from './types'
 import { DeviceActiveContext } from './state/deviceContext'
 import { initialLiveRegion, nextLiveRegion } from './state/liveRegion'
 import { usePlayback } from './state/playbackContext'
@@ -16,10 +17,20 @@ import { useIPodEngine } from './useIPodEngine'
  * The device: chassis + LCD + click wheel, wired to the navigation engine.
  * Must be rendered inside <SettingsProvider> and <PlaybackProvider>.
  */
-export function IPod({ active }: { active: boolean }) {
+interface IPodProps {
+  active: boolean
+  /** Ignore keys while something sits on top of the device (the Expand reader). */
+  paused?: boolean
+  /** Reports the open screen (null on a menu), so the stage can offer to expand it. */
+  onScreenChange?: (spec: ScreenSpec | null) => void
+}
+
+export function IPod({ active, paused = false, onScreenChange }: IPodProps) {
   const { settings, reducedMotion } = useSettings()
   const playback = usePlayback()
-  const engine = useIPodEngine({ root: menuTree, nodes: nodeIndex, enabled: active })
+  const engine = useIPodEngine({ root: menuTree, nodes: nodeIndex, enabled: active && !paused })
+  const screen = engine.node.kind === 'screen' ? engine.node.screen : null
+  useEffect(() => onScreenChange?.(screen), [screen, onScreenChange])
   const { controls } = engine
   const statusLayout = engine.node.kind === 'menu' && engine.node.layout === 'split' ? 'split' : 'full'
 
@@ -55,7 +66,12 @@ export function IPod({ active }: { active: boolean }) {
                 direction={engine.direction}
                 api={engine.api}
               />
-              <StatusBar title={engine.node.title} playback={playback.status} layout={statusLayout} />
+              <StatusBar
+                title={engine.node.title}
+                playback={playback.status}
+                layout={statusLayout}
+                canGoBack={engine.depth > 0}
+              />
             </LCD>
           }
           wheel={

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { elapsedAt, skipClock, STOPPED_CLOCK, toggleClock, type Clock } from '../state/playbackClock'
+import { elapsedAt, seekClock, skipClock, STOPPED_CLOCK, toggleClock, type Clock } from '../state/playbackClock'
 
 describe('playback clock', () => {
   it('starts, pauses and resumes, keeping elapsed time across the pause', () => {
@@ -23,5 +23,14 @@ describe('playback clock', () => {
   it('never starts or skips with an empty track list', () => {
     expect(toggleClock(STOPPED_CLOCK, 1000, 0)).toBe(STOPPED_CLOCK)
     expect(skipClock(STOPPED_CLOCK, 1, 1000, 0)).toBe(STOPPED_CLOCK)
+  })
+
+  it('seeks within the track, keeping play / pause and never going below zero', () => {
+    const playing = toggleClock(STOPPED_CLOCK, 1000, 3)
+    const moved = seekClock(playing, 20, 2000)
+    expect(moved.status).toBe('playing')
+    expect(elapsedAt(moved, 3000)).toBe(21)
+    const paused = toggleClock(moved, 3000, 3)
+    expect(elapsedAt(seekClock(paused, -4, 4000), 9000)).toBe(0)
   })
 })

@@ -278,14 +278,18 @@ const skills: SkillGroup[] = [
   },
 ]
 
-// -- Now Playing easter egg --
-const nowBuilding: Track[] = [
-  { id: 'target-match', title: 'Target Match (Gemini Mix)', artist: 'Giancarlo Forero', album: 'Iris', duration: 196, artwork: art.iris },
-  { id: 'duels', title: 'Duels (en / es / el)', artist: 'Giancarlo Forero', album: 'Puberry · Summer \'26', duration: 204, artwork: art.puberry },
-  { id: 'multi-tenant', title: 'Multi-Tenant Orgs', artist: 'Giancarlo Forero', album: 'Augenta AI', duration: 178, artwork: art.augenta },
-  { id: 'thirty-fps', title: '30+ FPS', artist: 'Giancarlo Forero', album: 'Polly Debate AI', duration: 221, artwork: art.polly },
-  { id: 'sub-200', title: 'Sub-200 ms', artist: 'Giancarlo Forero', album: 'UP! Investments', duration: 167, artwork: art.up },
-  { id: 'click-wheel', title: 'Click Wheel (Rotary Mix)', artist: 'Giancarlo Forero', album: 'iPod Portfolio', duration: 185, artwork: art.portfolio },
+// -- Now Playing easter egg: songs on repeat, played through Spotify's embed --
+/** Album covers come from Spotify's image CDN; the generated cover is the fallback if one fails to load. */
+const spotifyCover = (hash: string) => `https://i.scdn.co/image/ab67616d00001e02${hash}`
+
+const nowPlaying: Track[] = [
+  { id: 'portal', spotifyId: '7LYCoMFe1ciXBMdwZLmvG2', title: 'Portal', artist: 'Fine', album: 'Portal', duration: 144, artwork: { image: spotifyCover('3d5ca71998d457565f91c274'), imageAlt: 'Portal cover', monogram: 'P', palette: ['#20242c', '#e9e4da', '#8fb4d9'], motif: 'orbit' } },
+  { id: 'know-who-you-are', spotifyId: '4IdcRddA9tKLvTwpymycpU', title: 'Know Who You Are at Every Age', artist: 'Cocteau Twins', album: 'Four-Calendar Café', duration: 220, artwork: { image: spotifyCover('3eec753a75cfd369b65e6972'), imageAlt: 'Four-Calendar Café cover', monogram: 'CT', palette: ['#d9c7b8', '#3b2f2f', '#a8786a'], motif: 'waveform' } },
+  { id: 'glider', spotifyId: '6fyMExLM9mmtXAQKCnTaZG', title: 'Glider', artist: 'Japanese Breakfast', album: 'Sable (Original Video Game Soundtrack)', duration: 171, artwork: { image: spotifyCover('702d716b9dd10ab2129e563a'), imageAlt: 'Sable (Original Video Game Soundtrack) cover', monogram: 'JB', palette: ['#f2c46d', '#2b2330', '#d96c4e'], motif: 'rings' } },
+  { id: 'white-ferrari', spotifyId: '2LMkwUfqC6S6s6qDVlEuzV', title: 'White Ferrari', artist: 'Frank Ocean', album: 'Blonde', duration: 249, artwork: { image: spotifyCover('c5649add07ed3720be9d5526'), imageAlt: 'Blonde cover', monogram: 'FO', palette: ['#e8e6e1', '#1d1d1f', '#9a9a9a'], motif: 'stripes' } },
+  { id: 'modern-love', spotifyId: '3gxEZXUjrNbl3TlSrTGbR5', title: 'Modern Love', artist: 'David Bowie', album: 'Let\'s Dance (2018 Remaster)', duration: 288, artwork: { image: spotifyCover('db0917ddd4139153bc1d1a1a'), imageAlt: 'Let\'s Dance (2018 Remaster) cover', monogram: 'DB', palette: ['#1c1c1c', '#f4f1ea', '#d63a2f'], motif: 'bars' } },
+  { id: 'cry-for-me', spotifyId: '2RhHct6gGXSrZ1zHjovhRq', title: 'Cry for Me', artist: 'Magdalena Bay', album: 'Imaginal Disk', duration: 307, artwork: { image: spotifyCover('a3390485ba30a0a99feaa0dd'), imageAlt: 'Imaginal Disk cover', monogram: 'MB', palette: ['#2a1f4a', '#f6d7f0', '#7ad3c8'], motif: 'orbit' } },
+  { id: 'suga-honey-iced-tea', spotifyId: '6HjzGcCtnFNfzA3N1ftR2v', title: 'Suga Honey Iced Tea', artist: 'Kelis', album: 'Tasty', duration: 203, artwork: { image: spotifyCover('80c0124b18f8d2e3152bbb02'), imageAlt: 'Tasty cover', monogram: 'K', palette: ['#f5d36b', '#3a2414', '#e0823c'], motif: 'grid' } },
 ]
 
 // -- Portfolio --
@@ -334,7 +338,7 @@ export const portfolio: Portfolio = {
     fileName: 'Giancarlo_Forero_Resume.pdf',
     updated: 'Oct 2026',
   },
-  nowBuilding,
+  nowPlaying,
   sourceUrl: 'https://github.com/gianca2020/Portfolio',
 }
 

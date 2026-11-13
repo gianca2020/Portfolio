@@ -174,7 +174,7 @@ export function aboutPortfolioBlocks(content: Portfolio): DetailBlock[] {
         'Rotate the wheel or use ↑ ↓',
         'Select / Enter / → opens',
         'MENU / Esc / ← goes back',
-        '▶︎❚❚ or Space plays the Now Building easter egg',
+        '▶︎❚❚ or Space plays songs I have on repeat',
       ],
     },
     {

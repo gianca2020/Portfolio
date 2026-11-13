@@ -75,7 +75,7 @@ describe('RecruiterView', () => {
   })
 
   it('keeps full accessible names on the narrow-screen top-bar labels', () => {
-    expect(html).toMatch(/<a href="#\/"[^>]*>.*?<span class="max-sm:sr-only">Back to iPod<\/span><\/a>/)
+    expect(html).toMatch(/<a href="#\/"[^>]*>.*?<span class="max-sm:sr-only">Back to portfolio<\/span><\/a>/)
     expect(html).toContain('<span class="max-sm:sr-only">Download résumé</span>')
   })
 

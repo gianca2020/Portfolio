@@ -31,7 +31,7 @@ export function PageShell({ meta, children }: { meta: RouteMeta; children: React
       <header className="work-header">
         <nav className="work-header__nav" aria-label="Site">
           <NavLink to="/" className="work-header__back">
-            <span aria-hidden="true">←</span> Back to iPod
+            <span aria-hidden="true">←</span> Back to portfolio
           </NavLink>
           <NavLink to="/work" end className="work-header__link">
             Design Work

@@ -1,0 +1,67 @@
+/*
+ * Expand reader: the current screen as a readable sheet over the stage.
+ * Colours are Recruiter View's --rv-* tokens (the dialog carries .rv).
+ */
+
+.expand-reader {
+  width: min(48rem, calc(100vw - 32px));
+  max-height: calc(100dvh - 48px);
+  margin: auto;
+  padding: 0;
+  border: 1px solid var(--rv-rule-strong);
+  border-radius: 12px;
+  background: var(--rv-bg);
+  color: var(--rv-ink);
+  box-shadow: 0 24px 64px rgb(0 0 0 / 0.35);
+  overflow: hidden;
+}
+
+.expand-reader::backdrop {
+  background: rgb(0 0 0 / 0.45);
+}
+
+.expand-reader__sheet {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100dvh - 48px);
+}
+
+.expand-reader__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px 10px 20px;
+  border-bottom: 1px solid var(--rv-rule);
+}
+
+.expand-reader__close {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--rv-rule-strong);
+  border-radius: 7px;
+  font-size: 0.875rem;
+  color: var(--rv-ink);
+}
+
+@media (hover: hover) {
+  .expand-reader__close:hover {
+    border-color: var(--rv-accent);
+    color: var(--rv-accent);
+  }
+}
+
+.expand-reader__body {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 4px 20px 28px;
+}
+
+@media (min-width: 640px) {
+  .expand-reader__body {
+    padding: 8px 32px 36px;
+  }
+}
