@@ -21,7 +21,7 @@ export function TopBar({ name, resume }: { name: string; resume: ResumeFile }) {
             <span aria-hidden="true" className="sm:hidden">
               iPod
             </span>
-            <span className="max-sm:sr-only">Back to iPod</span>
+            <span className="max-sm:sr-only">Back to portfolio</span>
           </a>
           <a href={resume.href} download={resume.fileName} type="application/pdf" className={primaryButton}>
             <DownloadIcon className="size-4 shrink-0" />

@@ -12,7 +12,7 @@ export function NotFoundPage() {
         <p className="work-lead">That page doesn’t exist, or it has moved.</p>
         <p className="work-links">
           <Link className="work-button" to="/">
-            Back to the iPod
+            Back to portfolio
           </Link>
           <Link className="work-button work-button--quiet" to="/work">
             See design work
