@@ -2,6 +2,7 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { describe, expect, it } from 'vitest'
 import { asset, caseStudies, hasText, publishedCaseStudies, type CaseStudy as CaseStudyData } from '../../../content/work'
 import { codeForAll } from '../../../content/work/code-for-all'
+import { duels } from '../../../content/work/duels'
 import { puberry } from '../../../content/work/puberry'
 import { CaseStudy } from '../CaseStudy'
 
@@ -111,5 +112,23 @@ describe('Puberry', () => {
       expect(video).toMatch(/poster="[^"]+-poster\.webp"/)
       expect(video).toMatch(/aria-label="[^"]+"/)
     }
+  })
+})
+
+describe('Duels', () => {
+  const html = render(duels)
+
+  it('follows Puberry and renders every filled section in order', () => {
+    expect(publishedCaseStudies.map((c) => c.slug).slice(0, 2)).toEqual(['puberry', 'duels'])
+    expect(headings(html)).toEqual([
+      'Snapshot',
+      'The problem',
+      'Who it’s for',
+      'Key decisions',
+      'Process',
+      'Final design',
+      'Outcome',
+    ])
+    expect(html.match(/<h3 class="work-decision__title"/g)).toHaveLength(duels.decisions.length)
   })
 })

@@ -35,6 +35,54 @@
     "width": 2000,
     "height": 562
   },
+  "duels/async-round.webp": {
+    "width": 2000,
+    "height": 1068
+  },
+  "duels/battle-poster.webp": {
+    "width": 1280,
+    "height": 1412
+  },
+  "duels/battle.mp4": {
+    "width": 1280,
+    "height": 1412
+  },
+  "duels/challenge.webp": {
+    "width": 1664,
+    "height": 1836
+  },
+  "duels/cover.webp": {
+    "width": 2000,
+    "height": 1068
+  },
+  "duels/direct-hit.webp": {
+    "width": 1664,
+    "height": 1836
+  },
+  "duels/how-to-duel.webp": {
+    "width": 1664,
+    "height": 1836
+  },
+  "duels/leaderboard.webp": {
+    "width": 1664,
+    "height": 1836
+  },
+  "duels/lesson-select.webp": {
+    "width": 1664,
+    "height": 1836
+  },
+  "duels/miss.webp": {
+    "width": 1664,
+    "height": 1836
+  },
+  "duels/teacher-toggle.webp": {
+    "width": 1470,
+    "height": 1122
+  },
+  "duels/title.webp": {
+    "width": 1664,
+    "height": 1836
+  },
   "hackknight/site-desktop-full.webp": {
     "width": 1440,
     "height": 5200

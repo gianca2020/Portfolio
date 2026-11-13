@@ -1,7 +1,7 @@
 import type { CaseStudy } from './types.ts'
 
 /*
- * Drafted from the Puberry design boards (sign-up and login), three rounds of
+ * Drafted from public descriptions of Puberry, the Puberry design boards (sign-up and login), three rounds of
  * review notes on the mobile builds, screen recordings, and the Puberry entry
  * in src/data/portfolio.ts. Media is cropped to drop browser chrome, staging
  * URLs and anything personal. 'TODO' fields are hidden on the page.
@@ -11,14 +11,14 @@ export const puberry: CaseStudy = {
   published: true,
   title: 'Puberry on mobile',
   summary:
-    'Redesigning Puberry, a health-education platform used by 1 million students, for phones: an 8-step sign-up designed for iPhone and Android, and the student, teacher and parent portals reworked through three rounds of review.',
+    'Redesigning Puberry, “Duolingo for health” for K–12 schools, used by 1 million students, for phones: an 8-step sign-up designed for iPhone and Android, and the student, teacher and parent portals reworked through three rounds of review.',
   cover: {
     type: 'image',
     src: 'cover.webp',
     alt: 'Five iPhone screens from the redesigned Puberry sign-up: choose a role, enter your age, create a username, create a password with a live checklist, and a last step for an adult to confirm the account.',
   },
   snapshot: {
-    role: 'Software Engineering Intern. I redesigned the platform for mobile and led the build.',
+    role: 'Software Engineering Intern, fully in charge of design. I redesigned the platform for mobile and led the build.',
     team: 'Me and 2 intern engineers I led, with review rounds from the Puberry team',
     timeline: 'Jun – Aug 2026 (summer internship)',
     tools: ['HTML/CSS prototypes', 'Tailwind CSS'],
@@ -31,7 +31,7 @@ export const puberry: CaseStudy = {
     ],
   },
   problem:
-    'Puberry was built for desktop. On a phone, the student portal broke in small ways that added up: popups spilled past their edges, a section title sat on top of the card above it, the language dropdown needed sideways scrolling, and in lessons the button to move on was trapped below the lesson’s own scroll area, so students couldn’t find the next step.\n\nThe job was to make the student, teacher and parent portals, and the sign-up every new student starts with, work on phones across Apple devices, as the same web app rather than a separate one.',
+    'Puberry turns health education into a game, “Duolingo for health”: medically verified lessons for students aged 8 to 18, daily check-ins, mini-games and Berry Bucks to spend on your character. But it was built for desktop. On a phone, the student portal broke in small ways that added up: popups spilled past their edges, a section title sat on top of the card above it, the language dropdown needed sideways scrolling, and in lessons the button to move on was trapped below the lesson’s own scroll area, so students couldn’t find the next step.\n\nThe job was to make the student, teacher and parent portals, and the sign-up every new student starts with, work on phones across Apple devices, as the same web app rather than a separate one.',
   users: [
     {
       name: 'Students',
@@ -152,6 +152,6 @@ export const puberry: CaseStudy = {
   },
   links: [],
   outcome:
-    'Shipped to production on a platform serving 1 million students: the student, teacher and parent portals, plus the 8-step sign-up and login, validated across 3 iOS breakpoints.',
+    'Shipped to production on a platform serving 1 million students: the student, teacher and parent portals, plus the 8-step sign-up and login, validated across 3 iOS breakpoints. The Puberry team praised the design work, and I went on to design Duels, the platform’s first mini-game.',
   reflection: 'TODO',
 }
