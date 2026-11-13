@@ -35,6 +35,54 @@
     "width": 2000,
     "height": 562
   },
+  "duels/async-round.webp": {
+    "width": 2000,
+    "height": 1068
+  },
+  "duels/battle-poster.webp": {
+    "width": 1280,
+    "height": 1412
+  },
+  "duels/battle.mp4": {
+    "width": 1280,
+    "height": 1412
+  },
+  "duels/challenge.webp": {
+    "width": 1664,
+    "height": 1836
+  },
+  "duels/cover.webp": {
+    "width": 2000,
+    "height": 1068
+  },
+  "duels/direct-hit.webp": {
+    "width": 1664,
+    "height": 1836
+  },
+  "duels/how-to-duel.webp": {
+    "width": 1664,
+    "height": 1836
+  },
+  "duels/leaderboard.webp": {
+    "width": 1664,
+    "height": 1836
+  },
+  "duels/lesson-select.webp": {
+    "width": 1664,
+    "height": 1836
+  },
+  "duels/miss.webp": {
+    "width": 1664,
+    "height": 1836
+  },
+  "duels/teacher-toggle.webp": {
+    "width": 1470,
+    "height": 1122
+  },
+  "duels/title.webp": {
+    "width": 1664,
+    "height": 1836
+  },
   "hackknight/site-desktop-full.webp": {
     "width": 1440,
     "height": 5200
@@ -46,5 +94,61 @@
   "hackknight/site-mobile.webp": {
     "width": 780,
     "height": 1688
+  },
+  "puberry/cover.webp": {
+    "width": 2000,
+    "height": 818
+  },
+  "puberry/landscape.webp": {
+    "width": 1720,
+    "height": 1760
+  },
+  "puberry/lesson-continue-poster.webp": {
+    "width": 750,
+    "height": 1218
+  },
+  "puberry/lesson-continue.mp4": {
+    "width": 750,
+    "height": 1218
+  },
+  "puberry/live-requirements.webp": {
+    "width": 1692,
+    "height": 1720
+  },
+  "puberry/login.webp": {
+    "width": 1024,
+    "height": 1532
+  },
+  "puberry/review-lesson-flow.webp": {
+    "width": 946,
+    "height": 1590
+  },
+  "puberry/review-profile-stats.webp": {
+    "width": 946,
+    "height": 1590
+  },
+  "puberry/review-student-portal.webp": {
+    "width": 946,
+    "height": 1590
+  },
+  "puberry/review-teacher-portal.webp": {
+    "width": 946,
+    "height": 1440
+  },
+  "puberry/signup-on-iphone-poster.webp": {
+    "width": 750,
+    "height": 1218
+  },
+  "puberry/signup-on-iphone.mp4": {
+    "width": 750,
+    "height": 1218
+  },
+  "puberry/signup-platforms.webp": {
+    "width": 1766,
+    "height": 1880
+  },
+  "puberry/under-13.webp": {
+    "width": 1766,
+    "height": 1880
   }
 }

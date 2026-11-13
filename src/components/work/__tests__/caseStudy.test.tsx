@@ -2,6 +2,8 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { describe, expect, it } from 'vitest'
 import { asset, caseStudies, hasText, publishedCaseStudies, type CaseStudy as CaseStudyData } from '../../../content/work'
 import { codeForAll } from '../../../content/work/code-for-all'
+import { duels } from '../../../content/work/duels'
+import { puberry } from '../../../content/work/puberry'
 import { CaseStudy } from '../CaseStudy'
 
 const render = (study: CaseStudyData) => renderToStaticMarkup(<CaseStudy study={study} />)
@@ -81,5 +83,52 @@ describe('Code For All', () => {
       expect(img).toMatch(/alt="[^"]+"/)
     }
     expect(html.match(/loading="eager"/g)).toHaveLength(1) // the hero cover only
+  })
+})
+
+describe('Puberry', () => {
+  const html = render(puberry)
+
+  it('is published, listed first, and renders every filled section in order', () => {
+    expect(publishedCaseStudies[0].slug).toBe('puberry')
+    expect(headings(html)).toEqual([
+      'Snapshot',
+      'The problem',
+      'Who it’s for',
+      'Key decisions',
+      'Process',
+      'Final design',
+      'Outcome',
+    ])
+  })
+
+  it('shows its recordings as muted, looping videos with controls and posters', () => {
+    const videos = html.match(/<video [^>]*>/g) ?? []
+    expect(videos).toHaveLength(2)
+    for (const video of videos) {
+      expect(video).toMatch(/muted/)
+      expect(video).toMatch(/loop/)
+      expect(video).toMatch(/controls/)
+      expect(video).toMatch(/poster="[^"]+-poster\.webp"/)
+      expect(video).toMatch(/aria-label="[^"]+"/)
+    }
+  })
+})
+
+describe('Duels', () => {
+  const html = render(duels)
+
+  it('follows Puberry and renders every filled section in order', () => {
+    expect(publishedCaseStudies.map((c) => c.slug).slice(0, 2)).toEqual(['puberry', 'duels'])
+    expect(headings(html)).toEqual([
+      'Snapshot',
+      'The problem',
+      'Who it’s for',
+      'Key decisions',
+      'Process',
+      'Final design',
+      'Outcome',
+    ])
+    expect(html.match(/<h3 class="work-decision__title"/g)).toHaveLength(duels.decisions.length)
   })
 })
