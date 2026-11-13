@@ -16,8 +16,8 @@ const countCaption = (n: number, one: string, many = `${one}s`) =>
  * Builds the iPod menu tree from portfolio content.
  *
  * Giancarlo
- * ├── Design Work ─ one row per published case study + More Design Work (/work, once the gallery has pieces)
  * ├── Projects ─ one row per project + View All Projects (Cover Flow)
+ * ├── Design Work ─ one row per published case study + More Design Work (/work, once the gallery has pieces)
  * ├── Experience ─ one row per role
  * ├── About Me
  * ├── Resume ─ View Resume · Download Resume · Recruiter View
@@ -262,8 +262,8 @@ export function buildMenuTree(
     title: profile.shortName,
     layout: 'split',
     children: [
-      ...(designWork ? [designWork] : []),
       projectsMenu,
+      ...(designWork ? [designWork] : []),
       experienceMenu,
       {
         kind: 'screen',

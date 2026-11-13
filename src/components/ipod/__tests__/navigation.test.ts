@@ -64,8 +64,8 @@ describe('navigationReducer', () => {
 describe('menu tree', () => {
   it('has the spec’d root menu', () => {
     expect(getVisibleChildren(menuTree, false).map((n) => n.label)).toEqual([
-      'Design Work',
       'Projects',
+      'Design Work',
       'Experience',
       'About Me',
       'Resume',
@@ -125,6 +125,6 @@ describe('Design Work menu', () => {
 
   it('disappears when there is nothing to show', () => {
     expect(buildDesignWorkMenu([], false)).toBeNull()
-    expect(getVisibleChildren(buildMenuTree(portfolio, null), false)[0].label).toBe('Projects')
+    expect(getVisibleChildren(buildMenuTree(portfolio, null), false)[1].label).toBe('Experience')
   })
 })

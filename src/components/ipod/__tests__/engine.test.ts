@@ -63,8 +63,8 @@ describe('spokenState', () => {
 
   it('names the menu in both the slider value and the announcement', () => {
     expect(menu('root', 0)).toEqual({
-      valueText: 'Design Work, submenu, 1 of 7, Giancarlo',
-      announcement: 'Giancarlo: Design Work, submenu, 1 of 7',
+      valueText: 'Projects, submenu, 1 of 7, Giancarlo',
+      announcement: 'Giancarlo: Projects, submenu, 1 of 7',
     })
     expect(menu('projects', 0).valueText).toMatch(/, 1 of \d+, Projects$/)
   })
