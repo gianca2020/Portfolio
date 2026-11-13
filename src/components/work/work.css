@@ -747,6 +747,15 @@
   margin-top: 1rem;
 }
 
+/* A piece shown in several formats takes the full row, so each format stays legible. */
+.work-gallery__card--formats {
+  grid-column: 1 / -1;
+}
+
+.work-gallery__card--formats > p {
+  max-width: var(--w-text);
+}
+
 .work-gallery__images {
   display: grid;
   gap: 0.75rem;
@@ -757,7 +766,7 @@
 
 /* Several formats of one piece (poster, post, story) sit together, bottom-aligned. */
 .work-gallery__images--formats {
-  grid-template-columns: repeat(auto-fit, minmax(6rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 8rem), 1fr));
   align-items: end;
   padding: 0.75rem;
   border-radius: var(--w-radius);

@@ -15,7 +15,7 @@ function GalleryCard({ item, onOpen }: { item: GalleryItem; onOpen: OpenLightbox
   const grouped = (item.formats?.length ?? 0) > 1
 
   return (
-    <li className="work-gallery__card">
+    <li className={`work-gallery__card${grouped ? ' work-gallery__card--formats' : ''}`}>
       <ul className={`work-gallery__images${grouped ? ' work-gallery__images--formats' : ''}`} aria-label={grouped ? 'Formats' : undefined}>
         {images.map(({ image, format }) => (
           <li key={image.src}>
@@ -98,7 +98,7 @@ export function WorkIndexPage() {
         {pieces.length > 0 && (
           <section className="work-section work-section--wide" aria-labelledby="gallery-title">
             <h2 id="gallery-title" className="work-section__title">
-              Gallery
+              More design work
             </h2>
             <ul className="work-gallery">
               {pieces.map((item) => (
