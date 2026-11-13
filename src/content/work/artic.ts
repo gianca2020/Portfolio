@@ -8,7 +8,7 @@ import type { CaseStudy } from './types.ts'
 export const artic: CaseStudy = {
   slug: 'artic',
   published: true,
-  title: 'ARTIC: Making Banking-Desert Data Usable Without a Data Analyst',
+  title: 'ARTIC for Mastercard',
   summary:
     'I designed the full interface for ARTIC, an AI tool that shows banks the business case for serving unbanked neighborhoods. The goal: turn six federal datasets into something a bank or Mastercard decision maker can use with no one in the room to explain it.',
   cover: {
@@ -17,8 +17,8 @@ export const artic: CaseStudy = {
     alt: 'ARTIC overview for Texas: headline figures for underserved households, value per customer and market opportunity above a county heat map.',
   },
   snapshot: {
-    role: 'Sole designer (all UI and UX) on a team of 6 · also built the AI decision layer and ROI engine',
-    team: '6 people',
+    role: 'Sole designer: I made every design decision, across all of the UI and UX. I also built the AI decision layer and ROI engine.',
+    team: 'A team of 6; the design was entirely mine',
     timeline: 'Designed in under a week · Microsoft LEAD ASPIRE hackathon → 11-day build for Mastercard, Oct 2026',
     tools: ['TODO'],
     platforms: ['Web dashboard'],
@@ -49,7 +49,7 @@ export const artic: CaseStudy = {
     {
       title: 'Organize the product around three questions: who, where, how',
       why:
-        'A bank deciding whether to serve a neighborhood is really asking who it’s missing, where they are, and how to win them. The dashboard is built to answer exactly that: how many households are underserved, where they live relative to branches, what each new customer is worth, and which campaign will reach them.\n\nThe sidebar mirrors it (Overview, Locations, Campaign), so users always know which question they’re on.',
+        'A bank deciding whether to serve a neighborhood is really asking who it’s missing, where they are, and how to win them. I built the dashboard to answer exactly that: how many households are underserved, where they live relative to branches, what each new customer is worth, and which campaign will reach them.\n\nI made the sidebar mirror it (Overview, Locations, Campaign), so users always know which question they’re on.',
       media: {
         type: 'image',
         src: 'overview.webp',
@@ -71,7 +71,7 @@ export const artic: CaseStudy = {
     {
       title: 'Build the explanation into the product: a 6-stop guided tour',
       why:
-        'Users shouldn’t need a person to walk them through it. On first visit, ARTIC opens a short tour written in plain language: “Find the customers your bank is missing.” Each stop highlights one part of the screen and explains it in one or two sentences, from the need to the map to what a customer is worth to the recommended campaign.\n\nIt can be skipped, and replayed any time from the sidebar.',
+        'Users shouldn’t need a person to walk them through it. So I designed a short tour that opens on first visit, written in plain language: “Find the customers your bank is missing.” Each stop highlights one part of the screen and explains it in one or two sentences, from the need to the map to what a customer is worth to the recommended campaign.\n\nIt can be skipped, and replayed any time from the sidebar.',
       media: {
         type: 'image',
         src: 'tour.webp',
@@ -82,7 +82,7 @@ export const artic: CaseStudy = {
     {
       title: 'Show why the AI picked each campaign',
       why:
-        'ARTIC uses an AI reasoning model to choose a campaign for each county, and a bank won’t act on a recommendation it can’t explain to its own leadership. So every pick comes with its reason: a “Community Needs” chart compares each local need against the wider area and marks the one that stands out.\n\nThe campaign is built on that need, so the AI’s choice reads as an argument with evidence, not a black box.',
+        'ARTIC uses an AI reasoning model to choose a campaign for each county, and a bank won’t act on a recommendation it can’t explain to its own leadership. So I gave every pick its reason: a “Community Needs” chart compares each local need against the wider area and marks the one that stands out.\n\nThe campaign is built on that need, so the AI’s choice reads as an argument with evidence, not a black box.',
       media: {
         type: 'image',
         src: 'campaign.webp',
@@ -93,7 +93,7 @@ export const artic: CaseStudy = {
     {
       title: 'Be honest about uncertainty',
       why:
-        'Projections can sell a bad idea if they only show the best case. Every forecast in ARTIC is labeled as an Estimate or a Projection, and a Conservative / Base / Optimistic switch runs across the whole dashboard.\n\nThe conservative case is shown even when it’s negative (in red), so a bank sees the downside before it commits.',
+        'Projections can sell a bad idea if they only show the best case. I labeled every forecast in ARTIC as an Estimate or a Projection, and put a Conservative / Base / Optimistic switch across the whole dashboard.\n\nI show the conservative case even when it’s negative (in red), so a bank sees the downside before it commits.',
       media: {
         type: 'image',
         src: 'scenarios.webp',
@@ -104,7 +104,7 @@ export const artic: CaseStudy = {
     {
       title: 'Headline first, full breakdown underneath',
       why:
-        'Executives need the takeaway; their analysts need to pick it apart. Each page leads with a few large numbers, and the supporting detail sits below in labeled sections: value components, payback, scenario comparison, Mastercard-specific views.\n\nThat way each organization can dig as deep as it needs without overwhelming a first-time viewer.',
+        'Executives need the takeaway; their analysts need to pick it apart. I led each page with a few large numbers and put the supporting detail below in labeled sections: value components, payback, scenario comparison, Mastercard-specific views.\n\nThat way each organization can dig as deep as it needs without overwhelming a first-time viewer.',
       media: {
         type: 'image',
         src: 'breakdown.webp',
