@@ -29,12 +29,14 @@ const playback = (started: boolean): PlaybackValue => ({
   trackIndex: 0,
   track: portfolio.nowPlaying[0],
   duration: portfolio.nowPlaying[0].duration,
+  canScrub: false,
   getElapsed: () => 0,
   toggle: () => {},
   skip: () => {},
-  seek: () => {},
+  scrub: () => {},
   seekRequest: null,
   reportEmbed: () => {},
+  followEmbed: () => {},
 })
 
 const api: ScreenApi = {

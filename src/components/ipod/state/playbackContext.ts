@@ -24,16 +24,20 @@ export interface PlaybackValue {
    * loaded the song (30 for a preview), until then the track's listed length.
    */
   duration: number
+  /** True once the embed has reported the current track's real length; scrubbing waits for it. */
+  canScrub: boolean
   /** Seconds into the current track, computed live — poll it while rendering progress. */
   getElapsed: () => number
   toggle: () => void
   skip: (delta: 1 | -1) => void
-  /** Scrub to `seconds` into the current track; the embed follows. */
-  seek: (seconds: number) => void
-  /** The latest scrub, for the embed to carry out (`id` tells repeats apart). */
+  /** Scrub `deltaSeconds` forward (or back) from the live position; the embed follows. */
+  scrub: (deltaSeconds: number) => void
+  /** The latest jump (a scrub, or ⏮ restarting a track) for the embed to carry out; `id` tells repeats apart. */
   seekRequest: { seconds: number; id: number } | null
   /** The embed's real position and length (seconds) for track `trackIndex`; the clock follows it. */
   reportEmbed: (trackIndex: number, position: number, duration: number) => void
+  /** The embed was played or paused from its own controls (or refused to start): follow it. */
+  followEmbed: (playing: boolean) => void
 }
 
 export const PlaybackContext = createContext<PlaybackValue | null>(null)

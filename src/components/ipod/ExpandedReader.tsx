@@ -76,6 +76,12 @@ export function ExpandedReader({ spec, onClose }: ExpandedReaderProps) {
     if (dialog && !dialog.open) dialog.showModal()
   }, [])
 
+  // Nothing to show (an unknown project, say): close at once rather than leave the iPod paused.
+  const empty = !content
+  useEffect(() => {
+    if (empty) onClose()
+  }, [empty, onClose])
+
   if (!content) return null
 
   // A click on the backdrop closes it; keyboard users have Esc and the Close button.

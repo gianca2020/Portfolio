@@ -74,9 +74,10 @@ export function NowPlaying({ node, active, api }: ScreenProps<ScreenNode>) {
   useScreenController(api, active, {
     count: 1,
     // The wheel scrubs through the song (Spotify's embed has no volume control to drive).
-    // getElapsed() reads the clock live, so quick successive steps build on each other.
+    // scrub() works from the live clock, so quick successive steps build on each other.
     onMove: (delta, source) => {
-      playback.seek(playback.getElapsed() + scrubSteps(delta, source) * SCRUB_STEP_S)
+      if (!playback.canScrub) return true
+      playback.scrub(scrubSteps(delta, source) * SCRUB_STEP_S)
       api.click()
       return true
     },

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type CSSProperties, type RefObject } from 'react'
+import { useCallback, useEffect, useRef, useState, type CSSProperties, type RefObject } from 'react'
 import { portfolio } from '../../data/portfolio'
 // Recruiter View is temporarily disabled (see App.tsx). To restore, uncomment
 // this import and the <RecruiterButton /> below.
@@ -92,6 +92,10 @@ function IPodStage({ active }: { active: boolean }) {
   const [screen, setScreen] = useState<ScreenSpec | null>(null)
   const [expanded, setExpanded] = useState(false)
   const expandable = active && screen !== null && canExpand(screen)
+  // Leaving the screen (or the page, e.g. browser Back) closes the reader for good,
+  // so it doesn't pop open again on return. (State derived during render, as React re-renders at once.)
+  if (!expandable && expanded) setExpanded(false)
+  const closeReader = useCallback(() => setExpanded(false), [])
 
   return (
     <main
@@ -107,7 +111,7 @@ function IPodStage({ active }: { active: boolean }) {
       </h1>
       {/* <RecruiterButton /> */}
       {expandable && <ExpandButton onPress={() => setExpanded(true)} />}
-      {expandable && expanded && <ExpandedReader spec={screen} onClose={() => setExpanded(false)} />}
+      {expanded && screen && <ExpandedReader spec={screen} onClose={closeReader} />}
       {/* Repeats the heading visually; hidden from assistive tech to avoid reading it twice. */}
       <div className="ipod-nametag" aria-hidden="true">
         <p className="ipod-nametag__name">{profile.name}</p>
