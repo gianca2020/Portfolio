@@ -71,7 +71,7 @@ describe('spokenState', () => {
 
   it('says a content row opens a page, not a menu', () => {
     expect(menu('root', 3).announcement).toBe('Giancarlo: About Me, opens page, 4 of 7')
-    expect(menu('design-work', 0).announcement).toBe('Design Work: Puberry on mobile, opens page, 1 of 4')
+    expect(menu('design-work', 0).announcement).toBe('Design Work: Puberry on mobile, opens page, 1 of 5')
   })
 
   it('includes a setting’s current value', () => {
