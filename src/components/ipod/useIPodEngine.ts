@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react'
+import { navigateTo } from '../../lib/navigate'
 import { getVisibleChildren, isNavigable } from './data'
 import { clampIndex, currentLevel, initialNavigation, navigationReducer } from './navigation'
 import { soundEngine } from './SoundEngine'
@@ -133,7 +134,7 @@ function describeRow(row: IPodNode, settingValue: (key: SettingKey) => string): 
     case 'screen':
       return `${row.label}, opens page`
     case 'action':
-      return row.label
+      return row.action.type === 'navigate' ? `${row.label}, opens page` : row.label
   }
 }
 
@@ -191,6 +192,9 @@ export function runMenuAction(action: MenuAction) {
     }
     case 'recruiter-view':
       window.location.hash = '/recruiter'
+      return
+    case 'navigate':
+      navigateTo(action.to)
       return
   }
 }

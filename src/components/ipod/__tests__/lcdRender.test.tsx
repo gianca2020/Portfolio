@@ -100,9 +100,9 @@ describe('MenuScreen', () => {
     expect(html).toContain(`aria-label="${menuTree.title}"`)
     expect(count(html, /role="option"/g)).toBe(menuTree.children.length - 1) // Now Playing hidden
     expect(count(html, /aria-selected="true"/g)).toBe(1)
-    expect(html).toMatch(/aria-selected="true"[^>]*lcd-selected[^>]*><span[^>]*><span[^>]*>Projects</)
+    expect(html).toMatch(/aria-selected="true"[^>]*lcd-selected[^>]*><span[^>]*><span[^>]*>Design Work</)
     expect(html).toContain('lcd-split-panel')
-    // Projects is highlighted: its slideshow drifts behind the list.
+    // Design Work is highlighted: its slideshow drifts behind the list.
     expect(html).toContain('lcd-kenburns')
   })
 
