@@ -508,3 +508,258 @@
 [data-reduced-motion='true'] .ipod-wheel__hub::after {
   transition: none;
 }
+
+/* ── Wheel coach (first-visit hint, see WheelCoach.tsx) ───────────────────── */
+
+/* The page dim: a full-viewport SVG. Heavy around the device, light over its body (so the
+ * finish keeps its colour), and nothing over the LCD or the wheel. */
+.ipod-coach-dim {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  animation: ipod-coach-fade-in 240ms ease-out;
+}
+
+.ipod-coach-dim__outer {
+  fill: rgba(12, 12, 14, 0.66);
+}
+
+.ipod-coach-dim__inner {
+  fill: rgba(12, 12, 14, 0.35);
+}
+
+.ipod-coach-dim[data-leaving] {
+  opacity: 0;
+  transition: opacity 200ms ease-in;
+}
+
+@keyframes ipod-coach-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* The caption covers the usual hint line instead of replacing it, so the device never moves. */
+.ipod-hint-slot {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  max-width: 100%;
+}
+
+.ipod-hint[data-covered] {
+  visibility: hidden;
+}
+
+/* Two lines (title, then detail with Skip) on the dim: light on dark in every finish (≥ 7:1). */
+.ipod-coach-caption {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  z-index: 41;
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  translate: -50% 0;
+  color: #e6e6e8;
+  font-size: 13px;
+  line-height: 18px;
+  text-align: center;
+}
+
+/* A held press remounts the caption with a short ±4 px shake (the comet restarts with it). */
+.ipod-coach-caption[data-nudged] {
+  animation: ipod-coach-shake 300ms ease-in-out;
+}
+
+.ipod-coach-caption p {
+  margin: 0;
+}
+
+.ipod-coach-caption__title {
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 20px;
+}
+
+.ipod-coach-caption__skip {
+  padding: 2px 4px;
+  margin: -2px -4px;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  color: #e6e6e8;
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+.ipod-coach-caption__skip:hover {
+  color: #ffffff;
+}
+
+/* The stage hides its hint where there's no room; the caption follows (Esc / Menu still skip). */
+@media (max-height: 520px) {
+  .ipod-coach-caption {
+    display: none;
+  }
+}
+
+@keyframes ipod-coach-shake {
+  20%,
+  60% {
+    translate: calc(-50% - 4px) 0;
+  }
+  40%,
+  80% {
+    translate: calc(-50% + 4px) 0;
+  }
+}
+
+/* An orange comet that touches down at 12 o'clock, sweeps 270° clockwise, lifts and
+ * rests. It fills the ring's full width, centre button to rim: a round head exactly as
+ * wide as the ring and a tail fading behind it. Sweep and head turn together. */
+.ipod-wheel__coach,
+.ipod-wheel__coach-spin,
+.ipod-wheel__coach-sweep,
+.ipod-wheel__coach-head {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.ipod-wheel__coach {
+  --coach-accent: #e8650a;
+  /* Middle of the ring, as a share of the wheel's width: hub edge and rim averaged. */
+  --coach-mid: calc(var(--coach-hub) / 4 + 25%);
+  /* Head and tail are drawn opaque and faded together here, so where they overlap
+   * there's no darker seam. */
+  opacity: 0.72;
+}
+
+/* A brighter orange on the black wheel, where the deep one turns muddy. */
+.ipod-wheel[data-finish='black'] .ipod-wheel__coach {
+  --coach-accent: #ff7a1a;
+  opacity: 0.8;
+}
+
+.ipod-wheel__coach-spin {
+  animation: ipod-coach-orbit 2.4s linear infinite;
+}
+
+.ipod-wheel__coach-sweep {
+  background: conic-gradient(
+    from 250deg,
+    transparent,
+    color-mix(in srgb, var(--coach-accent) 40%, transparent) 70deg,
+    var(--coach-accent) 98deg,
+    transparent 98.5deg
+  );
+  /* The full band between the centre button and the rim, softened at both edges. */
+  mask: radial-gradient(
+    circle closest-side,
+    transparent calc(var(--coach-hub) - 1%),
+    #000 calc(var(--coach-hub) + 4%),
+    #000 94%,
+    transparent 100%
+  );
+}
+
+/* The comet's head: a disc as wide as the ring, centred on it where the tail ends,
+ * so the leading edge is round instead of a straight cut. */
+.ipod-wheel__coach-head {
+  rotate: -12deg;
+}
+
+.ipod-wheel__coach-head::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: calc(50% - var(--coach-mid));
+  width: calc(50% - var(--coach-hub) / 2);
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: radial-gradient(circle closest-side, var(--coach-accent) 86%, transparent 100%);
+  animation: ipod-coach-press 2.4s linear infinite;
+}
+
+/* Touch down (0–10%), sweep 270° (10–70%), lift (70–80%), rest (80–100%). The spin layer
+ * is offset 12° so the head, which sits 12° behind it, starts at 12 o'clock. */
+@keyframes ipod-coach-orbit {
+  0% {
+    opacity: 0;
+    transform: rotate(12deg);
+  }
+  10% {
+    opacity: 1;
+    transform: rotate(12deg);
+    animation-timing-function: cubic-bezier(0.45, 0, 0.3, 1);
+  }
+  70% {
+    opacity: 1;
+    transform: rotate(282deg);
+  }
+  80%,
+  100% {
+    opacity: 0;
+    transform: rotate(282deg);
+  }
+}
+
+@keyframes ipod-coach-press {
+  0% {
+    scale: 0.85;
+  }
+  10%,
+  70% {
+    scale: 1;
+  }
+  80%,
+  100% {
+    scale: 1.1;
+  }
+}
+
+/* Reduced motion: no comet; a still 270° arrow round the ring instead. */
+.ipod-wheel__coach-arrow {
+  display: none;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.ipod-wheel__coach-arrow path {
+  fill: none;
+  stroke: var(--coach-accent);
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+.ipod-wheel__coach-arrow polygon {
+  fill: var(--coach-accent);
+  stroke: var(--coach-accent);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+[data-reduced-motion='true'] .ipod-wheel__coach-spin {
+  display: none;
+}
+
+[data-reduced-motion='true'] .ipod-wheel__coach-arrow {
+  display: block;
+}
+
+[data-reduced-motion='true'] .ipod-coach-dim,
+[data-reduced-motion='true'] .ipod-coach-caption {
+  animation: none;
+  transition: none;
+}

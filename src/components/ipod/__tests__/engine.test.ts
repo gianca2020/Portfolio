@@ -75,8 +75,8 @@ describe('spokenState', () => {
   })
 
   it('includes a setting’s current value', () => {
-    expect(menu('settings', 0).announcement).toBe('Settings: Sound, Off, 1 of 4')
-    expect(menu('settings', 1).valueText).toBe('Theme, Silver, 2 of 4, Settings')
+    expect(menu('settings', 0).announcement).toBe('Settings: Sound, Off, 1 of 5')
+    expect(menu('settings', 1).valueText).toBe('Theme, Silver, 2 of 5, Settings')
   })
 
   it('says nothing extra for action rows', () => {

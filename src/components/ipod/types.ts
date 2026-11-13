@@ -44,6 +44,8 @@ export type MenuAction =
   | { type: 'open-url'; href: string }
   | { type: 'download'; href: string; fileName: string }
   | { type: 'recruiter-view' }
+  /** Replay the first-visit click-wheel hint (state/wheelCoach.ts). */
+  | { type: 'wheel-tutorial' }
   /** Leave the iPod for another route of the site (e.g. a case study at /work/…). */
   | { type: 'navigate'; to: string }
 

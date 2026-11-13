@@ -3,6 +3,8 @@ import './chassis.css'
 import { DEVICE_MM } from './constants'
 import { sliderKeyMove, sliderValue } from './rotary'
 import type { ChassisTheme } from './state/settingsContext'
+import { useDeviceActive } from './state/deviceContext'
+import { useWheelCoach } from './state/wheelCoach'
 import type { MoveSource } from './types'
 import type { WheelA11y } from './useIPodEngine'
 import { useRotaryInput } from './useRotaryInput'
@@ -34,6 +36,21 @@ const HUB = DEVICE_MM.centerButton.diameter
 const KEY = { along: 12, across: 10.6, offset: 13 }
 /** The rotation "thumb" rides the middle of the ring (% of the wheel's width from its centre). */
 const THUMB_ORBIT = ((RADIUS + HUB / 2) / 2 / DEVICE_MM.wheel.diameter) * 100
+
+/** The coach's sweep covers the ring from the centre button's edge to the rim (% of the wheel's radius). */
+const COACH_STYLE = { '--coach-hub': `${(HUB / DEVICE_MM.wheel.diameter) * 100}%` } as CSSProperties
+
+/* Reduced-motion coach: a still 270° arrow along the middle of the ring, 12 o'clock round to 9
+ * o'clock, in a 100 × 100 box over the wheel. */
+const COACH_MID = (HUB / DEVICE_MM.wheel.diameter) * 25 + 25
+const COACH_ARC = `M 50 ${50 - COACH_MID} A ${COACH_MID} ${COACH_MID} 0 1 1 ${50 - COACH_MID} 50`
+const COACH_ARROWHEAD = [
+  [50 - COACH_MID, 50 - 9],
+  [50 - COACH_MID - 7, 50 + 1],
+  [50 - COACH_MID + 7, 50 + 1],
+]
+  .map((p) => p.join(','))
+  .join(' ')
 
 function keyStyle(dx: number, dy: number): CSSProperties {
   const width = dx === 0 ? KEY.along : KEY.across
@@ -90,6 +107,8 @@ function WheelKey({ label, style, onPress, hub = false }: WheelKeyProps) {
 export function ClickWheel(props: ClickWheelProps) {
   const { theme, onRotate, onMenu, onSelect, onPrevious, onNext, onPlayPause, playing, a11y } = props
   const thumbRef = useRef<HTMLDivElement>(null)
+  const coach = useWheelCoach()
+  const coaching = useDeviceActive() && coach.active
 
   // Positions the soft pressure shading under the finger without re-rendering.
   const onTurn = useCallback((angle: number | null) => {
@@ -141,6 +160,20 @@ export function ClickWheel(props: ClickWheelProps) {
         onKeyDown={onSliderKeyDown}
       />
       <div ref={thumbRef} className="ipod-wheel__thumb" aria-hidden="true" />
+      {coaching && (
+        // First-visit hint: an orange comet turning around the ring (a still arrow under
+        // reduced motion). Keyed so a held press replays it.
+        <div key={coach.nudges} className="ipod-wheel__coach" style={COACH_STYLE} aria-hidden="true">
+          <div className="ipod-wheel__coach-spin">
+            <div className="ipod-wheel__coach-sweep" />
+            <div className="ipod-wheel__coach-head" />
+          </div>
+          <svg className="ipod-wheel__coach-arrow" viewBox="0 0 100 100" focusable="false">
+            <path d={COACH_ARC} />
+            <polygon points={COACH_ARROWHEAD} />
+          </svg>
+        </div>
+      )}
       <WheelLegends />
       {/* DOM (and Tab) order follows reading order: top, left, centre, right, bottom. */}
       <WheelKey label="Menu — go back" style={MENU_KEY} onPress={onMenu} />
