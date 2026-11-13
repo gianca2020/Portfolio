@@ -1,4 +1,36 @@
 {
+  "artic/breakdown.webp": {
+    "width": 2000,
+    "height": 830
+  },
+  "artic/campaign.webp": {
+    "width": 2000,
+    "height": 1250
+  },
+  "artic/county-map.webp": {
+    "width": 1400,
+    "height": 1372
+  },
+  "artic/cover.webp": {
+    "width": 2000,
+    "height": 1250
+  },
+  "artic/heatmap.webp": {
+    "width": 2000,
+    "height": 1158
+  },
+  "artic/overview.webp": {
+    "width": 2000,
+    "height": 1250
+  },
+  "artic/scenarios.webp": {
+    "width": 850,
+    "height": 1372
+  },
+  "artic/tour.webp": {
+    "width": 2000,
+    "height": 1250
+  },
   "code-for-all/cody-variations.webp": {
     "width": 2000,
     "height": 1126
