@@ -147,9 +147,12 @@ export function ClickWheel(props: ClickWheelProps) {
       />
       <div ref={thumbRef} className="ipod-wheel__thumb" aria-hidden="true" />
       {coach.active && (
-        // First-visit hint: an orange sweep turning around the ring. Keyed so a held press replays it.
+        // First-visit hint: a soft orange comet turning around the ring. Keyed so a held press replays it.
         <div key={coach.nudges} className="ipod-wheel__coach" style={COACH_STYLE} aria-hidden="true">
-          <div className="ipod-wheel__coach-sweep" />
+          <div className="ipod-wheel__coach-spin">
+            <div className="ipod-wheel__coach-sweep" />
+            <div className="ipod-wheel__coach-head" />
+          </div>
         </div>
       )}
       <WheelLegends />

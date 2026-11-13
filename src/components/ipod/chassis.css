@@ -564,10 +564,13 @@
   }
 }
 
-/* An orange sweep turning clockwise around the whole ring, from the centre
- * button's edge to the rim: a soft glow, feathered on both sides (no hard edge). */
+/* A soft orange comet turning clockwise around the ring: a round glow at its
+ * head and a tail that fades behind it, both feathered toward the centre
+ * button and the rim. The sweep and the head turn together in one layer. */
 .ipod-wheel__coach,
-.ipod-wheel__coach-sweep {
+.ipod-wheel__coach-spin,
+.ipod-wheel__coach-sweep,
+.ipod-wheel__coach-head {
   position: absolute;
   inset: 0;
   border-radius: 50%;
@@ -575,25 +578,52 @@
 }
 
 .ipod-wheel__coach {
-  --coach-accent: #ff8a1f;
+  --coach-accent: #e8650a;
+  /* Middle of the ring, as a share of the wheel's width: hub edge and rim averaged. */
+  --coach-mid: calc(var(--coach-hub) / 4 + 25%);
+}
+
+.ipod-wheel__coach-spin {
+  animation: ipod-coach-orbit 2.6s cubic-bezier(0.45, 0, 0.3, 1) infinite;
 }
 
 .ipod-wheel__coach-sweep {
   background: conic-gradient(
     from 250deg,
     transparent,
-    color-mix(in srgb, var(--coach-accent) 40%, transparent) 84deg,
-    color-mix(in srgb, var(--coach-accent) 65%, transparent) 100deg,
-    transparent 124deg
+    color-mix(in srgb, var(--coach-accent) 35%, transparent) 80deg,
+    color-mix(in srgb, var(--coach-accent) 60%, transparent) 100deg,
+    transparent 116deg
   );
+  /* Strongest along the middle of the ring, fading out toward the hub and the rim. */
   mask: radial-gradient(
     circle closest-side,
-    transparent calc(var(--coach-hub) - 0.5%),
-    #000 var(--coach-hub),
-    #000 99%,
+    transparent var(--coach-hub),
+    #000 calc(var(--coach-hub) / 2 + 50%),
     transparent 100%
   );
-  animation: ipod-coach-orbit 2.6s cubic-bezier(0.45, 0, 0.3, 1) infinite;
+}
+
+/* The comet's head: a round glow on the middle of the ring, just ahead of the tail's peak. */
+.ipod-wheel__coach-head {
+  rotate: -8deg;
+}
+
+.ipod-wheel__coach-head::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: calc(50% - var(--coach-mid));
+  width: calc(50% - var(--coach-hub) / 2);
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle closest-side,
+    color-mix(in srgb, var(--coach-accent) 70%, transparent),
+    color-mix(in srgb, var(--coach-accent) 30%, transparent) 55%,
+    transparent
+  );
 }
 
 @keyframes ipod-coach-orbit {
@@ -622,7 +652,7 @@
   transition: none;
 }
 
-[data-reduced-motion='true'] .ipod-wheel__coach-sweep {
+[data-reduced-motion='true'] .ipod-wheel__coach-spin {
   animation: none;
   transform: rotate(60deg);
 }
