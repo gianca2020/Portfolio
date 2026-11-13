@@ -564,9 +564,9 @@
   }
 }
 
-/* A soft orange comet turning clockwise around the ring: a round glow at its
- * head and a tail that fades behind it, both feathered toward the centre
- * button and the rim. The sweep and the head turn together in one layer. */
+/* An orange comet turning clockwise around the ring. It fills the ring's full
+ * width, centre button to rim: a round head exactly as wide as the ring and a
+ * tail fading behind it. The sweep and the head turn together in one layer. */
 .ipod-wheel__coach,
 .ipod-wheel__coach-spin,
 .ipod-wheel__coach-sweep,
@@ -579,6 +579,9 @@
 
 .ipod-wheel__coach {
   --coach-accent: #e8650a;
+  /* Head and tail are drawn opaque and faded together here, so where they overlap
+   * there's no darker seam. */
+  opacity: 0.6;
   /* Middle of the ring, as a share of the wheel's width: hub edge and rim averaged. */
   --coach-mid: calc(var(--coach-hub) / 4 + 25%);
 }
@@ -591,22 +594,24 @@
   background: conic-gradient(
     from 250deg,
     transparent,
-    color-mix(in srgb, var(--coach-accent) 35%, transparent) 80deg,
-    color-mix(in srgb, var(--coach-accent) 60%, transparent) 100deg,
-    transparent 116deg
+    color-mix(in srgb, var(--coach-accent) 45%, transparent) 70deg,
+    var(--coach-accent) 98deg,
+    transparent 98.5deg
   );
-  /* Strongest along the middle of the ring, fading out toward the hub and the rim. */
+  /* The full band between the centre button and the rim, softened at both edges. */
   mask: radial-gradient(
     circle closest-side,
-    transparent var(--coach-hub),
-    #000 calc(var(--coach-hub) / 2 + 50%),
+    transparent calc(var(--coach-hub) - 1%),
+    #000 calc(var(--coach-hub) + 4%),
+    #000 94%,
     transparent 100%
   );
 }
 
-/* The comet's head: a round glow on the middle of the ring, just ahead of the tail's peak. */
+/* The comet's head: a disc as wide as the ring, centred on it where the tail ends,
+ * so the leading edge is round instead of a straight cut. */
 .ipod-wheel__coach-head {
-  rotate: -8deg;
+  rotate: -12deg;
 }
 
 .ipod-wheel__coach-head::after {
@@ -620,9 +625,8 @@
   border-radius: 50%;
   background: radial-gradient(
     circle closest-side,
-    color-mix(in srgb, var(--coach-accent) 70%, transparent),
-    color-mix(in srgb, var(--coach-accent) 30%, transparent) 55%,
-    transparent
+    var(--coach-accent) 84%,
+    transparent 100%
   );
 }
 
