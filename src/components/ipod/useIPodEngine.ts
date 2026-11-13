@@ -207,9 +207,11 @@ export function useIPodEngine({ root, nodes, enabled }: EngineOptions): IPodEngi
   const navRef = useRef(nav)
   const settingsRef = useRef(settings)
   const playbackRef = useRef(playback)
+  const enabledRef = useRef(enabled)
   useLayoutEffect(() => {
     settingsRef.current = settings
     playbackRef.current = playback
+    enabledRef.current = enabled
   })
 
   const screenController = useRef<ScreenController | null>(null)
@@ -284,16 +286,28 @@ export function useIPodEngine({ root, nodes, enabled }: EngineOptions): IPodEngi
     }
 
     /** While the wheel coach is up, presses replay its hint instead of acting (see state/wheelCoach.ts). */
-    const held = () => {
-      if (coachIntercepts(wheelCoach.get(), 'press') !== 'hold') return false
-      wheelCoach.nudge()
-      return true
+    const held = (input: 'press' | 'back' = 'press') => {
+      // The coach only shows on a visible device; a hidden one never holds input.
+      if (!enabledRef.current) return false
+      switch (coachIntercepts(wheelCoach.get(), input)) {
+        case 'hold':
+          wheelCoach.nudge()
+          return true
+        case 'skip':
+          wheelCoach.end()
+          return true
+        case 'release':
+          wheelCoach.end()
+          return false
+        default:
+          return false
+      }
     }
 
     const moveBy = (delta: number, source: MoveSource = 'wheel') => {
       const controller = activeController()
       if (!controller || delta === 0) return
-      if (coachIntercepts(wheelCoach.get(), 'move') === 'step') wheelCoach.step()
+      if (enabledRef.current && coachIntercepts(wheelCoach.get(), 'move') === 'step') wheelCoach.end()
       if (controller.onMove?.(delta, source)) return
       const before = currentLevel(navRef.current).index
       const next = dispatch({ type: 'move', delta, count: controller.count })
@@ -335,7 +349,7 @@ export function useIPodEngine({ root, nodes, enabled }: EngineOptions): IPodEngi
         if (!held()) select()
       },
       back: () => {
-        if (held()) return
+        if (held('back')) return
         const before = navRef.current
         if (dispatch({ type: 'pop' }) !== before) soundEngine.press()
       },

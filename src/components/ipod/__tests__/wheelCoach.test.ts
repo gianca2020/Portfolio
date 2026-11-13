@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { menuTree } from '../data'
-import { coachIntercepts, createWheelCoach } from '../state/wheelCoach'
+import { coachIntercepts, createWheelCoach, MAX_HELD_PRESSES, wheelCoach } from '../state/wheelCoach'
+import { runMenuAction } from '../useIPodEngine'
 
 const storage = (initial: Record<string, string> = {}) => {
   const data = { ...initial }
@@ -29,7 +30,7 @@ describe('wheel coach', () => {
     const coach = createWheelCoach()
     const seen: boolean[] = []
     coach.subscribe(() => seen.push(coach.get().active))
-    coach.step()
+    coach.end()
     expect(coach.get().active).toBe(false)
     expect(seen).toEqual([false])
     expect(localStorage.data['gf-ipod-portfolio:wheel-coach']).toBe('done')
@@ -41,7 +42,7 @@ describe('wheel coach', () => {
     coach.nudge()
     coach.nudge()
     expect(coach.get().nudges).toBe(2)
-    coach.step()
+    coach.end()
     coach.nudge()
     expect(coach.get()).toEqual({ active: false, nudges: 2 })
     coach.start()
@@ -55,17 +56,30 @@ describe('wheel coach', () => {
     vi.stubGlobal('window', { localStorage: { getItem: throws, setItem: throws } })
     const coach = createWheelCoach()
     expect(coach.get().active).toBe(true)
-    expect(() => coach.step()).not.toThrow()
+    expect(() => coach.end()).not.toThrow()
     expect(coach.get().active).toBe(false)
   })
 
-  it('lets scrolling through (ending the hint) and holds every other press while showing', () => {
+  it('lets scrolling through (ending the hint) and holds other presses while showing', () => {
     const showing = { active: true, nudges: 0 }
     const done = { active: false, nudges: 0 }
     expect(coachIntercepts(showing, 'move')).toBe('step')
     expect(coachIntercepts(showing, 'press')).toBe('hold')
     expect(coachIntercepts(done, 'move')).toBe('pass')
     expect(coachIntercepts(done, 'press')).toBe('pass')
+    expect(coachIntercepts(done, 'back')).toBe('pass')
+  })
+
+  it('never traps anyone: Back skips it, and a press after two held ones goes through', () => {
+    expect(coachIntercepts({ active: true, nudges: 0 }, 'back')).toBe('skip')
+    expect(coachIntercepts({ active: true, nudges: MAX_HELD_PRESSES - 1 }, 'press')).toBe('hold')
+    expect(coachIntercepts({ active: true, nudges: MAX_HELD_PRESSES }, 'press')).toBe('release')
+  })
+
+  it('Settings › Wheel Tutorial restarts it', () => {
+    wheelCoach.end()
+    runMenuAction({ type: 'wheel-tutorial' })
+    expect(wheelCoach.get()).toEqual({ active: true, nudges: 0 })
   })
 
   it('can be replayed from Settings', () => {
