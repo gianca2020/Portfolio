@@ -1,10 +1,11 @@
 import { useEffect, useState, type RefObject } from 'react'
+import { DEVICE_MM } from './constants'
 import { useWheelCoach } from './state/wheelCoach'
 
 /** Fade-out after the first scroll (skipped with reduced motion). */
 const FADE_MS = 200
-/** Breathing room around the cut-outs, in px. */
-const PAD = 6
+/** The glass window's corner radius as a share of its width, so the cut-out hugs it exactly. */
+const GLASS_RADIUS = DEVICE_MM.window.radius / DEVICE_MM.window.width
 
 interface Hole {
   x: number
@@ -13,10 +14,10 @@ interface Hole {
   height: number
 }
 
-const holeOf = (el: Element | null, pad: number): Hole | null => {
+const holeOf = (el: Element | null): Hole | null => {
   if (!el) return null
   const r = el.getBoundingClientRect()
-  return { x: r.left - pad, y: r.top - pad, width: r.width + pad * 2, height: r.height + pad * 2 }
+  return { x: r.left, y: r.top, width: r.width, height: r.height }
 }
 
 /**
@@ -34,8 +35,8 @@ function useDeviceHoles(stage: RefObject<HTMLElement | null>, enabled: boolean) 
     const screen = root.querySelector('.ipod__slot')
     const wheel = root.querySelector('.ipod-wheel')
     const measure = () => {
-      const s = holeOf(screen, PAD)
-      const w = holeOf(wheel, PAD)
+      const s = holeOf(screen)
+      const w = holeOf(wheel)
       setHoles(s && w ? { screen: s, wheel: w } : null)
     }
     measure()
@@ -102,7 +103,7 @@ export function WheelCoachOverlay({
           <defs>
             <mask id="ipod-coach-mask">
               <rect width="100%" height="100%" fill="white" />
-              <rect {...holes.screen} rx={PAD * 1.5} fill="black" />
+              <rect {...holes.screen} rx={holes.screen.width * GLASS_RADIUS} fill="black" />
               <ellipse
                 cx={holes.wheel.x + holes.wheel.width / 2}
                 cy={holes.wheel.y + holes.wheel.height / 2}

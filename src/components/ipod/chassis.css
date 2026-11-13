@@ -564,51 +564,36 @@
   }
 }
 
-/* A fingertip tracing the ring clockwise with a glow trail, then a pause. The trail
- * and the dot are full-size layers turning together about the wheel's centre. */
+/* An orange sweep turning clockwise around the whole ring, from the centre
+ * button's edge to the rim, with a bright leading edge and a fading tail. */
 .ipod-wheel__coach,
-.ipod-wheel__coach-trail,
-.ipod-wheel__coach-spin {
+.ipod-wheel__coach-sweep {
   position: absolute;
   inset: 0;
   border-radius: 50%;
   pointer-events: none;
 }
 
-.ipod-wheel__coach-trail,
-.ipod-wheel__coach-spin {
-  animation: ipod-coach-orbit 2.6s cubic-bezier(0.45, 0, 0.3, 1) infinite;
+.ipod-wheel__coach {
+  --coach-accent: #ff8a1f;
 }
 
-/* An arc fading in behind the dot, clipped to a band along the middle of the ring. */
-.ipod-wheel__coach-trail {
+.ipod-wheel__coach-sweep {
   background: conic-gradient(
-    from 290deg,
+    from 250deg,
     transparent,
-    color-mix(in srgb, var(--focus-ring) 55%, transparent) 64deg,
-    transparent 70deg
+    color-mix(in srgb, var(--coach-accent) 45%, transparent) 104deg,
+    color-mix(in srgb, var(--coach-accent) 85%, transparent) 109deg,
+    transparent 110deg
   );
   mask: radial-gradient(
     circle closest-side,
-    transparent calc(var(--coach-orbit) * 2 - var(--u) * 1.4),
-    #000 calc(var(--coach-orbit) * 2 - var(--u) * 1.2),
-    #000 calc(var(--coach-orbit) * 2 + var(--u) * 1.2),
-    transparent calc(var(--coach-orbit) * 2 + var(--u) * 1.4)
+    transparent calc(var(--coach-hub) - 0.5%),
+    #000 var(--coach-hub),
+    #000 99%,
+    transparent 100%
   );
-}
-
-.ipod-wheel__coach-dot {
-  position: absolute;
-  left: 50%;
-  top: calc(50% - var(--coach-orbit));
-  width: calc(var(--u) * 5);
-  height: calc(var(--u) * 5);
-  translate: -50% -50%;
-  border-radius: 50%;
-  background: color-mix(in srgb, var(--focus-ring) 22%, #ffffff);
-  box-shadow:
-    0 0 0 max(1px, calc(var(--u) * 0.35)) var(--focus-ring),
-    0 calc(var(--u) * 0.4) calc(var(--u) * 1.2) rgba(0, 0, 0, 0.25);
+  animation: ipod-coach-orbit 2.6s cubic-bezier(0.45, 0, 0.3, 1) infinite;
 }
 
 @keyframes ipod-coach-orbit {
@@ -637,8 +622,7 @@
   transition: none;
 }
 
-[data-reduced-motion='true'] .ipod-wheel__coach-trail,
-[data-reduced-motion='true'] .ipod-wheel__coach-spin {
+[data-reduced-motion='true'] .ipod-wheel__coach-sweep {
   animation: none;
   transform: rotate(60deg);
 }

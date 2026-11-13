@@ -36,8 +36,8 @@ const KEY = { along: 12, across: 10.6, offset: 13 }
 /** The rotation "thumb" rides the middle of the ring (% of the wheel's width from its centre). */
 const THUMB_ORBIT = ((RADIUS + HUB / 2) / 2 / DEVICE_MM.wheel.diameter) * 100
 
-/** The coach's fingertip rides the same orbit as the touch shading. */
-const COACH_STYLE = { '--coach-orbit': `${THUMB_ORBIT}%` } as CSSProperties
+/** The coach's sweep covers the ring from the centre button's edge to the rim (% of the wheel's radius). */
+const COACH_STYLE = { '--coach-hub': `${(HUB / DEVICE_MM.wheel.diameter) * 100}%` } as CSSProperties
 
 function keyStyle(dx: number, dy: number): CSSProperties {
   const width = dx === 0 ? KEY.along : KEY.across
@@ -147,12 +147,9 @@ export function ClickWheel(props: ClickWheelProps) {
       />
       <div ref={thumbRef} className="ipod-wheel__thumb" aria-hidden="true" />
       {coach.active && (
-        // First-visit hint: a fingertip tracing the ring. Keyed so a held press replays it.
+        // First-visit hint: an orange sweep turning around the ring. Keyed so a held press replays it.
         <div key={coach.nudges} className="ipod-wheel__coach" style={COACH_STYLE} aria-hidden="true">
-          <div className="ipod-wheel__coach-trail" />
-          <div className="ipod-wheel__coach-spin">
-            <span className="ipod-wheel__coach-dot" />
-          </div>
+          <div className="ipod-wheel__coach-sweep" />
         </div>
       )}
       <WheelLegends />
