@@ -9,6 +9,8 @@ import { IPod } from './IPod'
 import { PlaybackProvider } from './state/PlaybackProvider'
 import { SettingsProvider } from './state/SettingsProvider'
 import { useSettings, type ChassisTheme } from './state/settingsContext'
+import { useWheelCoach } from './state/wheelCoach'
+import { WheelCoachCaption, WheelCoachOverlay } from './WheelCoach'
 
 const { profile } = portfolio
 
@@ -78,6 +80,7 @@ function useRestoreFocus(active: boolean, stage: RefObject<HTMLElement | null>) 
 function IPodStage({ active }: { active: boolean }) {
   const { settings, reducedMotion } = useSettings()
   const stageRef = useRef<HTMLElement>(null)
+  const coach = useWheelCoach()
   useDocumentFinish(settings.theme, active)
   useRestoreFocus(active, stageRef)
 
@@ -103,11 +106,16 @@ function IPodStage({ active }: { active: boolean }) {
         <div className="ipod-stage__device">
           <IPod active={active} />
         </div>
-        <p className="ipod-hint">
-          <span className="ipod-hint__fine">↑ ↓ scroll · Enter select · Esc back · or drag around the wheel</span>
-          <span className="ipod-hint__coarse">Slide your thumb around the wheel · tap the centre to select</span>
-        </p>
+        {coach.active ? (
+          <WheelCoachCaption nudges={coach.nudges} />
+        ) : (
+          <p className="ipod-hint">
+            <span className="ipod-hint__fine">↑ ↓ scroll · Enter select · Esc back · or drag around the wheel</span>
+            <span className="ipod-hint__coarse">Slide your thumb around the wheel · tap the centre to select</span>
+          </p>
+        )}
       </div>
+      <WheelCoachOverlay stage={stageRef} active={active} reducedMotion={reducedMotion} />
     </main>
   )
 }

@@ -508,3 +508,137 @@
 [data-reduced-motion='true'] .ipod-wheel__hub::after {
   transition: none;
 }
+
+/* ── Wheel coach (first-visit hint, see WheelCoach.tsx) ───────────────────── */
+
+/* The page dim: a full-viewport SVG with the LCD and the wheel cut out. */
+.ipod-coach-dim {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  width: 100%;
+  height: 100%;
+  fill: rgba(12, 12, 14, 0.66);
+  pointer-events: none;
+  animation: ipod-coach-fade-in 240ms ease-out;
+}
+
+.ipod-coach-dim[data-leaving] {
+  opacity: 0;
+  transition: opacity 200ms ease-in;
+}
+
+@keyframes ipod-coach-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* The caption sits on the dim, so it's light on dark in every finish (≥ 7:1). */
+.ipod-hint--coach {
+  position: relative;
+  z-index: 41;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  color: #e6e6e8;
+  animation: ipod-coach-nudge 360ms ease-out;
+}
+
+.ipod-hint--coach__title {
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 20px;
+}
+
+.ipod-hint--coach .ipod-hint__fine,
+.ipod-hint--coach .ipod-hint__coarse {
+  font-size: 13px;
+}
+
+@keyframes ipod-coach-nudge {
+  30% {
+    transform: scale(1.06);
+  }
+}
+
+/* A fingertip tracing the ring clockwise with a glow trail, then a pause. The trail
+ * and the dot are full-size layers turning together about the wheel's centre. */
+.ipod-wheel__coach,
+.ipod-wheel__coach-trail,
+.ipod-wheel__coach-spin {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.ipod-wheel__coach-trail,
+.ipod-wheel__coach-spin {
+  animation: ipod-coach-orbit 2.6s cubic-bezier(0.45, 0, 0.3, 1) infinite;
+}
+
+/* An arc fading in behind the dot, clipped to a band along the middle of the ring. */
+.ipod-wheel__coach-trail {
+  background: conic-gradient(
+    from 290deg,
+    transparent,
+    color-mix(in srgb, var(--focus-ring) 55%, transparent) 64deg,
+    transparent 70deg
+  );
+  mask: radial-gradient(
+    circle closest-side,
+    transparent calc(var(--coach-orbit) * 2 - var(--u) * 1.4),
+    #000 calc(var(--coach-orbit) * 2 - var(--u) * 1.2),
+    #000 calc(var(--coach-orbit) * 2 + var(--u) * 1.2),
+    transparent calc(var(--coach-orbit) * 2 + var(--u) * 1.4)
+  );
+}
+
+.ipod-wheel__coach-dot {
+  position: absolute;
+  left: 50%;
+  top: calc(50% - var(--coach-orbit));
+  width: calc(var(--u) * 5);
+  height: calc(var(--u) * 5);
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--focus-ring) 22%, #ffffff);
+  box-shadow:
+    0 0 0 max(1px, calc(var(--u) * 0.35)) var(--focus-ring),
+    0 calc(var(--u) * 0.4) calc(var(--u) * 1.2) rgba(0, 0, 0, 0.25);
+}
+
+@keyframes ipod-coach-orbit {
+  0% {
+    opacity: 0;
+    transform: rotate(-40deg);
+  }
+  12% {
+    opacity: 1;
+  }
+  68% {
+    opacity: 1;
+    transform: rotate(150deg);
+  }
+  82%,
+  100% {
+    opacity: 0;
+    transform: rotate(150deg);
+  }
+}
+
+/* Reduced motion: a still dot partway round with its trail, no fades. */
+[data-reduced-motion='true'] .ipod-coach-dim,
+[data-reduced-motion='true'] .ipod-hint--coach {
+  animation: none;
+  transition: none;
+}
+
+[data-reduced-motion='true'] .ipod-wheel__coach-trail,
+[data-reduced-motion='true'] .ipod-wheel__coach-spin {
+  animation: none;
+  transform: rotate(60deg);
+}

@@ -44,6 +44,8 @@ export type MenuAction =
   | { type: 'open-url'; href: string }
   | { type: 'download'; href: string; fileName: string }
   | { type: 'recruiter-view' }
+  /** Replay the first-visit click-wheel hint (state/wheelCoach.ts). */
+  | { type: 'wheel-tutorial' }
 
 /** Full-screen, non-menu views. Rendered via the registry in `screens/index.tsx`. */
 export type ScreenSpec =

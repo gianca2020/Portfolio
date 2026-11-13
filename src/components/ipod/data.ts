@@ -19,7 +19,7 @@ const countCaption = (n: number, one: string, many = `${one}s`) =>
  * ├── About Me
  * ├── Resume ─ View Resume · Download Resume · Recruiter View
  * ├── Contact ─ GitHub · LinkedIn · Email · Download Resume
- * ├── Settings ─ Sound · Theme · Reduce Motion · About This Portfolio
+ * ├── Settings ─ Sound · Theme · Reduce Motion · About This Portfolio · Wheel Tutorial
  * └── Now Playing (only after Play/Pause has been pressed)
  */
 export function buildMenuTree(content: Portfolio): MenuNode {
@@ -189,6 +189,13 @@ export function buildMenuTree(content: Portfolio): MenuNode {
         title: 'About',
         screen: { type: 'about-portfolio' },
         preview: { type: 'info', icon: 'info', title: 'About This Portfolio' },
+      },
+      {
+        kind: 'action',
+        id: 'settings/wheel-tutorial',
+        label: 'Wheel Tutorial',
+        action: { type: 'wheel-tutorial' },
+        preview: { type: 'info', icon: 'info', title: 'Wheel Tutorial', detail: 'Replay the scrolling hint' },
       },
     ],
   }
