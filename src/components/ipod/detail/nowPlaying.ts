@@ -1,12 +1,10 @@
 import type { Track } from '../../../data/types'
 import type { MoveSource } from '../types'
 
-/** Now Playing ("Now Building") clock, volume and artwork maths. */
+/** Now Playing clock, scrubbing and artwork maths. */
 
-/** Volume change per wheel step. */
-export const VOLUME_STEP = 0.05
-/** How long the volume bar replaces the progress bar after the last wheel step (ms). */
-export const VOLUME_HUD_MS = 1500
+/** Seconds scrubbed per wheel step. */
+export const SCRUB_STEP_S = 2
 /** Progress refresh interval while playing (ms). */
 export const PROGRESS_TICK_MS = 250
 
@@ -25,18 +23,14 @@ export const progressOf = (elapsed: number, duration: number) =>
   duration > 0 ? Math.min(Math.max(elapsed / duration, 0), 1) : 0
 
 /**
- * Volume steps for a highlight move (+1 = next row). Turning the wheel clockwise is louder, as on the iPod.
- * Keys follow the vertical wheel slider instead: ↑, → and a screen reader's increment are louder.
+ * Scrub steps for a highlight move (+1 = next row). Turning the wheel clockwise goes forward, as on the iPod.
+ * Keys follow the vertical wheel slider instead: ↑, → and a screen reader's increment go forward.
  */
-export const volumeSteps = (delta: number, source: MoveSource) => (source === 'wheel' ? delta : -delta)
+export const scrubSteps = (delta: number, source: MoveSource) => (source === 'wheel' ? delta : -delta)
 
-/** Volume after `delta` wheel steps, clamped to 0–1 and rounded to kill float drift. */
-export const nextVolume = (volume: number, delta: number) =>
-  Math.min(1, Math.max(0, Math.round((volume + delta * VOLUME_STEP) * 100) / 100))
-
-/** Spoken words for the screen: "Duels by Giancarlo Forero, volume 60%". */
-export const describeTrack = (track: Track, volume: number) =>
-  `${track.title} by ${track.artist}, volume ${Math.round(volume * 100)}%`
+/** Spoken words for the screen: "Glider by Japanese Breakfast, 0:12 of 0:30". */
+export const describeTrack = (track: Track, elapsed: number, duration: number) =>
+  `${track.title} by ${track.artist}, ${formatClock(elapsed)} of ${formatClock(duration)}`
 
 export type Point = readonly [x: number, y: number]
 /** Corners in order: top-left, top-right, bottom-right, bottom-left. */

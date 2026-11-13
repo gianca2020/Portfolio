@@ -32,3 +32,11 @@ export const outlineButton =
 
 /** Inline text link: accent colour, always underlined so it doesn't rely on colour alone. */
 export const textLink = 'rv-text-link font-medium text-(--rv-accent) underline underline-offset-[3px]'
+
+/** Geometry here; the skin (stage-token colours and states) lives in recruiter-button.css. Shared with the iPod's Expand button. */
+export const STAGE_BUTTON_CLASS = [
+  'recruiter-button fixed z-50',
+  'top-[max(12px,env(safe-area-inset-top))] right-[max(12px,env(safe-area-inset-right))]',
+  'inline-flex h-[34px] items-center gap-[7px] rounded-[7px] pr-[12px] pl-[10px]',
+  'font-sans text-[13px] leading-none font-medium whitespace-nowrap select-none',
+].join(' ')

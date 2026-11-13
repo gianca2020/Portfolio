@@ -32,3 +32,10 @@ export function skipClock(clock: Clock, delta: 1 | -1, now: number, trackCount: 
   const trackIndex = restart ? clock.trackIndex : (clock.trackIndex + delta + trackCount) % trackCount
   return { ...clock, trackIndex, at: now, elapsed: 0 }
 }
+
+/** Jump to `seconds` into the current track (scrubbing, or catching up with the real player). */
+export const seekClock = (clock: Clock, seconds: number, now: number): Clock => ({
+  ...clock,
+  at: now,
+  elapsed: Math.max(0, seconds),
+})

@@ -146,7 +146,7 @@ export interface ScreenController {
   /** Select / Enter / → / centre button, with the current index. */
   onSelect?: (index: number) => void
   /**
-   * Intercept wheel/arrow movement (e.g. volume on Now Playing). `delta` is in list
+   * Intercept wheel/arrow movement (e.g. scrubbing on Now Playing). `delta` is in list
    * direction (+1 = next row) whatever the source. Return true when handled.
    */
   onMove?: (delta: number, source: MoveSource) => boolean

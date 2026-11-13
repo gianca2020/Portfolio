@@ -21,16 +21,7 @@ interface RecruiterViewProps {
 
 /** Clean, conventional one-page résumé — the escape hatch from the iPod. */
 export function RecruiterView({ data = portfolio }: RecruiterViewProps) {
-  const { profile, contact, resume, skills } = data
-  const { education } = profile
-  const work = data.experience.filter((item) => item.kind === 'work')
-  const leadership = data.experience.filter((item) => item.kind === 'leadership')
-  const projects = data.projects.filter((project) => !project.placeholder)
-  // Everything the iPod's About Me screen says, so this page stays a complete alternative to the device.
-  const about = [
-    { name: 'Focus', items: profile.focus },
-    { name: 'Interests', items: profile.interests },
-  ].filter((group) => group.items.length > 0)
+  const { profile, contact, resume } = data
 
   const rootRef = useRef<HTMLDivElement>(null)
   const headingRef = useRef<HTMLHeadingElement>(null)
@@ -48,66 +39,7 @@ export function RecruiterView({ data = portfolio }: RecruiterViewProps) {
       <main className={`${pageColumn} flex-1 pb-12`}>
         <ProfileHeader profile={profile} contact={contact} headingRef={headingRef} />
 
-        {work.length > 0 && (
-          <Section id="experience" title="Experience">
-            <div className="space-y-8">
-              {work.map((item) => (
-                <ExperienceEntry key={item.id} item={item} />
-              ))}
-            </div>
-          </Section>
-        )}
-
-        {projects.length > 0 && (
-          <Section id="projects" title="Projects">
-            <div className="space-y-9">
-              {projects.map((project) => (
-                <ProjectEntry key={project.id} project={project} />
-              ))}
-            </div>
-          </Section>
-        )}
-
-        <Section id="skills" title="Skills">
-          <SkillList groups={skills} />
-        </Section>
-
-        <Section id="education" title="Education">
-          <Entry
-            title={education.degree}
-            subtitle={education.school}
-            when={
-              <>
-                {isUpcoming(education.graduation) && 'Expected '}
-                <Time value={education.graduation} />
-              </>
-            }
-            where={education.location}
-          />
-        </Section>
-
-        {leadership.length > 0 && (
-          <Section id="leadership" title="Leadership">
-            <div className="space-y-8">
-              {leadership.map((item) => (
-                <ExperienceEntry key={item.id} item={item} />
-              ))}
-            </div>
-          </Section>
-        )}
-
-        {(profile.bio.length > 0 || about.length > 0) && (
-          <Section id="about" title="About">
-            {profile.bio.length > 0 && (
-              <div className="mb-5 max-w-[38rem] space-y-3 text-[0.9375rem] leading-relaxed text-(--rv-ink) last:mb-0">
-                {profile.bio.map((paragraph) => (
-                  <p key={paragraph}>{paragraph}</p>
-                ))}
-              </div>
-            )}
-            {about.length > 0 && <SkillList groups={about} />}
-          </Section>
-        )}
+        <ResumeSections data={data} />
       </main>
 
       <footer className="rv-footer border-t border-(--rv-rule)">
@@ -120,7 +52,7 @@ export function RecruiterView({ data = portfolio }: RecruiterViewProps) {
           <p>
             Prefer the interactive version?{' '}
             <a href="#/" className={textLink}>
-              Back to the iPod
+              Back to portfolio
             </a>
           </p>
           <p>
@@ -129,5 +61,84 @@ export function RecruiterView({ data = portfolio }: RecruiterViewProps) {
         </div>
       </footer>
     </div>
+  )
+}
+
+/** Every résumé section below the profile header; shared with the iPod's Expand reader. */
+export function ResumeSections({ data = portfolio }: { data?: Portfolio }) {
+  const { profile, skills } = data
+  const { education } = profile
+  const work = data.experience.filter((item) => item.kind === 'work')
+  const leadership = data.experience.filter((item) => item.kind === 'leadership')
+  const projects = data.projects.filter((project) => !project.placeholder)
+  // Everything the iPod's About Me screen says, so this page stays a complete alternative to the device.
+  const about = [
+    { name: 'Focus', items: profile.focus },
+    { name: 'Interests', items: profile.interests },
+  ].filter((group) => group.items.length > 0)
+
+  return (
+    <>
+      {work.length > 0 && (
+        <Section id="experience" title="Experience">
+          <div className="space-y-8">
+            {work.map((item) => (
+              <ExperienceEntry key={item.id} item={item} />
+            ))}
+          </div>
+        </Section>
+      )}
+
+      {projects.length > 0 && (
+        <Section id="projects" title="Projects">
+          <div className="space-y-9">
+            {projects.map((project) => (
+              <ProjectEntry key={project.id} project={project} />
+            ))}
+          </div>
+        </Section>
+      )}
+
+      <Section id="skills" title="Skills">
+        <SkillList groups={skills} />
+      </Section>
+
+      <Section id="education" title="Education">
+        <Entry
+          title={education.degree}
+          subtitle={education.school}
+          when={
+            <>
+              {isUpcoming(education.graduation) && 'Expected '}
+              <Time value={education.graduation} />
+            </>
+          }
+          where={education.location}
+        />
+      </Section>
+
+      {leadership.length > 0 && (
+        <Section id="leadership" title="Leadership">
+          <div className="space-y-8">
+            {leadership.map((item) => (
+              <ExperienceEntry key={item.id} item={item} />
+            ))}
+          </div>
+        </Section>
+      )}
+
+      {(profile.bio.length > 0 || about.length > 0) && (
+        <Section id="about" title="About">
+          {profile.bio.length > 0 && (
+            <div className="mb-5 max-w-[38rem] space-y-3 text-[0.9375rem] leading-relaxed text-(--rv-ink) last:mb-0">
+              {profile.bio.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+            </div>
+          )}
+          {about.length > 0 && <SkillList groups={about} />}
+        </Section>
+      )}
+    </>
   )
 }

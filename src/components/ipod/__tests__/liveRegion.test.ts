@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { portfolio } from '../../../data/portfolio'
 import { initialLiveRegion, nextLiveRegion, type LiveRegion, type LiveRegionInput } from '../state/liveRegion'
 
-const track = portfolio.nowBuilding[0]
+const track = portfolio.nowPlaying[0]
 const input = (announcement: string, overrides: Partial<LiveRegionInput> = {}): LiveRegionInput => ({
   announcement,
   status: 'stopped',

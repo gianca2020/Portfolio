@@ -152,6 +152,8 @@ export interface ResumeFile {
 /** A "song" for the Now Playing easter egg (Play/Pause on the click wheel). */
 export interface Track {
   id: string
+  /** Spotify track id (the part after /track/ in a share link); the embed plays it. */
+  spotifyId: string
   title: string
   artist: string
   album: string
@@ -167,7 +169,7 @@ export interface Portfolio {
   skills: SkillGroup[]
   contact: ContactInfo
   resume: ResumeFile
-  nowBuilding: Track[]
+  nowPlaying: Track[]
   /** This site's own source repository (Settings › About This Portfolio › View Source; hidden when absent). */
   sourceUrl?: string
 }

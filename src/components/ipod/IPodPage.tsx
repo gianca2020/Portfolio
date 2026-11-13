@@ -1,15 +1,20 @@
-import { useEffect, useRef, type CSSProperties, type RefObject } from 'react'
+import { useEffect, useRef, useState, type CSSProperties, type RefObject } from 'react'
 import { portfolio } from '../../data/portfolio'
 // Recruiter View is temporarily disabled (see App.tsx). To restore, uncomment
 // this import and the <RecruiterButton /> below.
 // import { RecruiterButton } from '../recruiter/RecruiterButton'
 import './chassis.css'
 import { DEVICE_MM } from './constants'
+import { ExpandButton } from './ExpandButton'
+import { canExpand } from './expandable'
+import { ExpandedReader } from './ExpandedReader'
+import { SpotifyPlayer } from './SpotifyPlayer'
 import { IPod } from './IPod'
 import { PlaybackProvider } from './state/PlaybackProvider'
 import { SettingsProvider } from './state/SettingsProvider'
 import { useSettings, type ChassisTheme } from './state/settingsContext'
 import { useWheelCoach } from './state/wheelCoach'
+import type { ScreenSpec } from './types'
 import { WheelCoachCaption, WheelCoachOverlay } from './WheelCoach'
 
 const { profile } = portfolio
@@ -84,6 +89,9 @@ function IPodStage({ active }: { active: boolean }) {
   const showCoach = active && coach.active
   useDocumentFinish(settings.theme, active)
   useRestoreFocus(active, stageRef)
+  const [screen, setScreen] = useState<ScreenSpec | null>(null)
+  const [expanded, setExpanded] = useState(false)
+  const expandable = active && screen !== null && canExpand(screen)
 
   return (
     <main
@@ -98,6 +106,8 @@ function IPodStage({ active }: { active: boolean }) {
         {profile.name} — {profile.title}. Interactive iPod classic portfolio.
       </h1>
       {/* <RecruiterButton /> */}
+      {expandable && <ExpandButton onPress={() => setExpanded(true)} />}
+      {expandable && expanded && <ExpandedReader spec={screen} onClose={() => setExpanded(false)} />}
       {/* Repeats the heading visually; hidden from assistive tech to avoid reading it twice. */}
       <div className="ipod-nametag" aria-hidden="true">
         <p className="ipod-nametag__name">{profile.name}</p>
@@ -105,12 +115,12 @@ function IPodStage({ active }: { active: boolean }) {
       </div>
       <div className="ipod-stage__body">
         <div className="ipod-stage__device">
-          <IPod active={active} />
+          <IPod active={active} paused={expanded} onScreenChange={setScreen} />
         </div>
         <div className="ipod-hint-slot">
           <p className="ipod-hint" data-covered={showCoach || undefined}>
-            <span className="ipod-hint__fine">↑ ↓ scroll · Enter select · Esc back · or drag around the wheel</span>
-            <span className="ipod-hint__coarse">Slide your thumb around the wheel · tap the centre to select</span>
+            <span className="ipod-hint__fine">↑ ↓ scroll · Enter select · Esc or MENU to go back</span>
+            <span className="ipod-hint__coarse">Slide around the wheel · tap the centre to select · MENU to go back</span>
           </p>
           {showCoach && <WheelCoachCaption nudges={coach.nudges} />}
         </div>
@@ -129,6 +139,8 @@ export function IPodPage({ active }: { active: boolean }) {
     <SettingsProvider>
       <PlaybackProvider>
         <IPodStage active={active} />
+        {/* Outside the stage, so the music keeps its controls on the design pages too. */}
+        <SpotifyPlayer />
       </PlaybackProvider>
     </SettingsProvider>
   )

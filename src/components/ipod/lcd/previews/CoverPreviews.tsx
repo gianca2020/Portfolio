@@ -69,7 +69,7 @@ export function CoverArt({ artwork, title, caption }: { artwork: ArtworkSpec; ti
   )
 }
 
-/** The current "Now Building" track: its cover (dissolving on skips), title and album. */
+/** The current Now Playing track: its cover (dissolving on skips), title and album. */
 export function NowPlayingArt() {
   const { track } = usePlayback()
   const still = useLcdReducedMotion()

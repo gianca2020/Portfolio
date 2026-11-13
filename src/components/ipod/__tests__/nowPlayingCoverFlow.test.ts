@@ -15,12 +15,11 @@ import {
   describeTrack,
   formatClock,
   formatRemaining,
-  nextVolume,
   type Point,
   progressOf,
   quadMatrix,
   type Quad,
-  volumeSteps,
+  scrubSteps,
 } from '../detail/nowPlaying'
 
 /** Where matrix3d(m) (transform-origin 0 0) puts local point (x, y). */
@@ -49,28 +48,21 @@ describe('Now Playing clock', () => {
   })
 })
 
-describe('nextVolume', () => {
-  it('steps by 5% and clamps without float drift', () => {
-    expect(nextVolume(0.6, 1)).toBe(0.65)
-    expect(nextVolume(0.6, -3)).toBe(0.45)
-    expect(nextVolume(0.98, 1)).toBe(1)
-    expect(nextVolume(0.02, -1)).toBe(0)
-  })
-
-  it('is louder clockwise on the wheel, but up (↑, →, AT increment) on keys', () => {
-    expect(volumeSteps(1, 'wheel')).toBe(1)
-    expect(volumeSteps(-1, 'wheel')).toBe(-1)
-    // Keys arrive in list direction: ↑ / increment is -1 (up the list), and must turn the volume up.
-    expect(volumeSteps(-1, 'key')).toBe(1)
-    expect(volumeSteps(9, 'key')).toBe(-9)
+describe('scrubSteps', () => {
+  it('goes forward clockwise on the wheel, but up (↑, →, AT increment) on keys', () => {
+    expect(scrubSteps(1, 'wheel')).toBe(1)
+    expect(scrubSteps(-1, 'wheel')).toBe(-1)
+    // Keys arrive in list direction: ↑ / increment is -1 (up the list), and must scrub forward.
+    expect(scrubSteps(-1, 'key')).toBe(1)
+    expect(scrubSteps(9, 'key')).toBe(-9)
   })
 })
 
 describe('Now Playing speech', () => {
-  it('names the track, its artist and the volume', () => {
-    const [track] = portfolio.nowBuilding
-    expect(describeTrack(track, 0.6)).toBe(`${track.title} by ${track.artist}, volume 60%`)
-    expect(describeTrack(track, 0.05 * 3)).toBe(`${track.title} by ${track.artist}, volume 15%`)
+  it('names the track, its artist and where it is in the song', () => {
+    const [track] = portfolio.nowPlaying
+    expect(describeTrack(track, 12.7, 30)).toBe(`${track.title} by ${track.artist}, 0:12 of 0:30`)
+    expect(describeTrack(track, 0, 144)).toBe(`${track.title} by ${track.artist}, 0:00 of 2:24`)
   })
 })
 
