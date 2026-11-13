@@ -1,0 +1,9 @@
+import { codeForAll } from './code-for-all.ts'
+import { hackKnight } from './hackknight.ts'
+import type { CaseStudy } from './types.ts'
+
+/** Every case study, in the order they're listed. */
+export const caseStudies: CaseStudy[] = [codeForAll, hackKnight]
+
+/** The ones visitors can see: routed, on the iPod and in /work. */
+export const publishedCaseStudies = caseStudies.filter((c) => c.published)

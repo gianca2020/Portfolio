@@ -46,6 +46,8 @@ export type MenuAction =
   | { type: 'recruiter-view' }
   /** Replay the first-visit click-wheel hint (state/wheelCoach.ts). */
   | { type: 'wheel-tutorial' }
+  /** Leave the iPod for another route of the site (e.g. a case study at /work/…). */
+  | { type: 'navigate'; to: string }
 
 /** Full-screen, non-menu views. Rendered via the registry in `screens/index.tsx`. */
 export type ScreenSpec =
