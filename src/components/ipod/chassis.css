@@ -565,7 +565,7 @@
 }
 
 /* An orange sweep turning clockwise around the whole ring, from the centre
- * button's edge to the rim, with a bright leading edge and a fading tail. */
+ * button's edge to the rim: a soft glow, feathered on both sides (no hard edge). */
 .ipod-wheel__coach,
 .ipod-wheel__coach-sweep {
   position: absolute;
@@ -582,9 +582,9 @@
   background: conic-gradient(
     from 250deg,
     transparent,
-    color-mix(in srgb, var(--coach-accent) 45%, transparent) 104deg,
-    color-mix(in srgb, var(--coach-accent) 85%, transparent) 109deg,
-    transparent 110deg
+    color-mix(in srgb, var(--coach-accent) 40%, transparent) 84deg,
+    color-mix(in srgb, var(--coach-accent) 65%, transparent) 100deg,
+    transparent 124deg
   );
   mask: radial-gradient(
     circle closest-side,
