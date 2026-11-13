@@ -23,3 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 design-system-dist
+
+# Raw design originals (PDFs, .mov, full-size images) — only optimized copies in public/work are committed
+portfolio-assets

@@ -1,0 +1,50 @@
+{
+  "code-for-all/cody-variations.webp": {
+    "width": 2000,
+    "height": 1126
+  },
+  "code-for-all/cover.webp": {
+    "width": 2000,
+    "height": 1126
+  },
+  "code-for-all/favicon-scale.webp": {
+    "width": 2000,
+    "height": 1126
+  },
+  "code-for-all/guidelines-spread.webp": {
+    "width": 2000,
+    "height": 376
+  },
+  "code-for-all/in-practice.webp": {
+    "width": 2000,
+    "height": 1126
+  },
+  "code-for-all/logo-before-after.webp": {
+    "width": 2000,
+    "height": 1126
+  },
+  "code-for-all/logo-variations.webp": {
+    "width": 2000,
+    "height": 1126
+  },
+  "code-for-all/old-logo.webp": {
+    "width": 600,
+    "height": 546
+  },
+  "code-for-all/type-and-color.webp": {
+    "width": 2000,
+    "height": 562
+  },
+  "hackknight/site-desktop-full.webp": {
+    "width": 1440,
+    "height": 5200
+  },
+  "hackknight/site-desktop.webp": {
+    "width": 1440,
+    "height": 900
+  },
+  "hackknight/site-mobile.webp": {
+    "width": 780,
+    "height": 1688
+  }
+}

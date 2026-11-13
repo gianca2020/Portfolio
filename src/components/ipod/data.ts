@@ -1,5 +1,7 @@
+import { asset, hasGallery, publishedCaseStudies } from '../../content/work'
+import type { CaseStudy } from '../../content/work'
 import { portfolio } from '../../data/portfolio'
-import type { Portfolio } from '../../data/types'
+import type { ArtworkSpec, Portfolio } from '../../data/types'
 import type { IPodNode, MenuNode, NavigableNode } from './types'
 
 /** Stable node ids for content screens (use these instead of formatting ids by hand). */
@@ -15,6 +17,7 @@ const countCaption = (n: number, one: string, many = `${one}s`) =>
  *
  * Giancarlo
  * ├── Projects ─ one row per project + View All Projects (Cover Flow)
+ * ├── Design Work ─ one row per published case study + More Design Work (/work, once the gallery has pieces)
  * ├── Experience ─ one row per role
  * ├── About Me
  * ├── Resume ─ View Resume · Download Resume · Recruiter View
@@ -22,7 +25,66 @@ const countCaption = (n: number, one: string, many = `${one}s`) =>
  * ├── Settings ─ Sound · Theme · Reduce Motion · About This Portfolio
  * └── Now Playing (only after Play/Pause has been pressed)
  */
-export function buildMenuTree(content: Portfolio): MenuNode {
+/** LCD cover for a case study: its cover image, over a generated fallback. */
+const caseStudyArtwork = (study: CaseStudy): ArtworkSpec => {
+  const cover = asset(study.slug, study.cover?.src)
+  return {
+    image: cover?.url,
+    imageAlt: cover && study.cover?.alt,
+    monogram: study.title
+      .split(/\s+/)
+      .map((word) => word[0])
+      .join('')
+      .slice(0, 4)
+      .toUpperCase(),
+    palette: ['#1f64d0', '#ffffff', '#94c7de'],
+    motif: 'grid',
+  }
+}
+
+/** The Design Work menu, or null when there is nothing to list. */
+export function buildDesignWorkMenu(studies: CaseStudy[], withGallery: boolean): MenuNode | null {
+  if (studies.length === 0 && !withGallery) return null
+  const artworks = studies.map(caseStudyArtwork)
+  return {
+    kind: 'menu',
+    id: 'design-work',
+    label: 'Design Work',
+    title: 'Design Work',
+    layout: 'split',
+    preview: {
+      type: 'slideshow',
+      artworks,
+      title: 'Design Work',
+      caption: countCaption(studies.length, 'case study', 'case studies'),
+    },
+    children: [
+      ...studies.map<IPodNode>((study, i) => ({
+        kind: 'action',
+        id: `design-work/${study.slug}`,
+        label: study.title,
+        action: { type: 'navigate', to: `/work/${study.slug}` },
+        preview: { type: 'artwork', artwork: artworks[i], title: study.title, caption: 'Case study' },
+      })),
+      ...(withGallery
+        ? [
+            {
+              kind: 'action',
+              id: 'design-work/more',
+              label: 'More Design Work',
+              action: { type: 'navigate', to: '/work' },
+              preview: { type: 'info', icon: 'website', title: 'More Design Work', detail: 'Posters, social & print' },
+            } satisfies IPodNode,
+          ]
+        : []),
+    ],
+  }
+}
+
+export function buildMenuTree(
+  content: Portfolio,
+  designWork = buildDesignWorkMenu(publishedCaseStudies, hasGallery),
+): MenuNode {
   const { profile, projects, experience, contact, resume } = content
 
   const downloadResume = (id: string): IPodNode => ({
@@ -201,6 +263,7 @@ export function buildMenuTree(content: Portfolio): MenuNode {
     layout: 'split',
     children: [
       projectsMenu,
+      ...(designWork ? [designWork] : []),
       experienceMenu,
       {
         kind: 'screen',

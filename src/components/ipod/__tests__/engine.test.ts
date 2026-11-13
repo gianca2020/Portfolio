@@ -63,14 +63,15 @@ describe('spokenState', () => {
 
   it('names the menu in both the slider value and the announcement', () => {
     expect(menu('root', 0)).toEqual({
-      valueText: 'Projects, submenu, 1 of 6, Giancarlo',
-      announcement: 'Giancarlo: Projects, submenu, 1 of 6',
+      valueText: 'Projects, submenu, 1 of 7, Giancarlo',
+      announcement: 'Giancarlo: Projects, submenu, 1 of 7',
     })
     expect(menu('projects', 0).valueText).toMatch(/, 1 of \d+, Projects$/)
   })
 
   it('says a content row opens a page, not a menu', () => {
-    expect(menu('root', 2).announcement).toBe('Giancarlo: About Me, opens page, 3 of 6')
+    expect(menu('root', 3).announcement).toBe('Giancarlo: About Me, opens page, 4 of 7')
+    expect(menu('design-work', 0).announcement).toBe('Design Work: Code For All, opens page, 1 of 1')
   })
 
   it('includes a setting’s current value', () => {

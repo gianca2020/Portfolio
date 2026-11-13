@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { portfolio } from '../../../data/portfolio'
-import { buildMenuTree, getVisibleChildren, indexTree, menuTree } from '../data'
+import { caseStudies, publishedCaseStudies } from '../../../content/work'
+import { buildDesignWorkMenu, buildMenuTree, getVisibleChildren, indexTree, menuTree } from '../data'
 import { clampIndex, currentLevel, initialNavigation, navigationReducer } from '../navigation'
 
 describe('navigationReducer', () => {
@@ -64,6 +65,7 @@ describe('menu tree', () => {
   it('has the spec’d root menu', () => {
     expect(getVisibleChildren(menuTree, false).map((n) => n.label)).toEqual([
       'Projects',
+      'Design Work',
       'Experience',
       'About Me',
       'Resume',
@@ -102,5 +104,27 @@ describe('menu tree', () => {
     expect(caption(1, 1)).toEqual(['1 project', '1 role'])
     expect(caption(3, 2)).toEqual(['3 projects', '2 roles'])
     expect(caption(0, 0)).toEqual(['No projects yet', 'No roles yet'])
+  })
+})
+
+describe('Design Work menu', () => {
+  const rows = (menu: ReturnType<typeof buildDesignWorkMenu>) =>
+    menu?.children.map((n) => [n.label, n.kind === 'action' && n.action.type === 'navigate' ? n.action.to : undefined])
+
+  it('lists only published case studies, each navigating to its page', () => {
+    expect(caseStudies.some((c) => !c.published)).toBe(true)
+    expect(rows(buildDesignWorkMenu(publishedCaseStudies, false))).toEqual(
+      publishedCaseStudies.map((c) => [c.title, `/work/${c.slug}`]),
+    )
+  })
+
+  it('offers More Design Work only when the gallery has pieces', () => {
+    expect(rows(buildDesignWorkMenu(publishedCaseStudies, true))?.at(-1)).toEqual(['More Design Work', '/work'])
+    expect(rows(buildDesignWorkMenu(publishedCaseStudies, false))?.map(([label]) => label)).not.toContain('More Design Work')
+  })
+
+  it('disappears when there is nothing to show', () => {
+    expect(buildDesignWorkMenu([], false)).toBeNull()
+    expect(getVisibleChildren(buildMenuTree(portfolio, null), false)[1].label).toBe('Experience')
   })
 })
