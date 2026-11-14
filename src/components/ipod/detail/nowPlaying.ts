@@ -28,7 +28,6 @@ export const progressOf = (elapsed: number, duration: number) =>
  */
 export const scrubSteps = (delta: number, source: MoveSource) => (source === 'wheel' ? delta : -delta)
 
-/** Spoken words for the screen: "Glider by Japanese Breakfast, 0:12 of 0:30". */
 /**
  * Which way a track change slides: forward (1) for ⏭ and auto-advance, back (-1)
  * for ⏮, each wrapping round the list. With two tracks either way is the same
@@ -38,6 +37,7 @@ export function trackDirection(from: number, to: number, count: number): 1 | -1 
   return count > 2 && (from - to + count) % count === 1 ? -1 : 1
 }
 
+/** Spoken words for the screen: "Glider by Japanese Breakfast, 0:12 of 0:30". */
 export const describeTrack = (track: Track, elapsed: number, duration: number) =>
   `${track.title} by ${track.artist}, ${formatClock(elapsed)} of ${formatClock(duration)}`
 

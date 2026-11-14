@@ -35,6 +35,8 @@ export function PlaybackProvider({ children }: { children: ReactNode }) {
   const audioRef = useRef<HTMLAudioElement | null>(null)
   /** The track the audio element has loaded. */
   const loadedRef = useRef<number | null>(null)
+  /** Counts play() calls, so a refusal that arrives after a newer call is ignored. */
+  const playCallRef = useRef(0)
 
   /**
    * Moves the clock and makes the audio follow: loads the clock's track, jumps to
@@ -55,11 +57,15 @@ export function PlaybackProvider({ children }: { children: ReactNode }) {
         audio.currentTime = seekTo
       }
       if (next.status !== 'playing') {
+        playCallRef.current++
         audio.pause()
         return
       }
+      const call = ++playCallRef.current
       audio.play().catch((error: unknown) => {
-        // AbortError only means a newer load or pause overtook this play.
+        // AbortError only means a newer load or pause overtook this play; and a
+        // refusal from an older call says nothing about the newer one.
+        if (call !== playCallRef.current) return
         if (!(error instanceof DOMException) || error.name !== 'NotAllowedError') return
         const c = clockRef.current
         if (c.status !== 'playing') return
@@ -102,6 +108,20 @@ export function PlaybackProvider({ children }: { children: ReactNode }) {
       setClock(seekClock(c, target, now), target)
     },
     [setClock],
+  )
+
+  // Leaving the iPod silences it.
+  useEffect(
+    () => () => {
+      const audio = audioRef.current
+      audioRef.current = null
+      loadedRef.current = null
+      if (!audio) return
+      audio.pause()
+      audio.removeAttribute('src')
+      audio.load()
+    },
+    [],
   )
 
   // Keep the clock on the audio's real length and position (it may buffer, or start late).
