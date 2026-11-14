@@ -20,6 +20,7 @@ import {
   quadMatrix,
   type Quad,
   scrubSteps,
+  trackDirection,
 } from '../detail/nowPlaying'
 
 /** Where matrix3d(m) (transform-origin 0 0) puts local point (x, y). */
@@ -55,6 +56,20 @@ describe('scrubSteps', () => {
     // Keys arrive in list direction: ↑ / increment is -1 (up the list), and must scrub forward.
     expect(scrubSteps(-1, 'key')).toBe(1)
     expect(scrubSteps(9, 'key')).toBe(-9)
+  })
+})
+
+describe('trackDirection', () => {
+  it('slides forward for ⏭ and auto-advance, back for ⏮, wrapping round the list', () => {
+    expect(trackDirection(0, 1, 7)).toBe(1)
+    expect(trackDirection(6, 0, 7)).toBe(1)
+    expect(trackDirection(3, 2, 7)).toBe(-1)
+    expect(trackDirection(0, 6, 7)).toBe(-1)
+  })
+
+  it('counts either change as forward with two tracks', () => {
+    expect(trackDirection(0, 1, 2)).toBe(1)
+    expect(trackDirection(1, 0, 2)).toBe(1)
   })
 })
 

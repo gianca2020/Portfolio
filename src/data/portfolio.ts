@@ -278,18 +278,21 @@ const skills: SkillGroup[] = [
   },
 ]
 
-// -- Now Playing easter egg: songs on repeat, played through Spotify's embed --
-/** Album covers come from Spotify's image CDN; the generated cover is the fallback if one fails to load. */
-const spotifyCover = (hash: string) => `https://i.scdn.co/image/ab67616d00001e02${hash}`
+// -- Now Playing easter egg: songs on repeat, each song's Apple Music preview (iTunes Search API) --
+/** A 30-second preview on Apple's audio CDN. */
+const applePreview = (bucket: string, path: string) =>
+  `https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview${bucket}/v4/${path}.plus.aac.p.m4a`
+/** Album covers come from Apple's image CDN; the generated cover is the fallback if one fails to load. */
+const appleCover = (path: string) => `https://is1-ssl.mzstatic.com/image/thumb/${path}/600x600bb.jpg`
 
 const nowPlaying: Track[] = [
-  { id: 'portal', spotifyId: '7LYCoMFe1ciXBMdwZLmvG2', title: 'Portal', artist: 'Fine', album: 'Portal', duration: 144, artwork: { image: spotifyCover('3d5ca71998d457565f91c274'), imageAlt: 'Portal cover', monogram: 'P', palette: ['#20242c', '#e9e4da', '#8fb4d9'], motif: 'orbit' } },
-  { id: 'know-who-you-are', spotifyId: '4IdcRddA9tKLvTwpymycpU', title: 'Know Who You Are at Every Age', artist: 'Cocteau Twins', album: 'Four-Calendar Café', duration: 220, artwork: { image: spotifyCover('3eec753a75cfd369b65e6972'), imageAlt: 'Four-Calendar Café cover', monogram: 'CT', palette: ['#d9c7b8', '#3b2f2f', '#a8786a'], motif: 'waveform' } },
-  { id: 'glider', spotifyId: '6fyMExLM9mmtXAQKCnTaZG', title: 'Glider', artist: 'Japanese Breakfast', album: 'Sable (Original Video Game Soundtrack)', duration: 171, artwork: { image: spotifyCover('702d716b9dd10ab2129e563a'), imageAlt: 'Sable (Original Video Game Soundtrack) cover', monogram: 'JB', palette: ['#f2c46d', '#2b2330', '#d96c4e'], motif: 'rings' } },
-  { id: 'white-ferrari', spotifyId: '2LMkwUfqC6S6s6qDVlEuzV', title: 'White Ferrari', artist: 'Frank Ocean', album: 'Blonde', duration: 249, artwork: { image: spotifyCover('c5649add07ed3720be9d5526'), imageAlt: 'Blonde cover', monogram: 'FO', palette: ['#e8e6e1', '#1d1d1f', '#9a9a9a'], motif: 'stripes' } },
-  { id: 'modern-love', spotifyId: '3gxEZXUjrNbl3TlSrTGbR5', title: 'Modern Love', artist: 'David Bowie', album: 'Let\'s Dance (2018 Remaster)', duration: 288, artwork: { image: spotifyCover('db0917ddd4139153bc1d1a1a'), imageAlt: 'Let\'s Dance (2018 Remaster) cover', monogram: 'DB', palette: ['#1c1c1c', '#f4f1ea', '#d63a2f'], motif: 'bars' } },
-  { id: 'cry-for-me', spotifyId: '2RhHct6gGXSrZ1zHjovhRq', title: 'Cry for Me', artist: 'Magdalena Bay', album: 'Imaginal Disk', duration: 307, artwork: { image: spotifyCover('a3390485ba30a0a99feaa0dd'), imageAlt: 'Imaginal Disk cover', monogram: 'MB', palette: ['#2a1f4a', '#f6d7f0', '#7ad3c8'], motif: 'orbit' } },
-  { id: 'suga-honey-iced-tea', spotifyId: '6HjzGcCtnFNfzA3N1ftR2v', title: 'Suga Honey Iced Tea', artist: 'Kelis', album: 'Tasty', duration: 203, artwork: { image: spotifyCover('80c0124b18f8d2e3152bbb02'), imageAlt: 'Tasty cover', monogram: 'K', palette: ['#f5d36b', '#3a2414', '#e0823c'], motif: 'grid' } },
+  { id: 'portal', previewUrl: applePreview('221', '5c/f5/95/5cf59500-92fb-c0d0-50e3-630e97203fa8/mzaf_14372611492750107391'), title: 'Portal', artist: 'Fine', album: 'Portal', duration: 144, artwork: { image: appleCover('Music221/v4/6f/85/a9/6f85a9fc-b464-b289-671b-07182e8e64df/cover.jpg'), imageAlt: 'Portal cover', monogram: 'P', palette: ['#20242c', '#e9e4da', '#8fb4d9'], motif: 'orbit' } },
+  { id: 'know-who-you-are', previewUrl: applePreview('211', 'a4/a5/5d/a4a55dd3-98ae-5bfd-c73d-1df0489ffec5/mzaf_8094353415315880248'), title: 'Know Who You Are at Every Age', artist: 'Cocteau Twins', album: 'Four-Calendar Café', duration: 220, artwork: { image: appleCover('Music116/v4/a9/52/fd/a952fd47-cbbd-261e-e487-467a03fd5318/191400071469.png'), imageAlt: 'Four-Calendar Café cover', monogram: 'CT', palette: ['#d9c7b8', '#3b2f2f', '#a8786a'], motif: 'waveform' } },
+  { id: 'glider', previewUrl: applePreview('221', '5d/9b/f7/5d9bf7ee-1b61-3956-24e0-3d7c00232d88/mzaf_511772591711905927'), title: 'Glider', artist: 'Japanese Breakfast', album: 'Sable (Original Video Game Soundtrack)', duration: 171, artwork: { image: appleCover('Music115/v4/a9/83/cc/a983cc52-40ca-316f-7c9f-2d946cc75daa/886449206308.jpg'), imageAlt: 'Sable (Original Video Game Soundtrack) cover', monogram: 'JB', palette: ['#f2c46d', '#2b2330', '#d96c4e'], motif: 'rings' } },
+  { id: 'white-ferrari', previewUrl: applePreview('221', 'b6/94/4d/b6944d5f-b66c-ef53-6fd5-8f0aaa92846c/mzaf_16355860049074950110'), title: 'White Ferrari', artist: 'Frank Ocean', album: 'Blonde', duration: 249, artwork: { image: appleCover('Music115/v4/bb/45/68/bb4568f3-68cd-619d-fbcb-4e179916545d/BlondCover-Final.jpg'), imageAlt: 'Blonde cover', monogram: 'FO', palette: ['#e8e6e1', '#1d1d1f', '#9a9a9a'], motif: 'stripes' } },
+  { id: 'modern-love', previewUrl: applePreview('211', '51/8d/a4/518da4ff-8ef3-e355-cbb7-adbda3414ff7/mzaf_1378483798019088876'), title: 'Modern Love', artist: 'David Bowie', album: 'Let\'s Dance (2018 Remaster)', duration: 288, artwork: { image: appleCover('Music115/v4/bd/df/9d/bddf9d26-d45a-278f-26c1-e5274094cb27/190295671600.jpg'), imageAlt: 'Let\'s Dance (2018 Remaster) cover', monogram: 'DB', palette: ['#1c1c1c', '#f4f1ea', '#d63a2f'], motif: 'bars' } },
+  { id: 'cry-for-me', previewUrl: applePreview('221', '22/9c/aa/229caa74-d164-4df7-ee63-9a3e17d8bd29/mzaf_7686219845117483591'), title: 'Cry for Me', artist: 'Magdalena Bay', album: 'Imaginal Disk', duration: 307, artwork: { image: appleCover('Music221/v4/8f/e3/6c/8fe36c7a-d280-2d0e-8e67-4ee0fd4523cd/810090095448.png'), imageAlt: 'Imaginal Disk cover', monogram: 'MB', palette: ['#2a1f4a', '#f6d7f0', '#7ad3c8'], motif: 'orbit' } },
+  { id: 'suga-honey-iced-tea', previewUrl: applePreview('221', '9b/38/b0/9b38b021-3ff8-30de-325f-047b765c93db/mzaf_18319590966631733676'), title: 'Suga Honey Iced Tea', artist: 'Kelis', album: 'Tasty', duration: 203, artwork: { image: appleCover('Music124/v4/a3/51/b2/a351b255-d9cc-6c88-65d0-8600b32e2dd9/mzi.pzuzolyw.jpg'), imageAlt: 'Tasty cover', monogram: 'K', palette: ['#f5d36b', '#3a2414', '#e0823c'], motif: 'grid' } },
 ]
 
 // -- Portfolio --

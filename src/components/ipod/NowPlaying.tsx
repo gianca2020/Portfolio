@@ -1,4 +1,6 @@
+import { AnimatePresence, m } from 'framer-motion'
 import { useEffect, useState } from 'react'
+import { SLIDE_DURATION } from './constants'
 import type { ArtworkSpec } from '../../data/types'
 import { Artwork } from './Artwork'
 import {
@@ -11,7 +13,10 @@ import {
   quadMatrix,
   SCRUB_STEP_S,
   scrubSteps,
+  trackDirection,
 } from './detail/nowPlaying'
+import { useLcdReducedMotion } from './lcd/hooks'
+import { slide, SLIDE_EASE } from './lcd/motion'
 import { useDeviceActive } from './state/deviceContext'
 import { usePlayback } from './state/playbackContext'
 import type { ScreenNode, ScreenProps } from './types'
@@ -61,6 +66,13 @@ export function NowPlaying({ node, active, api }: ScreenProps<ScreenNode>) {
   const deviceActive = useDeviceActive()
   const { status, track, trackIndex, tracks, duration } = playback
   const playing = status === 'playing'
+  const instant = useLcdReducedMotion()
+
+  // The way the last track change went, for the slide. (State derived while rendering.)
+  const [shown, setShown] = useState({ trackIndex, direction: 1 as 1 | -1 })
+  if (shown.trackIndex !== trackIndex) {
+    setShown({ trackIndex, direction: trackDirection(shown.trackIndex, trackIndex, tracks.length) })
+  }
 
   // Re-render ~4×/s while playing and on screen so the clock and bar advance. The
   // clock is timestamp-based, so it is right again as soon as the device reappears.
@@ -73,7 +85,7 @@ export function NowPlaying({ node, active, api }: ScreenProps<ScreenNode>) {
 
   useScreenController(api, active, {
     count: 1,
-    // The wheel scrubs through the song (Spotify's embed has no volume control to drive).
+    // The wheel scrubs through the song.
     // scrub() works from the live clock, so quick successive steps build on each other.
     onMove: (delta, source) => {
       if (!playback.canScrub) return true
@@ -101,16 +113,30 @@ export function NowPlaying({ node, active, api }: ScreenProps<ScreenNode>) {
         {trackIndex + 1} of {tracks.length}
       </p>
 
-      <ReflectedArtwork spec={track.artwork} />
+      {/* ⏭ / ⏮ push the cover and the song's details aside, like moving through a menu. */}
+      <AnimatePresence initial={false} custom={shown.direction} mode="sync">
+        <m.div
+          key={trackIndex}
+          custom={shown.direction}
+          variants={slide}
+          initial="enter"
+          animate="centre"
+          exit="exit"
+          transition={{ duration: instant ? 0 : SLIDE_DURATION, ease: SLIDE_EASE }}
+          className="absolute inset-0"
+        >
+          <ReflectedArtwork spec={track.artwork} />
 
-      <div
-        className="absolute right-[8px] flex flex-col justify-center"
-        style={{ top: ART_RIGHT_TOP, left: TEXT_LEFT, height: ART_RIGHT_BOTTOM - ART_RIGHT_TOP }}
-      >
-        <h2 className="truncate text-[14px] leading-[18px] font-bold">{track.title}</h2>
-        <p className="truncate text-[12px] leading-[16px]">{track.artist}</p>
-        <p className="truncate text-[12px] leading-[16px] text-lcd-ink-2">{track.album}</p>
-      </div>
+          <div
+            className="absolute right-[8px] flex flex-col justify-center"
+            style={{ top: ART_RIGHT_TOP, left: TEXT_LEFT, height: ART_RIGHT_BOTTOM - ART_RIGHT_TOP }}
+          >
+            <h2 className="truncate text-[14px] leading-[18px] font-bold">{track.title}</h2>
+            <p className="truncate text-[12px] leading-[16px]">{track.artist}</p>
+            <p className="truncate text-[12px] leading-[16px] text-lcd-ink-2">{track.album}</p>
+          </div>
+        </m.div>
+      </AnimatePresence>
 
       <div className="absolute right-[14px] bottom-[9px] left-[14px] h-[26px]">
         <div className="flex">

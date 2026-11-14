@@ -1,3 +1,4 @@
+import type { Variants } from 'framer-motion'
 import type { CSSProperties } from 'react'
 import { SLIDE_DURATION } from '../constants'
 
@@ -5,6 +6,17 @@ import { SLIDE_DURATION } from '../constants'
 export const SLIDE_EASE: [number, number, number, number] = [0.4, 0, 0.8, 0.6]
 export const SLIDE_EASE_CSS = `cubic-bezier(${SLIDE_EASE.join(', ')})`
 export const SLIDE_MS = Math.round(SLIDE_DURATION * 1000)
+
+/**
+ * Horizontal push: going forward, the current view leaves to the left while the
+ * new one arrives from the right; going back, the reverse. `custom` is the
+ * direction — AnimatePresence hands the latest one to the exiting view.
+ */
+export const slide: Variants = {
+  enter: (direction: 1 | -1) => ({ x: direction > 0 ? '100%' : '-100%' }),
+  centre: { x: 0 },
+  exit: (direction: 1 | -1) => ({ x: direction > 0 ? '-100%' : '100%' }),
+}
 
 /** Split-view preview: swaps almost immediately when the highlight moves. */
 export const PREVIEW_FADE_MS = 130
