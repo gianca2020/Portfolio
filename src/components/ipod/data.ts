@@ -257,7 +257,7 @@ export function buildMenuTree(
         id: 'settings/wheel-tutorial',
         label: 'Wheel Tutorial',
         action: { type: 'wheel-tutorial' },
-        preview: { type: 'info', icon: 'info', title: 'Wheel Tutorial', detail: 'Replay the scrolling hint' },
+        preview: { type: 'info', icon: 'info', title: 'Wheel Tutorial', detail: 'Replay the wheel walkthrough' },
       },
     ],
   }

@@ -290,10 +290,13 @@ export function useIPodEngine({ root, nodes, enabled }: EngineOptions): IPodEngi
     }
 
     /** While the wheel coach is up, presses replay its hint instead of acting (see state/wheelCoach.ts). */
-    const held = (input: 'press' | 'back' = 'press') => {
+    const held = (input: 'select' | 'back' | 'press' = 'press') => {
       // The coach only shows on a visible device; a hidden one never holds input.
       if (!enabledRef.current) return false
       switch (coachIntercepts(wheelCoach.get(), input)) {
+        case 'advance':
+          wheelCoach.advance()
+          return false
         case 'hold':
           wheelCoach.nudge()
           return true
@@ -311,7 +314,7 @@ export function useIPodEngine({ root, nodes, enabled }: EngineOptions): IPodEngi
     const moveBy = (delta: number, source: MoveSource = 'wheel') => {
       const controller = activeController()
       if (!controller || delta === 0) return
-      if (enabledRef.current && coachIntercepts(wheelCoach.get(), 'move') === 'step') wheelCoach.end()
+      if (enabledRef.current && coachIntercepts(wheelCoach.get(), 'move') === 'advance') wheelCoach.advance()
       if (controller.onMove?.(delta, source)) return
       const before = currentLevel(navRef.current).index
       const next = dispatch({ type: 'move', delta, count: controller.count })
@@ -331,18 +334,18 @@ export function useIPodEngine({ root, nodes, enabled }: EngineOptions): IPodEngi
       // Silent move: the select's press is the feedback (a click just before it would
       // also swallow the press, which plays too soon after it).
       selectIndex: (index) => {
-        if (held()) return
+        if (held('select')) return
         setIndex(index, { silent: true })
         select()
       },
       open: (nodeId) => {
-        if (!held()) open(nodeId)
+        if (!held('select')) open(nodeId)
       },
       activate: (node) => {
-        if (!held()) activate(node)
+        if (!held('select')) activate(node)
       },
       runAction: (action) => {
-        if (!held()) runAction(action)
+        if (!held('select')) runAction(action)
       },
       click: () => soundEngine.click(),
     }
@@ -350,7 +353,7 @@ export function useIPodEngine({ root, nodes, enabled }: EngineOptions): IPodEngi
     const controls: IPodControls = {
       moveBy,
       select: () => {
-        if (!held()) select()
+        if (!held('select')) select()
       },
       back: () => {
         if (held('back')) return

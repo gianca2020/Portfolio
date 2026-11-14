@@ -19,9 +19,9 @@ afterEach(() => vi.unstubAllGlobals())
 describe('wheel coach', () => {
   it('shows on a first visit and not once completed', () => {
     vi.stubGlobal('window', { localStorage: storage() })
-    expect(createWheelCoach().get().active).toBe(true)
+    expect(createWheelCoach().get().step).toBe('scroll')
     vi.stubGlobal('window', { localStorage: storage({ 'gf-ipod-portfolio:wheel-coach': 'done' }) })
-    expect(createWheelCoach().get().active).toBe(false)
+    expect(createWheelCoach().get().step).toBe(null)
   })
 
   it('ends on the first scroll and remembers it', () => {
@@ -29,9 +29,9 @@ describe('wheel coach', () => {
     vi.stubGlobal('window', { localStorage })
     const coach = createWheelCoach()
     const seen: boolean[] = []
-    coach.subscribe(() => seen.push(coach.get().active))
+    coach.subscribe(() => seen.push(coach.get().step !== null))
     coach.end()
-    expect(coach.get().active).toBe(false)
+    expect(coach.get().step).toBe(null)
     expect(seen).toEqual([false])
     expect(localStorage.data['gf-ipod-portfolio:wheel-coach']).toBe('done')
   })
@@ -44,9 +44,9 @@ describe('wheel coach', () => {
     expect(coach.get().nudges).toBe(2)
     coach.end()
     coach.nudge()
-    expect(coach.get()).toEqual({ active: false, nudges: 2 })
+    expect(coach.get()).toEqual({ step: null, nudges: 2 })
     coach.start()
-    expect(coach.get()).toEqual({ active: true, nudges: 0 })
+    expect(coach.get()).toEqual({ step: 'scroll', nudges: 0 })
   })
 
   it('tolerates blocked storage', () => {
@@ -55,31 +55,55 @@ describe('wheel coach', () => {
     }
     vi.stubGlobal('window', { localStorage: { getItem: throws, setItem: throws } })
     const coach = createWheelCoach()
-    expect(coach.get().active).toBe(true)
+    expect(coach.get().step).toBe('scroll')
     expect(() => coach.end()).not.toThrow()
-    expect(coach.get().active).toBe(false)
+    expect(coach.get().step).toBe(null)
   })
 
-  it('lets scrolling through (ending the hint) and holds other presses while showing', () => {
-    const showing = { active: true, nudges: 0 }
-    const done = { active: false, nudges: 0 }
-    expect(coachIntercepts(showing, 'move')).toBe('step')
-    expect(coachIntercepts(showing, 'press')).toBe('hold')
-    expect(coachIntercepts(done, 'move')).toBe('pass')
-    expect(coachIntercepts(done, 'press')).toBe('pass')
-    expect(coachIntercepts(done, 'back')).toBe('pass')
+  it('walks scroll → select → back, then remembers it', () => {
+    const localStorage = storage()
+    vi.stubGlobal('window', { localStorage })
+    const coach = createWheelCoach()
+    coach.nudge()
+    coach.advance()
+    expect(coach.get()).toEqual({ step: 'select', nudges: 0 })
+    coach.advance()
+    expect(coach.get()).toEqual({ step: 'back', nudges: 0 })
+    expect(localStorage.data['gf-ipod-portfolio:wheel-coach']).toBeUndefined()
+    coach.advance()
+    expect(coach.get().step).toBe(null)
+    expect(localStorage.data['gf-ipod-portfolio:wheel-coach']).toBe('done')
   })
 
-  it('never traps anyone: Back skips it, and a press after two held ones goes through', () => {
-    expect(coachIntercepts({ active: true, nudges: 0 }, 'back')).toBe('skip')
-    expect(coachIntercepts({ active: true, nudges: MAX_HELD_PRESSES - 1 }, 'press')).toBe('hold')
-    expect(coachIntercepts({ active: true, nudges: MAX_HELD_PRESSES }, 'press')).toBe('release')
+  it('advances on the input each step asks for and holds stray presses', () => {
+    const at = (step: 'scroll' | 'select' | 'back') => ({ step, nudges: 0 })
+    expect(coachIntercepts(at('scroll'), 'move')).toBe('advance')
+    expect(coachIntercepts(at('scroll'), 'select')).toBe('hold')
+    expect(coachIntercepts(at('scroll'), 'press')).toBe('hold')
+    expect(coachIntercepts(at('select'), 'select')).toBe('advance')
+    expect(coachIntercepts(at('select'), 'move')).toBe('pass')
+    expect(coachIntercepts(at('select'), 'press')).toBe('hold')
+    expect(coachIntercepts(at('back'), 'back')).toBe('advance')
+    expect(coachIntercepts(at('back'), 'move')).toBe('pass')
+    expect(coachIntercepts(at('back'), 'select')).toBe('pass')
+    expect(coachIntercepts(at('back'), 'press')).toBe('hold')
+    const done = { step: null, nudges: 0 }
+    for (const input of ['move', 'select', 'back', 'press'] as const) expect(coachIntercepts(done, input)).toBe('pass')
+  })
+
+  it('never traps anyone: Back skips the early steps, and a press after two held ones goes through', () => {
+    expect(coachIntercepts({ step: 'scroll', nudges: 0 }, 'back')).toBe('skip')
+    expect(coachIntercepts({ step: 'select', nudges: 0 }, 'back')).toBe('skip')
+    for (const step of ['scroll', 'select', 'back'] as const) {
+      expect(coachIntercepts({ step, nudges: MAX_HELD_PRESSES - 1 }, 'press')).toBe('hold')
+      expect(coachIntercepts({ step, nudges: MAX_HELD_PRESSES }, 'press')).toBe('release')
+    }
   })
 
   it('Settings › Wheel Tutorial restarts it', () => {
     wheelCoach.end()
     runMenuAction({ type: 'wheel-tutorial' })
-    expect(wheelCoach.get()).toEqual({ active: true, nudges: 0 })
+    expect(wheelCoach.get()).toEqual({ step: 'scroll', nudges: 0 })
   })
 
   it('can be replayed from Settings', () => {
