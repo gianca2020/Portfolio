@@ -40,14 +40,13 @@ const THUMB_ORBIT = ((RADIUS + HUB / 2) / 2 / DEVICE_MM.wheel.diameter) * 100
 
 /** The coach's hand, as wide as a third of the wheel, with its fingertip pinned to the point it touches. */
 const COACH_HAND = DEVICE_MM.wheel.diameter * 0.34
-/** Where the hand taps MENU: the middle of the legend (% of the wheel's height). */
-const COACH_MENU_Y = ((RADIUS - DEVICE_MM.labels.menu) / DEVICE_MM.wheel.diameter) * 100
 
 /** The coach's sweep covers the ring from the centre button's edge to the rim (% of the wheel's radius). */
 const COACH_STYLE = {
   '--coach-hub': `${(HUB / DEVICE_MM.wheel.diameter) * 100}%`,
   '--coach-hand': mm(COACH_HAND),
-  '--coach-menu-y': `${COACH_MENU_Y}%`,
+  // From the centre button up to the middle of the MENU legend.
+  '--coach-menu-lift': mm(DEVICE_MM.labels.menu),
   '--coach-ripple': mm(HUB * 0.9),
 } as CSSProperties
 

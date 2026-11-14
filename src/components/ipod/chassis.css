@@ -746,7 +746,13 @@
   top: 0;
   width: var(--coach-hand);
   overflow: visible;
-  filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.35));
+}
+
+.coach-hand__shadow {
+  fill: rgba(0, 0, 0, 0.22);
+  stroke: rgba(0, 0, 0, 0.22);
+  stroke-width: 3;
+  stroke-linejoin: round;
 }
 
 .coach-hand__outline {
@@ -832,8 +838,9 @@
   position: absolute;
   left: 50%;
   top: 50%;
+  /* Moved with translate, not top, so the glide is composited instead of repainted. */
   transition:
-    top 600ms cubic-bezier(0.45, 0, 0.3, 1),
+    translate 600ms cubic-bezier(0.45, 0, 0.3, 1),
     rotate 600ms cubic-bezier(0.45, 0, 0.3, 1);
   animation: ipod-coach-fade-in 300ms ease-out;
 }
@@ -841,7 +848,7 @@
 /* On MENU the hand leans in from the lower right (turning on its fingertip), so the
  * palm rests on the ring instead of over the grey centre button. */
 .ipod-wheel__coach[data-step='back'] .ipod-wheel__coach-target {
-  top: var(--coach-menu-y);
+  translate: 0 calc(-1 * var(--coach-menu-lift));
   rotate: -35deg;
 }
 

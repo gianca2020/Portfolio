@@ -22,6 +22,10 @@ const SILHOUETTE = (
 export function CoachHand({ className }: { className?: string }) {
   return (
     <svg className={className} style={PIN} viewBox="0 0 50 64" aria-hidden="true" focusable="false">
+      {/* Drawn in the SVG, not as a CSS drop-shadow: a filtered layer smears a trail while the hand glides. */}
+      <g className="coach-hand__shadow" transform="translate(1.5 3)">
+        {SILHOUETTE}
+      </g>
       <g className="coach-hand__outline">{SILHOUETTE}</g>
       <g className="coach-hand__fill">{SILHOUETTE}</g>
       {/* Creases between the curled fingers, the thumb and the cuff seam. */}
