@@ -34,9 +34,6 @@ const playback = (started: boolean): PlaybackValue => ({
   toggle: () => {},
   skip: () => {},
   scrub: () => {},
-  seekRequest: null,
-  reportEmbed: () => {},
-  followEmbed: () => {},
 })
 
 const api: ScreenApi = {

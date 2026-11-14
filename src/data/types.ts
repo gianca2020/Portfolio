@@ -152,12 +152,12 @@ export interface ResumeFile {
 /** A "song" for the Now Playing easter egg (Play/Pause on the click wheel). */
 export interface Track {
   id: string
-  /** Spotify track id (the part after /track/ in a share link); the embed plays it. */
-  spotifyId: string
+  /** The song's 30-second Apple Music preview (`previewUrl` from the iTunes Search API); the iPod plays it. */
+  previewUrl: string
   title: string
   artist: string
   album: string
-  /** Seconds. */
+  /** Seconds, until the preview has loaded and reports its own length. */
   duration: number
   artwork: ArtworkSpec
 }

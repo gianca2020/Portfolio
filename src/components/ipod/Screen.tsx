@@ -1,7 +1,7 @@
-import { AnimatePresence, domMin, LazyMotion, m, useIsPresent, type Variants } from 'framer-motion'
+import { AnimatePresence, domMin, LazyMotion, m, useIsPresent } from 'framer-motion'
 import { SLIDE_DURATION } from './constants'
 import { useLcdReducedMotion } from './lcd/hooks'
-import { SLIDE_EASE } from './lcd/motion'
+import { slide, SLIDE_EASE } from './lcd/motion'
 import { renderScreen } from './screens'
 import type { NavigableNode, ScreenApi } from './types'
 
@@ -13,17 +13,6 @@ export interface ScreenStackProps {
   /** 1 = forward (slide left), -1 = back (slide right). */
   direction: 1 | -1
   api: ScreenApi
-}
-
-/**
- * Horizontal push: going deeper, the current screen leaves to the left while
- * the new one arrives from the right; going back, the reverse. `custom` is the
- * direction — AnimatePresence hands the latest one to the exiting screen.
- */
-const slide: Variants = {
-  enter: (direction: 1 | -1) => ({ x: direction > 0 ? '100%' : '-100%' }),
-  centre: { x: 0 },
-  exit: (direction: 1 | -1) => ({ x: direction > 0 ? '-100%' : '100%' }),
 }
 
 interface SlotProps extends Omit<ScreenStackProps, 'depth'> {

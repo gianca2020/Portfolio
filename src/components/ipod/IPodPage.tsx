@@ -8,7 +8,6 @@ import { DEVICE_MM } from './constants'
 import { ExpandButton } from './ExpandButton'
 import { canExpand } from './expandable'
 import { ExpandedReader } from './ExpandedReader'
-import { SpotifyPlayer } from './SpotifyPlayer'
 import { IPod } from './IPod'
 import { PlaybackProvider } from './state/PlaybackProvider'
 import { SettingsProvider } from './state/SettingsProvider'
@@ -143,8 +142,6 @@ export function IPodPage({ active }: { active: boolean }) {
     <SettingsProvider>
       <PlaybackProvider>
         <IPodStage active={active} />
-        {/* Outside the stage, so the music keeps its controls on the design pages too. */}
-        <SpotifyPlayer />
       </PlaybackProvider>
     </SettingsProvider>
   )
