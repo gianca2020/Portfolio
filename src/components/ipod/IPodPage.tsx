@@ -86,7 +86,7 @@ function IPodStage({ active }: { active: boolean }) {
   const { settings, reducedMotion } = useSettings()
   const stageRef = useRef<HTMLElement>(null)
   const coach = useWheelCoach()
-  const showCoach = active && coach.active
+  const showCoach = active && coach.step !== null
   useDocumentFinish(settings.theme, active)
   useRestoreFocus(active, stageRef)
   const [screen, setScreen] = useState<ScreenSpec | null>(null)
@@ -126,7 +126,7 @@ function IPodStage({ active }: { active: boolean }) {
             <span className="ipod-hint__fine">↑ ↓ scroll · Enter select · Esc or MENU to go back</span>
             <span className="ipod-hint__coarse">Slide around the wheel · tap the centre to select · MENU to go back</span>
           </p>
-          {showCoach && <WheelCoachCaption nudges={coach.nudges} />}
+          {showCoach && coach.step && <WheelCoachCaption step={coach.step} nudges={coach.nudges} />}
         </div>
       </div>
       <WheelCoachOverlay stage={stageRef} coach={coach} show={showCoach} reducedMotion={reducedMotion} />

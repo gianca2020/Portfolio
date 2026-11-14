@@ -598,6 +598,11 @@
   cursor: pointer;
 }
 
+.ipod-coach-caption__count {
+  color: #a8a8ae;
+  font-variant-numeric: tabular-nums;
+}
+
 .ipod-coach-caption__skip:hover {
   color: #ffffff;
 }
@@ -624,6 +629,8 @@
  * rests. It fills the ring's full width, centre button to rim: a round head exactly as
  * wide as the ring and a tail fading behind it. Sweep and head turn together. */
 .ipod-wheel__coach,
+.ipod-wheel__coach-comet,
+.ipod-wheel__coach-orbit,
 .ipod-wheel__coach-spin,
 .ipod-wheel__coach-sweep,
 .ipod-wheel__coach-head {
@@ -637,14 +644,20 @@
   --coach-accent: #e8650a;
   /* Middle of the ring, as a share of the wheel's width: hub edge and rim averaged. */
   --coach-mid: calc(var(--coach-hub) / 4 + 25%);
-  /* Head and tail are drawn opaque and faded together here, so where they overlap
-   * there's no darker seam. */
+}
+
+/* Head and tail are drawn opaque and faded together here, so where they overlap
+ * there's no darker seam. */
+.ipod-wheel__coach-comet {
   opacity: 0.72;
 }
 
 /* A brighter orange on the black wheel, where the deep one turns muddy. */
 .ipod-wheel[data-finish='black'] .ipod-wheel__coach {
   --coach-accent: #ff7a1a;
+}
+
+.ipod-wheel[data-finish='black'] .ipod-wheel__coach-comet {
   opacity: 0.8;
 }
 
@@ -726,6 +739,191 @@
   }
 }
 
+/* ── The coach's hand ── a white pointing hand, fingertip pinned to the point it touches. */
+.ipod-wheel__coach-hand {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--coach-hand);
+  overflow: visible;
+}
+
+.coach-hand__shadow {
+  fill: rgba(0, 0, 0, 0.22);
+  stroke: rgba(0, 0, 0, 0.22);
+  stroke-width: 3;
+  stroke-linejoin: round;
+}
+
+.coach-hand__outline {
+  fill: #2a2a2e;
+  stroke: #2a2a2e;
+  stroke-width: 3;
+  stroke-linejoin: round;
+}
+
+.coach-hand__fill {
+  fill: #ffffff;
+}
+
+.coach-hand__crease {
+  fill: none;
+  stroke: #b9b9c0;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+}
+
+/* Scroll: the orbit layer turns with the comet's head (the spin layer without its 12°
+ * offset), and the rider turns back by as much, so the hand stays upright on the ring. */
+.ipod-wheel__coach-orbit {
+  animation: ipod-coach-hand-orbit 2.4s linear infinite;
+}
+
+.ipod-wheel__coach-rider {
+  position: absolute;
+  left: 50%;
+  top: calc(50% - var(--coach-mid));
+  animation: ipod-coach-hand-upright 2.4s linear infinite;
+}
+
+.ipod-wheel__coach-orbit .ipod-wheel__coach-hand {
+  animation: ipod-coach-hand-touch 2.4s linear infinite;
+}
+
+/* Same timing as ipod-coach-orbit, so the fingertip leads the comet exactly. */
+@keyframes ipod-coach-hand-orbit {
+  0%,
+  10% {
+    transform: rotate(0deg);
+    animation-timing-function: cubic-bezier(0.45, 0, 0.3, 1);
+  }
+  70%,
+  100% {
+    transform: rotate(270deg);
+  }
+}
+
+@keyframes ipod-coach-hand-upright {
+  0%,
+  10% {
+    transform: rotate(0deg);
+    animation-timing-function: cubic-bezier(0.45, 0, 0.3, 1);
+  }
+  70%,
+  100% {
+    transform: rotate(-270deg);
+  }
+}
+
+/* Comes down onto the ring, stays pressed for the sweep, lifts away. */
+@keyframes ipod-coach-hand-touch {
+  0% {
+    opacity: 0;
+    scale: 1.15;
+  }
+  10%,
+  70% {
+    opacity: 1;
+    scale: 1;
+  }
+  80%,
+  100% {
+    opacity: 0;
+    scale: 1.15;
+  }
+}
+
+/* Select / Back: the target point glides from the centre button up to MENU. */
+.ipod-wheel__coach-target {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  /* Moved with translate, not top, so the glide is composited instead of repainted. */
+  transition:
+    translate 600ms cubic-bezier(0.45, 0, 0.3, 1),
+    rotate 600ms cubic-bezier(0.45, 0, 0.3, 1);
+  animation: ipod-coach-fade-in 300ms ease-out;
+}
+
+/* On MENU the hand leans in from the lower right (turning on its fingertip), so the
+ * palm rests on the ring instead of over the grey centre button. */
+.ipod-wheel__coach[data-step='back'] .ipod-wheel__coach-target {
+  translate: 0 calc(-1 * var(--coach-menu-lift));
+  rotate: -35deg;
+}
+
+.ipod-wheel__coach-tap .ipod-wheel__coach-hand {
+  animation: ipod-coach-tap-twice 2s ease-in-out infinite;
+}
+
+.ipod-wheel__coach[data-step='back'] .ipod-wheel__coach-tap .ipod-wheel__coach-hand {
+  /* Waits out the glide before the first tap. */
+  animation: ipod-coach-tap-once 2s ease-in-out 400ms infinite backwards;
+}
+
+/* A ring that spreads from the fingertip on each tap. */
+.ipod-wheel__coach-ripple {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--coach-ripple);
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border: 2px solid var(--coach-accent);
+  border-radius: 50%;
+  opacity: 0;
+  animation: ipod-coach-ripple 2s ease-out 0.16s infinite;
+}
+
+.ipod-wheel__coach-ripple[data-second] {
+  animation-delay: 0.56s;
+}
+
+.ipod-wheel__coach[data-step='back'] .ipod-wheel__coach-ripple {
+  animation-delay: 0.56s;
+}
+
+/* Press (8%), up (18%), press (28%), up (38%), rest. */
+@keyframes ipod-coach-tap-twice {
+  0%,
+  18%,
+  38%,
+  100% {
+    scale: 1;
+    transform: translateY(0);
+  }
+  8%,
+  28% {
+    scale: 0.9;
+    transform: translateY(2%);
+  }
+}
+
+@keyframes ipod-coach-tap-once {
+  0%,
+  18%,
+  100% {
+    scale: 1;
+    transform: translateY(0);
+  }
+  8% {
+    scale: 0.9;
+    transform: translateY(2%);
+  }
+}
+
+@keyframes ipod-coach-ripple {
+  0% {
+    opacity: 0.9;
+    scale: 0.4;
+  }
+  30%,
+  100% {
+    opacity: 0;
+    scale: 1.5;
+  }
+}
+
 /* Reduced motion: no comet; a still 270° arrow round the ring instead. */
 .ipod-wheel__coach-arrow {
   display: none;
@@ -756,6 +954,25 @@
 
 [data-reduced-motion='true'] .ipod-wheel__coach-arrow {
   display: block;
+}
+
+/* The hand rests on its target (12 o'clock for the scroll step) and a still ring marks it. */
+[data-reduced-motion='true'] .ipod-wheel__coach-orbit,
+[data-reduced-motion='true'] .ipod-wheel__coach-rider,
+[data-reduced-motion='true'] .ipod-wheel__coach-hand,
+[data-reduced-motion='true'] .ipod-wheel__coach[data-step] .ipod-wheel__coach-tap .ipod-wheel__coach-hand,
+[data-reduced-motion='true'] .ipod-wheel__coach-target,
+[data-reduced-motion='true'] .ipod-wheel__coach-ripple {
+  animation: none;
+  transition: none;
+}
+
+[data-reduced-motion='true'] .ipod-wheel__coach-ripple {
+  opacity: 0.8;
+}
+
+[data-reduced-motion='true'] .ipod-wheel__coach-ripple[data-second] {
+  display: none;
 }
 
 [data-reduced-motion='true'] .ipod-coach-dim,

@@ -1,6 +1,6 @@
 import { useEffect, useId, useState, type MouseEvent, type RefObject } from 'react'
 import { DEVICE_MM } from './constants'
-import { wheelCoach, type CoachState } from './state/wheelCoach'
+import { COACH_STEPS, wheelCoach, type CoachState, type CoachStep } from './state/wheelCoach'
 
 /** Fade-out after the first scroll (skipped with reduced motion). */
 const FADE_MS = 200
@@ -89,27 +89,52 @@ function usePresence(show: boolean, reducedMotion: boolean) {
   return mounted || show
 }
 
-const INSTRUCTION =
-  'Wheel tutorial: focus the click wheel and press the up or down arrow key to scroll through the menu. Press Escape or the Skip button to skip.'
+/** What each step asks, for the caption (by pointer type) and for screen readers. */
+const STEP_COPY: Record<CoachStep, { title: string; fine: string; coarse: string; spoken: string }> = {
+  scroll: {
+    title: '↻ Turn the wheel to scroll',
+    fine: 'Drag around the ring · or press ↑ ↓',
+    coarse: 'Slide your thumb around the ring',
+    spoken: 'focus the click wheel and press the up or down arrow key to scroll through the menu.',
+  },
+  select: {
+    title: 'Tap the centre to open',
+    fine: 'Click the centre button · or press Enter',
+    coarse: 'Tap the centre button',
+    spoken: 'press Enter or the centre Select button to open the highlighted item.',
+  },
+  back: {
+    title: 'Press MENU to go back',
+    fine: 'Click MENU · or press Esc',
+    coarse: 'Tap MENU at the top of the wheel',
+    spoken: 'press Escape or the Menu button to go back.',
+  },
+}
+
+const stepNumber = (step: CoachStep) => COACH_STEPS.indexOf(step) + 1
+
+const instruction = (step: CoachStep) =>
+  `Wheel tutorial, step ${stepNumber(step)} of ${COACH_STEPS.length}: ${STEP_COPY[step].spoken}` +
+  (step === 'back' ? '' : ' Press Escape or the Skip button to skip.')
 
 /**
  * The status message, cleared and then set a frame later each time the hint
  * starts or replays: screen readers announce a live region's change, not the
  * text it already had when it appeared, and skip a repeat of the same text.
  */
-function useAnnouncement(show: boolean, nudges: number) {
+function useAnnouncement(step: CoachStep | null, nudges: number) {
   const [message, setMessage] = useState('')
   useEffect(() => {
     let second = 0
     const first = requestAnimationFrame(() => {
       setMessage('')
-      if (show) second = requestAnimationFrame(() => setMessage(INSTRUCTION))
+      if (step) second = requestAnimationFrame(() => setMessage(instruction(step)))
     })
     return () => {
       cancelAnimationFrame(first)
       cancelAnimationFrame(second)
     }
-  }, [show, nudges])
+  }, [step, nudges])
   return message
 }
 
@@ -133,7 +158,7 @@ export function WheelCoachOverlay({
 }) {
   const mounted = usePresence(show, reducedMotion)
   const holes = useDeviceHoles(stage, mounted)
-  const message = useAnnouncement(show, coach.nudges)
+  const message = useAnnouncement(show ? coach.step : null, coach.nudges)
   const id = useId()
   const outer = `${id}-outer`
   const inner = `${id}-inner`
@@ -174,22 +199,27 @@ export function WheelCoachOverlay({
  * Sits over the stage's hint line while the coach is up, above the dim and
  * out of the layout flow, so the device doesn't move when it comes or goes.
  */
-export function WheelCoachCaption({ nudges }: { nudges: number }) {
+export function WheelCoachCaption({ step, nudges }: { step: CoachStep; nudges: number }) {
   // The button disappears with the coach; land keyboard users on the wheel instead of <body>.
   const skip = (event: MouseEvent<HTMLButtonElement>) => {
     const stage = event.currentTarget.closest('.ipod-stage')
     wheelCoach.end()
     stage?.querySelector<HTMLElement>('[role="slider"]')?.focus({ preventScroll: true })
   }
+  const copy = STEP_COPY[step]
   return (
-    <div className="ipod-coach-caption" key={nudges} data-nudged={nudges > 0 || undefined}>
+    <div className="ipod-coach-caption" key={`${step}-${nudges}`} data-nudged={nudges > 0 || undefined}>
       <p className="ipod-coach-caption__title" aria-hidden="true">
-        ↻ Turn the wheel to scroll
+        {copy.title}
       </p>
       <p className="ipod-coach-caption__detail">
         <span aria-hidden="true">
-          <span className="ipod-hint__fine">Drag around the ring · or press ↑ ↓</span>
-          <span className="ipod-hint__coarse">Slide your thumb around the ring</span>
+          <span className="ipod-hint__fine">{copy.fine}</span>
+          <span className="ipod-hint__coarse">{copy.coarse}</span>
+          {' · '}
+          <span className="ipod-coach-caption__count">
+            {stepNumber(step)} of {COACH_STEPS.length}
+          </span>
           {' · '}
         </span>
         <button type="button" className="ipod-coach-caption__skip" onClick={skip}>

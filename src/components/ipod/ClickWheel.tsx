@@ -4,7 +4,8 @@ import { DEVICE_MM } from './constants'
 import { sliderKeyMove, sliderValue } from './rotary'
 import type { ChassisTheme } from './state/settingsContext'
 import { useDeviceActive } from './state/deviceContext'
-import { useWheelCoach } from './state/wheelCoach'
+import { CoachHand } from './CoachHand'
+import { useWheelCoach, type CoachState } from './state/wheelCoach'
 import type { MoveSource } from './types'
 import type { WheelA11y } from './useIPodEngine'
 import { useRotaryInput } from './useRotaryInput'
@@ -37,8 +38,17 @@ const KEY = { along: 12, across: 10.6, offset: 13 }
 /** The rotation "thumb" rides the middle of the ring (% of the wheel's width from its centre). */
 const THUMB_ORBIT = ((RADIUS + HUB / 2) / 2 / DEVICE_MM.wheel.diameter) * 100
 
+/** The coach's hand, as wide as a third of the wheel, with its fingertip pinned to the point it touches. */
+const COACH_HAND = DEVICE_MM.wheel.diameter * 0.34
+
 /** The coach's sweep covers the ring from the centre button's edge to the rim (% of the wheel's radius). */
-const COACH_STYLE = { '--coach-hub': `${(HUB / DEVICE_MM.wheel.diameter) * 100}%` } as CSSProperties
+const COACH_STYLE = {
+  '--coach-hub': `${(HUB / DEVICE_MM.wheel.diameter) * 100}%`,
+  '--coach-hand': mm(COACH_HAND),
+  // From the centre button up to the middle of the MENU legend.
+  '--coach-menu-lift': mm(DEVICE_MM.labels.menu),
+  '--coach-ripple': mm(HUB * 0.9),
+} as CSSProperties
 
 /* Reduced-motion coach: a still 270° arrow along the middle of the ring, 12 o'clock round to 9
  * o'clock, in a 100 × 100 box over the wheel. */
@@ -101,6 +111,55 @@ function WheelKey({ label, style, onPress, hub = false }: WheelKeyProps) {
 }
 
 /**
+ * The first-visit tutorial drawn on the wheel (see state/wheelCoach.ts). Scroll: an
+ * orange comet turns round the ring (a still arrow under reduced motion), drawn under
+ * the legends. The hand that leads it, and that then taps the centre button twice and
+ * glides up to tap MENU, is drawn over everything (see <WheelCoachHand>). The animated
+ * parts are keyed so a held press replays them.
+ */
+function WheelCoachComet({ coach }: { coach: CoachState }) {
+  if (coach.step !== 'scroll') return null
+  return (
+    <div key={coach.nudges} className="ipod-wheel__coach" style={COACH_STYLE} aria-hidden="true">
+      <div className="ipod-wheel__coach-comet">
+        <div className="ipod-wheel__coach-spin">
+          <div className="ipod-wheel__coach-sweep" />
+          <div className="ipod-wheel__coach-head" />
+        </div>
+        <svg className="ipod-wheel__coach-arrow" viewBox="0 0 100 100" focusable="false">
+          <path d={COACH_ARC} />
+          <polygon points={COACH_ARROWHEAD} />
+        </svg>
+      </div>
+    </div>
+  )
+}
+
+/** The tapping hand's target isn't keyed, so it glides from the centre button up to MENU. */
+function WheelCoachHand({ coach }: { coach: CoachState }) {
+  const replay = `${coach.step}-${coach.nudges}`
+  return (
+    <div className="ipod-wheel__coach" data-step={coach.step} style={COACH_STYLE} aria-hidden="true">
+      {coach.step === 'scroll' ? (
+        <div key={replay} className="ipod-wheel__coach-orbit">
+          <div className="ipod-wheel__coach-rider">
+            <CoachHand className="ipod-wheel__coach-hand" />
+          </div>
+        </div>
+      ) : (
+        <div className="ipod-wheel__coach-target">
+          <div key={replay} className="ipod-wheel__coach-tap">
+            <span className="ipod-wheel__coach-ripple" />
+            {coach.step === 'select' && <span className="ipod-wheel__coach-ripple" data-second="" />}
+            <CoachHand className="ipod-wheel__coach-hand" />
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+/**
  * The click wheel: a rotary ring (drag around it, or scroll over it) with MENU,
  * ⏮, ⏭ and ⏯ printed at the compass points, and the Select button in the middle.
  */
@@ -108,7 +167,7 @@ export function ClickWheel(props: ClickWheelProps) {
   const { theme, onRotate, onMenu, onSelect, onPrevious, onNext, onPlayPause, playing, a11y } = props
   const thumbRef = useRef<HTMLDivElement>(null)
   const coach = useWheelCoach()
-  const coaching = useDeviceActive() && coach.active
+  const coaching = useDeviceActive() && coach.step !== null
 
   // Positions the soft pressure shading under the finger without re-rendering.
   const onTurn = useCallback((angle: number | null) => {
@@ -160,20 +219,7 @@ export function ClickWheel(props: ClickWheelProps) {
         onKeyDown={onSliderKeyDown}
       />
       <div ref={thumbRef} className="ipod-wheel__thumb" aria-hidden="true" />
-      {coaching && (
-        // First-visit hint: an orange comet turning around the ring (a still arrow under
-        // reduced motion). Keyed so a held press replays it.
-        <div key={coach.nudges} className="ipod-wheel__coach" style={COACH_STYLE} aria-hidden="true">
-          <div className="ipod-wheel__coach-spin">
-            <div className="ipod-wheel__coach-sweep" />
-            <div className="ipod-wheel__coach-head" />
-          </div>
-          <svg className="ipod-wheel__coach-arrow" viewBox="0 0 100 100" focusable="false">
-            <path d={COACH_ARC} />
-            <polygon points={COACH_ARROWHEAD} />
-          </svg>
-        </div>
-      )}
+      {coaching && <WheelCoachComet coach={coach} />}
       <WheelLegends />
       {/* DOM (and Tab) order follows reading order: top, left, centre, right, bottom. */}
       <WheelKey label="Menu — go back" style={MENU_KEY} onPress={onMenu} />
@@ -181,6 +227,7 @@ export function ClickWheel(props: ClickWheelProps) {
       <WheelKey label="Select" style={HUB_KEY} onPress={onSelect} hub />
       <WheelKey label="Next item" style={NEXT_KEY} onPress={onNext} />
       <WheelKey label={playing ? 'Pause' : 'Play'} style={PLAY_KEY} onPress={onPlayPause} />
+      {coaching && <WheelCoachHand coach={coach} />}
     </div>
   )
 }
