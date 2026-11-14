@@ -353,6 +353,9 @@ export function useIPodEngine({ root, nodes, enabled }: EngineOptions): IPodEngi
     const controls: IPodControls = {
       moveBy,
       select: () => {
+        // A select with nothing to act on isn't the tap the tutorial is waiting for.
+        const controller = activeController()
+        if (!controller?.onSelect || controller.count === 0) return
         if (!held('select')) select()
       },
       back: () => {

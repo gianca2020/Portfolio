@@ -948,6 +948,7 @@
 [data-reduced-motion='true'] .ipod-wheel__coach-orbit,
 [data-reduced-motion='true'] .ipod-wheel__coach-rider,
 [data-reduced-motion='true'] .ipod-wheel__coach-hand,
+[data-reduced-motion='true'] .ipod-wheel__coach[data-step] .ipod-wheel__coach-tap .ipod-wheel__coach-hand,
 [data-reduced-motion='true'] .ipod-wheel__coach-target,
 [data-reduced-motion='true'] .ipod-wheel__coach-ripple {
   animation: none;

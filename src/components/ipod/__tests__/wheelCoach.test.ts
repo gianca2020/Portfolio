@@ -24,7 +24,7 @@ describe('wheel coach', () => {
     expect(createWheelCoach().get().step).toBe(null)
   })
 
-  it('ends on the first scroll and remembers it', () => {
+  it('ends and remembers it', () => {
     const localStorage = storage()
     vi.stubGlobal('window', { localStorage })
     const coach = createWheelCoach()
