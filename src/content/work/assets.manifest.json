@@ -115,6 +115,10 @@
     "width": 1664,
     "height": 1836
   },
+  "gallery/code-4-a-cause.webp": {
+    "width": 1728,
+    "height": 2304
+  },
   "gallery/cyber-security.webp": {
     "width": 1400,
     "height": 1868
@@ -122,6 +126,22 @@
   "gallery/data-science-poster.webp": {
     "width": 1400,
     "height": 1868
+  },
+  "gallery/game-night-feed.webp": {
+    "width": 1080,
+    "height": 1080
+  },
+  "gallery/game-night-poster.webp": {
+    "width": 1728,
+    "height": 2304
+  },
+  "gallery/game-night-story.webp": {
+    "width": 1080,
+    "height": 1920
+  },
+  "gallery/hackathon-prep-poster.webp": {
+    "width": 1728,
+    "height": 2304
   },
   "gallery/html-css-feed.webp": {
     "width": 1080,
@@ -134,6 +154,10 @@
   "gallery/html-css-story.webp": {
     "width": 1080,
     "height": 1920
+  },
+  "gallery/leetcode-poster.webp": {
+    "width": 1728,
+    "height": 2304
   },
   "gallery/menu-letter-envelope.webp": {
     "width": 1170,
@@ -150,6 +174,22 @@
   "gallery/menu-letter-request.webp": {
     "width": 1170,
     "height": 2532
+  },
+  "gallery/programming-languages-feed.webp": {
+    "width": 1080,
+    "height": 1350
+  },
+  "gallery/programming-languages-poster.webp": {
+    "width": 1728,
+    "height": 2304
+  },
+  "gallery/python-beginners.webp": {
+    "width": 816,
+    "height": 1056
+  },
+  "gallery/resume-workshop.webp": {
+    "width": 1584,
+    "height": 2448
   },
   "hackknight/site-desktop-full.webp": {
     "width": 1440,
