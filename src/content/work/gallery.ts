@@ -5,8 +5,8 @@ import type { GalleryItem } from './types'
  * public/work/gallery/. While this list is empty the gallery section is hidden
  * and the iPod doesn't list “More Design Work”.
  *
- * Posters designed in Canva for campus CS clubs. Hackathon Prep, Art of
- * Programming Languages and Python for Beginners still carry Canva watermarks,
+ * Posters designed in Canva for campus CS clubs. Art of Programming Languages
+ * and Python for Beginners still carry faint Canva watermarks,
  * and Code 4 a Cause is an unfinished draft with placeholder date and venue.
  * Exports still in portfolio-assets/gallery/held-back/ aren't shown.
  */
@@ -141,18 +141,6 @@ export const gallery: GalleryItem[] = [
       {
         src: 'programming-languages-feed.webp',
         alt: 'The Art of Programming Languages graphic laid out for a 4:5 Instagram post, with the same logo, code-editor icon, title, date and QR code.',
-      },
-    ],
-  },
-  {
-    title: 'Hackathon Prep',
-    role: 'Designer, for Code ReSolve',
-    description:
-      'A neon, synthwave-styled poster for a session getting first-timers ready for hackathons, co-branded with the partner clubs along the top.',
-    images: [
-      {
-        src: 'hackathon-prep-poster.webp',
-        alt: 'Hackathon Prep poster with a neon purple and pink circuit-city background: the D.I.C.E, Girls Who Code and Code For All logos along the top, a coral-to-violet title banner, “Never been to a hackathon?”, Monday 10/7/24, 12–1 PM at Campbell Dome, a registration QR code, and the Code ReSolve logo.',
       },
     ],
   },
