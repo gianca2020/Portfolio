@@ -86,7 +86,7 @@ export const gallery: GalleryItem[] = [
     title: 'Game Day',
     role: 'Designer, for Code ReSolve',
     description:
-      'A playful club social: an oversized “G” traced as a game-board path, with cards, dice, chess pieces and a tilted checkerboard around it, recomposed for each format so the date and QR code stay clear.',
+      'A playful club social: an oversized “G” traced as a game-board path, with cards, dice, chess pieces and a tilted checkerboard around it, reflowed for each format; the square post trades the QR code for a raffle-prizes line.',
     formats: ['Print poster', 'Instagram post', 'Instagram Story'],
     images: [
       {
@@ -123,7 +123,7 @@ export const gallery: GalleryItem[] = [
     images: [
       {
         src: 'resume-workshop.webp',
-        alt: 'Resume Building Workshop poster in navy, steel blue and lavender: a circular portrait of guest speaker Shawn D. Rajukumar in a suit, the UBIQ logo, a “Why come” list (beginner-friendly advice, tips and tricks, boosting your resume), free hour on 13 November 2024 in Powdermaker Hall 141, and a follow-us QR code.',
+        alt: 'Resume Building Workshop poster in navy, steel blue and lavender: the Code ReSolve logo, a circular portrait of guest speaker Shawn D. Rajukumar in a suit, the UBIQ logo, a “Why come” list (beginner-friendly advice, tips and tricks, boosting your resume), free hour on 13 November 2024 in Powdermaker Hall 141, and a follow-us QR code.',
       },
     ],
   },
@@ -136,7 +136,7 @@ export const gallery: GalleryItem[] = [
     images: [
       {
         src: 'programming-languages-poster.webp',
-        alt: 'Art of Programming Languages workshop poster on deep indigo: the Code ReSolve logo overlapping a purple code-editor icon on the left, the title and “with Code Resolve” on the right, 3 March 2025, 12–1:30 PM in PH 118, and a QR code.',
+        alt: 'Art of Programming Languages workshop poster on deep indigo: a purple code-editor icon overlapping the Code ReSolve logo on the left, the title and “with Code Resolve” on the right, 3 March 2025, 12–1:30 PM in PH 118, and a QR code.',
       },
       {
         src: 'programming-languages-feed.webp',
