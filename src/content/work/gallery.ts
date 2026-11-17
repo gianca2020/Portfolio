@@ -12,10 +12,10 @@ import type { GalleryItem } from './types'
  */
 export const gallery: GalleryItem[] = [
   {
-    title: 'A Letter from Caco',
-    role: 'Designer and developer, a holiday gift for my family',
+    title: 'Christmas Card to My Family',
+    role: 'Designer and developer, a gift for my family',
     description:
-      'A holiday menu sent as a text message: a sealed envelope opens into a letter that writes itself word by word with a pen nib and scratchy pen sounds, paced slowly enough for my parents to read along. A pen button opens a request card where each family member taps their face and asks for a dish, which lands in my inbox. Built for phones in plain HTML, CSS and JavaScript.',
+      'A heartfelt Christmas card that doubles as a menu of the dishes I’ll cook when I’m home. Sent as a text, a sealed envelope opens into a letter that writes itself word by word, with a pen nib, scratchy pen sounds and a pace slow enough for my parents to read along. Built for phones in plain HTML, CSS and JavaScript, with sounds made live through the Web Audio API and hosted on Vercel. A pen button opens a request card where each family member taps their face and asks for a dish, and Web3Forms emails the request to me the moment they send it.',
     formats: ['Envelope', 'Letter', 'Menu', 'Request a dish'],
     images: [
       {
