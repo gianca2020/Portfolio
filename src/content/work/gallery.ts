@@ -14,6 +14,8 @@ export const gallery: GalleryItem[] = [
   {
     title: 'Christmas Card to My Family',
     role: 'Designer and developer, a gift for my family',
+    year: 2026,
+    tools: ['HTML', 'CSS', 'JavaScript', 'Web Audio API'],
     description:
       'A heartfelt Christmas card that doubles as a menu of the dishes I’ll cook when I’m home. Sent as a text, a sealed envelope opens into a letter that writes itself word by word, with a pen nib, scratchy pen sounds and a pace slow enough for my parents to read along. Built for phones in plain HTML, CSS and JavaScript, with sounds made live through the Web Audio API and hosted on Vercel. A pen button opens a request card where each family member taps their face and asks for a dish, and Web3Forms emails the request to me the moment they send it.',
     formats: ['Envelope', 'Letter', 'Menu', 'Request a dish'],
@@ -40,6 +42,8 @@ export const gallery: GalleryItem[] = [
   {
     title: 'HTML/CSS Workshop',
     role: 'Designer, for Code ReSolve',
+    year: 2024,
+    tools: ['Canva'],
     description:
       'One workshop in three formats: a print poster for campus boards, a 4:5 Instagram post and a 9:16 Story, each laid out for its size rather than cropped from the poster.',
     formats: ['Print poster', 'Instagram post', 'Instagram Story'],
@@ -61,6 +65,8 @@ export const gallery: GalleryItem[] = [
   {
     title: 'Data Science / ML Workshop',
     role: 'Designer, for D.I.C.E',
+    year: 2024,
+    tools: ['Canva'],
     description:
       'A workshop poster built around a stock-chart backdrop, the speaker’s photo and two QR codes, one to sign up and one for LinkedIn, with time and room set large enough to read from across a hallway.',
     images: [
@@ -73,6 +79,7 @@ export const gallery: GalleryItem[] = [
   {
     title: 'Cybersecurity Certifications 101',
     role: 'Designer, for ISACA',
+    tools: ['Canva'],
     description:
       'A light, typographic poster for a certifications session: the question that hooks the audience up top, time, location and date as a three-column row, and an RSVP QR code beside what’s on offer.',
     images: [
@@ -85,6 +92,7 @@ export const gallery: GalleryItem[] = [
   {
     title: 'Game Day',
     role: 'Designer, for Code ReSolve',
+    tools: ['Canva'],
     description:
       'A playful club social: an oversized “G” traced as a game-board path, with cards, dice, chess pieces and a tilted checkerboard around it, reflowed for each format; the square post trades the QR code for a raffle-prizes line.',
     formats: ['Print poster', 'Instagram post', 'Instagram Story'],
@@ -106,6 +114,8 @@ export const gallery: GalleryItem[] = [
   {
     title: 'LeetCode Workshop',
     role: 'Designer, for Code ReSolve',
+    year: 2024,
+    tools: ['Canva'],
     description:
       'An editorial, Swiss-style poster: outlined lavender display type over a honeycomb motif, with the event split into a ruled grid of pitch, QR code, club logo and host photo.',
     images: [
@@ -118,6 +128,8 @@ export const gallery: GalleryItem[] = [
   {
     title: 'Resume Building Workshop',
     role: 'Designer, for Code ReSolve',
+    year: 2024,
+    tools: ['Canva'],
     description:
       'A speaker-led poster: a large circular portrait of the guest speaker anchors the left, with the reasons to come and the event details stacked in a right-aligned column.',
     images: [
@@ -130,6 +142,8 @@ export const gallery: GalleryItem[] = [
   {
     title: 'Art of Programming Languages',
     role: 'Designer, for Code ReSolve',
+    year: 2025,
+    tools: ['Canva'],
     description:
       'A workshop promo built around a glossy code-editor icon and the club logo, in a print poster and a 4:5 Instagram post.',
     formats: ['Print poster', 'Instagram post'],
@@ -147,6 +161,8 @@ export const gallery: GalleryItem[] = [
   {
     title: 'Python for Beginners',
     role: 'Designer, for Code ReSolve',
+    year: 2024,
+    tools: ['Canva'],
     description:
       'A bright, friendly poster for an intro workshop, using the Python logo’s blue and yellow as the whole palette.',
     images: [
@@ -159,6 +175,8 @@ export const gallery: GalleryItem[] = [
   {
     title: 'Code 4 a Cause',
     role: 'Designer, for Code ReSolve',
+    year: 2025,
+    tools: ['Canva'],
     description:
       'A pixel-art concept for a charity coding event: an 8-bit Queens skyline with hearts, fireworks and a cursor clicking the title. An early draft, with the date and venue still to be filled in.',
     images: [

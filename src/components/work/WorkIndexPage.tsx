@@ -13,6 +13,7 @@ function GalleryCard({ item, onOpen }: { item: GalleryItem; onOpen: OpenLightbox
     .filter(({ image }) => asset(GALLERY_FOLDER, image.src))
   if (images.length === 0 || !hasText(item.title)) return null
   const grouped = (item.formats?.length ?? 0) > 1
+  const details = [item.year, item.tools?.join(', ')].filter(Boolean).join(' · ')
 
   return (
     <li className={`work-gallery__card${grouped ? ' work-gallery__card--formats' : ''}`}>
@@ -28,6 +29,7 @@ function GalleryCard({ item, onOpen }: { item: GalleryItem; onOpen: OpenLightbox
       </ul>
       <h3 className="work-card__title">{item.title}</h3>
       {hasText(item.role) && <p className="work-card__meta">{item.role}</p>}
+      {hasText(details) && <p className="work-card__meta">{details}</p>}
       {hasText(item.description) && <p>{item.description}</p>}
       {item.link && hasText(item.link.href) && (
         <a className="work-inline-link" href={item.link.href} target="_blank" rel="noopener noreferrer">
@@ -42,7 +44,9 @@ function GalleryCard({ item, onOpen }: { item: GalleryItem; onOpen: OpenLightbox
 /** /work — every published case study, then the gallery of one-off pieces (hidden while empty). */
 export function WorkIndexPage() {
   const lightbox = useLightbox()
-  const pieces = gallery.filter((item) => item.images.some((image) => asset(GALLERY_FOLDER, image.src)))
+  const pieces = gallery
+    .filter((item) => item.images.some((image) => asset(GALLERY_FOLDER, image.src)))
+    .sort((a, b) => (b.year ?? 0) - (a.year ?? 0))
 
   return (
     <PageShell meta={workIndexMeta}>

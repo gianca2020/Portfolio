@@ -89,6 +89,10 @@ export interface CaseStudy {
 export interface GalleryItem {
   title: string
   role: string
+  /** Year the piece was made. The gallery lists newest first; undated pieces go last. */
+  year?: number
+  /** e.g. ['Canva'] or ['HTML', 'CSS', 'JavaScript']. */
+  tools?: string[]
   description: string
   /** One image per format when `formats` is set (same order); otherwise a set of images. */
   images: Array<{ src: string; alt: string }>
