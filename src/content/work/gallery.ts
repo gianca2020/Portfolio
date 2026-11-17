@@ -12,6 +12,32 @@ import type { GalleryItem } from './types'
  */
 export const gallery: GalleryItem[] = [
   {
+    title: 'A Letter from Caco',
+    role: 'Designer and developer, a holiday gift for my family',
+    description:
+      'A holiday menu sent as a text message: a sealed envelope opens into a letter that writes itself word by word with a pen nib and scratchy pen sounds, paced slowly enough for my parents to read along. A pen button opens a request card where each family member taps their face and asks for a dish, which lands in my inbox. Built for phones in plain HTML, CSS and JavaScript.',
+    formats: ['Envelope', 'Letter', 'Menu', 'Request a dish'],
+    images: [
+      {
+        src: 'menu-letter-envelope.webp',
+        alt: 'Phone screen on dark green: “you’ve got mail!” in cream handwriting above a cream envelope sealed with a red wax “C”, addressed to Mom, Dad & Bella from Caco, with a heart stamp.',
+      },
+      {
+        src: 'menu-letter-letter.webp',
+        alt: 'The opened letter on dotted cream paper: a taped cartoon sticker of Caco above “Dear Mom, Dad & Bella,” in red script, typewriter-style paragraphs about coming home in December to cook, and a yellow “request a dish” pen button in the corner.',
+      },
+      {
+        src: 'menu-letter-menu.webp',
+        alt: 'The menu section of the letter: “the menu” in green script, an Appetizers heading in red with an orange underline, and dishes like Brussels sprouts, artichoke dip, deviled eggs and tomato soup, each with a joke note in blue handwriting.',
+      },
+      {
+        src: 'menu-letter-request.webp',
+        alt: 'The request card sliding up over the menu, asking “who’s asking?” with cartoon stickers of Dad, Mom and Bella to tap.',
+      },
+    ],
+    link: { label: 'Open the letter', href: 'https://menuforero.vercel.app' },
+  },
+  {
     title: 'HTML/CSS Workshop',
     role: 'Designer, for Code ReSolve',
     description:
