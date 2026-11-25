@@ -63,7 +63,7 @@ export const nikoleRajgor: CaseStudy = {
     {
       title: 'Give journalism and creative work separate homes',
       why:
-        'Creative wasn’t in the first Figma direction, which had only About, Journalism and Resume. It became its own nav item in the second, and the third direction put a Highlights section on the About page with a Journalist / Creative toggle, so a visitor sees both sides of her work without leaving the page. Her highlighted articles made it into the build.',
+        'Creative wasn’t in the first Figma direction, which had only About, Journalism and Resume. It became its own nav item in the second, and the third direction put a Highlights section on the About page with a Journalist / Creative toggle. In the build, Highlights made it onto the About page, and Creative kept its own page.',
       media: {
         type: 'image',
         src: 'v3-about-bio-highlights.webp',
@@ -113,8 +113,25 @@ export const nikoleRajgor: CaseStudy = {
     },
   ],
   finalDesign: {
-    text: 'TODO',
-    media: [],
+    text:
+      'The shipped site keeps the serif masthead and the cream and charcoal pairing. The journalism page is a dark, searchable list of her articles, each with its outlet, headline, excerpt, date and a thumbnail. Creative is a two-column grid of her video and production work with her role on each piece, and the nav (About, Journalism, Creative, Resume) stays the same on every page, down to a phone.',
+    media: [
+      {
+        type: 'image',
+        src: 'final-journalism.webp',
+        alt: 'The live Journalism page: a cream serif NIKOLE RAJGOR masthead on charcoal, a script Publications heading, a search field, and article cards with an outlet label, headline, excerpt, date and thumbnail.',
+      },
+      {
+        type: 'image',
+        src: 'final-creative.webp',
+        alt: 'The live Creative page: the serif masthead on cream, a script Creative heading, and a two-column grid of project tiles, each with a title and her role.',
+      },
+      {
+        type: 'image',
+        src: 'final-about-mobile.webp',
+        alt: 'The live About page on a phone: the masthead wrapped onto two lines, the nav, and a full-width portrait above the start of her bio.',
+      },
+    ],
   },
   links: [{ label: 'Visit nikolerajgor.netlify.app', href: 'https://nikolerajgor.netlify.app/' }],
   outcome:
