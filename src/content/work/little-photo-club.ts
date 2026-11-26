@@ -9,8 +9,8 @@ import type { CaseStudy } from './types.ts'
  * reasoning is the developer's inference from the code; confirm it matches
  * the intent. Sourced figures: DSi 41M+ units (Nintendo, via Wikipedia), 44M
  * Flipnotes archived (Nintendo Life), photobooth revival (The Week).
+ * The reveal reasoning was accepted for now and can change later.
  * Still to write, then flip `published` to true:
- *  - snapshot.role (hidden while 'TODO')
  *  - reflection (hidden while 'TODO')
  * Unpublished while the prototype is still changing.
  */
@@ -26,7 +26,7 @@ export const littlePhotoClub: CaseStudy = {
     alt: 'The Little Photo Club guest setup screen in 1-bit pixel art: four characters crowded into one frame, a man in a backwards cap, a woman with bangs and hoop earrings, a messy-haired baby with star eyes and a black cat peeking over the top, with orange burst lines around them.',
   },
   snapshot: {
-    role: 'TODO',
+    role: 'Lead designer. I designed and built all of it myself: the characters, the interface and the working prototype.',
     team: 'Solo project',
     timeline: 'Nov 25–26, 2026 · 14 numbered prototype drafts',
     tools: ['HTML', 'CSS', 'JavaScript', 'Canvas', 'Web Audio'],
