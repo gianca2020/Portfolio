@@ -1,0 +1,83 @@
+name: CI
+
+# Runs the repo's full check on every pull request and on main. When the check
+# fails on a same-repo PR, the `autofix` job asks Claude to repair it and open a
+# fix PR back into the failing branch. Claude never merges anything.
+#
+# One-time setup (see the PR description): install the Claude GitHub App on the
+# repo and add the ANTHROPIC_API_KEY repository secret. Until then `autofix`
+# fails when it runs; `check` is unaffected.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      # tsc -b && oxlint && vitest run && vite build
+      - run: npm run check
+
+  autofix:
+    needs: check
+    # Only for failures on PRs from this repo (forks get no secrets), and never
+    # for Claude's own fix branches, so it cannot loop.
+    if: >-
+      always() &&
+      needs.check.result == 'failure' &&
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      !startsWith(github.head_ref, 'claude-fix/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      id-token: write
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            The CI job "check" failed on pull request #${{ github.event.pull_request.number }}
+            (branch ${{ github.head_ref }}). `npm run check` runs `tsc -b && oxlint && vitest run && vite build`.
+
+            1. Run `npm run check`, read the first real failure, and find its root cause.
+            2. Make the smallest change that fixes it. Do not weaken or delete a test
+               just to make it pass unless the test itself is wrong, and say so if you do.
+               Do not edit anything under .github/, and do not change dependencies.
+            3. Re-run `npm run check` until it passes.
+            4. Create branch claude-fix/${{ github.run_id }}, commit the fix, push it, and open a pull
+               request from it into ${{ github.head_ref }} with `gh pr create`. Explain the cause and
+               the fix in the description. Do not merge anything.
+            5. If you cannot get the check to pass, make no commit and print what you found.
+          claude_args: |
+            --max-turns 20
+            --permission-mode default
+            --allowedTools "Read,Edit,Write,Glob,Grep,Bash(npm run check),Bash(npm run typecheck),Bash(npm run lint),Bash(npm test),Bash(git status),Bash(git diff:*),Bash(git checkout:*),Bash(git add:*),Bash(git commit:*),Bash(git push:*),Bash(gh pr create:*)"
