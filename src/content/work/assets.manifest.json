@@ -163,6 +163,62 @@
     "width": 780,
     "height": 1688
   },
+  "little-photo-club/camera-before-after.webp": {
+    "width": 2000,
+    "height": 620
+  },
+  "little-photo-club/cast-assembles.webp": {
+    "width": 1968,
+    "height": 380
+  },
+  "little-photo-club/cast-sheets.webp": {
+    "width": 2000,
+    "height": 1340
+  },
+  "little-photo-club/cover.webp": {
+    "width": 1280,
+    "height": 800
+  },
+  "little-photo-club/flow-booth.webp": {
+    "width": 1280,
+    "height": 800
+  },
+  "little-photo-club/flow-camera.webp": {
+    "width": 1280,
+    "height": 800
+  },
+  "little-photo-club/flow-coin.webp": {
+    "width": 1280,
+    "height": 800
+  },
+  "little-photo-club/flow-email.webp": {
+    "width": 1280,
+    "height": 800
+  },
+  "little-photo-club/flow-reveal.webp": {
+    "width": 1280,
+    "height": 800
+  },
+  "little-photo-club/flow-setup.webp": {
+    "width": 1280,
+    "height": 800
+  },
+  "little-photo-club/flow-welcome.webp": {
+    "width": 1280,
+    "height": 800
+  },
+  "little-photo-club/portrait-before-after.webp": {
+    "width": 2000,
+    "height": 620
+  },
+  "little-photo-club/reveal-before-after.webp": {
+    "width": 2000,
+    "height": 620
+  },
+  "little-photo-club/welcome-before-after.webp": {
+    "width": 2000,
+    "height": 620
+  },
   "puberry/cover.webp": {
     "width": 2000,
     "height": 818
