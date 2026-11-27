@@ -14,11 +14,12 @@ import type { CaseStudy } from './types.ts'
  * Still to do before flipping `published` to true:
  *  - reflection (hidden while 'TODO')
  *  - a Figma link in `links` once the board is shared
- * Unpublished until then.
+ * `published` is TRUE on the PR branch only so the preview deploy shows the page;
+ * set it back to false (or finish the items above) before merging to main.
  */
 export const littlePhotoClub: CaseStudy = {
   slug: 'little-photo-club',
-  published: false,
+  published: true,
   title: 'Little Photo Club',
   summary:
     'A nostalgic photobooth for the browser, built around a cast of four characters. Guests step in as the cast, take a four-frame strip and pick it up from a pixel dispenser. The cast’s halftone ink set the look of everything else.',
