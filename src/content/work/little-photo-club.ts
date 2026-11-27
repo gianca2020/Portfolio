@@ -106,6 +106,7 @@ export const littlePhotoClub: CaseStudy = {
     ],
   },
   links: [
+    { label: 'Try the Little Photo Club prototype', href: 'https://photobooth.giancarloforero.workers.dev' },
     { label: 'DSi Camera manual · Distortion lens', href: 'https://www.manualsdir.com/manuals/193570/nintendo-dsi.html?page=16' },
     { label: 'DSi Camera manual · Mischief lens', href: 'https://www.manualsdir.com/manuals/193570/nintendo-dsi.html?page=17' },
   ],
