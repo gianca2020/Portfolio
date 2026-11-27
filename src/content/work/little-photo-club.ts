@@ -14,7 +14,7 @@ export const littlePhotoClub: CaseStudy = {
   snapshot: {
     role: 'I drew the four characters, designed the booth interface, and built the working browser prototype.',
     team: 'Solo project',
-    timeline: '2022 – Nov 2026 · started in 2022, refined in 25 numbered versions',
+    timeline: '2022 · refreshed in 2026',
     tools: ['HTML', 'CSS', 'JavaScript', 'Canvas', 'Web Audio'],
     platforms: ['Web (desktop browser)'],
     metrics: [
@@ -23,7 +23,7 @@ export const littlePhotoClub: CaseStudy = {
     ],
   },
   problem:
-    'I started this in 2022 when I wanted to join the school clubs, and came back to refine it in November 2026.\n\nWe turned a tiny room into a photobooth. My laptop was the only thing inside. The setup called for someone to print and cut the downloaded strips as people left. My part was everything the group would see and hear on that laptop.\n\nThe club loves Nintendo. I wanted the wait for a picture to have some of the excitement of a real booth, and pressing a button to feel like a memory of playing on a Nintendo handheld.',
+    'I started this in 2022 when I wanted to join the school clubs, and gave it a modern refresh in 2026.\n\nWe turned a tiny room into a photobooth. My laptop was the only thing inside. The setup called for someone to print and cut the downloaded strips as people left. My part was everything the group would see and hear on that laptop.\n\nThe club loves Nintendo. I wanted the wait for a picture to have some of the excitement of a real booth, and pressing a button to feel like a memory of playing on a Nintendo handheld.',
   users: [
     {
       name: 'School club party guests',
