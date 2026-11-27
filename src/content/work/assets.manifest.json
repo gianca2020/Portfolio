@@ -163,6 +163,10 @@
     "width": 780,
     "height": 1688
   },
+  "little-photo-club/booth-sequence.webp": {
+    "width": 2000,
+    "height": 412
+  },
   "little-photo-club/camera-before-after.webp": {
     "width": 2000,
     "height": 620
@@ -211,9 +215,17 @@
     "width": 2000,
     "height": 620
   },
+  "little-photo-club/print-sequence.webp": {
+    "width": 2000,
+    "height": 412
+  },
   "little-photo-club/reveal-before-after.webp": {
     "width": 2000,
     "height": 620
+  },
+  "little-photo-club/rough-cuts.webp": {
+    "width": 2000,
+    "height": 412
   },
   "little-photo-club/welcome-before-after.webp": {
     "width": 2000,
