@@ -743,6 +743,10 @@
   list-style: none;
 }
 
+.work-studies + .work-gallery {
+  margin-top: 2.5rem;
+}
+
 .work-gallery__card > .work-card__title {
   margin-top: 1rem;
 }

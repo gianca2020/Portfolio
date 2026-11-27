@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { portfolio } from '../../../data/portfolio'
-import { caseStudies, publishedCaseStudies } from '../../../content/work'
+import { caseStudies, featuredCaseStudies } from '../../../content/work'
 import { buildDesignWorkMenu, buildMenuTree, getVisibleChildren, indexTree, menuTree } from '../data'
 import { clampIndex, currentLevel, initialNavigation, navigationReducer } from '../navigation'
 
@@ -113,14 +113,14 @@ describe('Design Work menu', () => {
 
   it('lists only published case studies, each navigating to its page', () => {
     expect(caseStudies.some((c) => !c.published)).toBe(true)
-    expect(rows(buildDesignWorkMenu(publishedCaseStudies, false))).toEqual(
-      publishedCaseStudies.map((c) => [c.title, `/work/${c.slug}`]),
+    expect(rows(buildDesignWorkMenu(featuredCaseStudies, false))).toEqual(
+      featuredCaseStudies.map((c) => [c.title, `/work/${c.slug}`]),
     )
   })
 
   it('offers More Design Work only when the gallery has pieces', () => {
-    expect(rows(buildDesignWorkMenu(publishedCaseStudies, true))?.at(-1)).toEqual(['More Design Work', '/work'])
-    expect(rows(buildDesignWorkMenu(publishedCaseStudies, false))?.map(([label]) => label)).not.toContain('More Design Work')
+    expect(rows(buildDesignWorkMenu(featuredCaseStudies, true))?.at(-1)).toEqual(['More Design Work', '/work#more-design'])
+    expect(rows(buildDesignWorkMenu(featuredCaseStudies, false))?.map(([label]) => label)).not.toContain('More Design Work')
   })
 
   it('disappears when there is nothing to show', () => {

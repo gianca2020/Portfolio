@@ -16,7 +16,7 @@
  * Per slug:
  *  - PDF pages listed in PDF_PAGES are rendered and cut into named images.
  *  - Any other .png/.jpg/.jpeg/.webp/.heic in the folder → <name>.webp.
- *  - Any .mov/.mp4/.m4v/.webm → <name>.mp4 (H.264, no audio) + <name>-poster.webp.
+ *  - Any .mov/.mp4/.m4v/.webm → <name>.mp4 (H.264, silent unless audio is part of the case study) + <name>-poster.webp.
  */
 import { execFileSync } from 'node:child_process'
 import { existsSync, mkdirSync, mkdtempSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs'
@@ -107,9 +107,13 @@ function buildPdfImages(slug, tmp) {
 function buildVideo(slug, file, tmp) {
   const name = basename(file, extname(file))
   const out = join(OUT, slug, `${name}.mp4`)
+  // The pickup demo documents the timing of the prototype’s synthesized print sound.
+  const audio = slug === 'little-photo-club' && name === 'strip-pickup'
+    ? ['-c:a', 'aac', '-b:a', '96k']
+    : ['-an']
   for (const crf of [26, 29, 32, 35]) {
     run('ffmpeg', [
-      '-loglevel', 'error', '-y', '-i', file, '-an',
+      '-loglevel', 'error', '-y', '-i', file, ...audio,
       '-c:v', 'libx264', '-preset', 'veryfast', '-crf', String(crf), '-pix_fmt', 'yuv420p',
       '-vf', `scale='min(${MAX_VIDEO_WIDTH},iw)':-2`, '-movflags', '+faststart', out,
     ])
