@@ -1,4 +1,4 @@
-import { asset, hasGallery, publishedCaseStudies } from '../../content/work'
+import { asset, featuredCaseStudies, hasGallery } from '../../content/work'
 import type { CaseStudy } from '../../content/work'
 import { portfolio } from '../../data/portfolio'
 import type { ArtworkSpec, Portfolio } from '../../data/types'
@@ -17,7 +17,7 @@ const countCaption = (n: number, one: string, many = `${one}s`) =>
  *
  * Giancarlo
  * ├── Projects ─ one row per project + View All Projects (Cover Flow)
- * ├── Design Work ─ one row per published case study + More Design Work (/work, once the gallery has pieces)
+ * ├── Design Work ─ one row per featured case study + More Design Work
  * ├── Experience ─ one row per role
  * ├── About Me
  * ├── Resume ─ View Resume · Download Resume · Recruiter View
@@ -72,8 +72,8 @@ export function buildDesignWorkMenu(studies: CaseStudy[], withGallery: boolean):
               kind: 'action',
               id: 'design-work/more',
               label: 'More Design Work',
-              action: { type: 'navigate', to: '/work' },
-              preview: { type: 'info', icon: 'website', title: 'More Design Work', detail: 'Posters, social & print' },
+              action: { type: 'navigate', to: '/work#more-design' },
+              preview: { type: 'info', icon: 'website', title: 'More Design Work', detail: 'Interactive, print & social design' },
             } satisfies IPodNode,
           ]
         : []),
@@ -83,7 +83,7 @@ export function buildDesignWorkMenu(studies: CaseStudy[], withGallery: boolean):
 
 export function buildMenuTree(
   content: Portfolio,
-  designWork = buildDesignWorkMenu(publishedCaseStudies, hasGallery),
+  designWork = buildDesignWorkMenu(featuredCaseStudies, hasGallery),
 ): MenuNode {
   const { profile, projects, experience, contact, resume } = content
 

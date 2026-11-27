@@ -31,9 +31,18 @@ describe('gallery', () => {
     expect(html).not.toMatch(/TODO/)
   })
 
+  it('links Little Photo Club only under More design work and keeps it off the main iPod list', () => {
+    const [featured, more] = html.split('id="more-design"')
+    const link = 'href="/work/little-photo-club"'
+    expect(featured).not.toContain(link)
+    expect(more).toContain(link)
+    const menu = menuTree.children.find((node) => node.id === 'design-work')
+    expect(menu?.kind === 'menu' && menu.children.some((node) => node.label === 'Little Photo Club')).toBe(false)
+  })
+
   it('lists More Design Work on the iPod now that the gallery has pieces', () => {
     const designWork = menuTree.children.find((n) => n.id === 'design-work')
     const last = designWork?.kind === 'menu' ? designWork.children.at(-1) : undefined
-    expect(last).toMatchObject({ label: 'More Design Work', action: { type: 'navigate', to: '/work' } })
+    expect(last).toMatchObject({ label: 'More Design Work', action: { type: 'navigate', to: '/work#more-design' } })
   })
 })

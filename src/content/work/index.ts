@@ -1,15 +1,15 @@
 import manifest from './assets.manifest.json'
 import { gallery } from './gallery'
-import { publishedCaseStudies } from './registry'
+import { moreDesignCaseStudies, publishedCaseStudies } from './registry'
 
 export type * from './types'
-export { caseStudies, publishedCaseStudies } from './registry'
+export { caseStudies, featuredCaseStudies, moreDesignCaseStudies, publishedCaseStudies } from './registry'
 export { gallery }
 
 export const findCaseStudy = (slug: string | undefined) => publishedCaseStudies.find((c) => c.slug === slug)
 
 /** Whether /work has anything beyond the case studies, i.e. whether to show “More Design Work”. */
-export const hasGallery = gallery.length > 0
+export const hasGallery = gallery.length > 0 || moreDesignCaseStudies.length > 0
 
 /* ── Skip rules ─────────────────────────────────────────────────────────── */
 

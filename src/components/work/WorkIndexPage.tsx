@@ -1,5 +1,5 @@
 import { Link } from 'react-router'
-import { asset, gallery, hasText, publishedCaseStudies, type GalleryItem } from '../../content/work'
+import { asset, featuredCaseStudies, gallery, hasText, moreDesignCaseStudies, type CaseStudy, type GalleryItem } from '../../content/work'
 import { workIndexMeta } from '../../lib/siteMeta'
 import { useLightbox, type OpenLightbox } from './hooks'
 import { CaseImage } from './Media'
@@ -39,7 +39,43 @@ function GalleryCard({ item, onOpen }: { item: GalleryItem; onOpen: OpenLightbox
   )
 }
 
-/** /work — every published case study, then the gallery of one-off pieces (hidden while empty). */
+function StudyList({ studies }: { studies: CaseStudy[] }) {
+  return (
+    <ul className="work-studies">
+      {studies.map((study) => {
+        const cover = study.cover && asset(study.slug, study.cover.src)
+        return (
+          <li key={study.slug} className="work-study">
+            {cover && (
+              <img
+                src={cover.url}
+                alt=""
+                width={cover.width}
+                height={cover.height}
+                loading="lazy"
+                decoding="async"
+                className="work-study__cover"
+              />
+            )}
+            <div className="work-study__text">
+              <h3 className="work-study__title">
+                <Link to={`/work/${study.slug}`} className="work-study__link">
+                  {study.title}
+                </Link>
+              </h3>
+              {hasText(study.snapshot.role) && <p className="work-card__meta">{study.snapshot.role}</p>}
+              {hasText(study.summary) && <p>{study.summary}</p>}
+              <span className="work-study__cta" aria-hidden="true">
+                Read the case study →
+              </span>
+            </div>
+          </li>
+        )
+      })}
+    </ul>
+  )
+}
+
 export function WorkIndexPage() {
   const lightbox = useLightbox()
   const pieces = gallery.filter((item) => item.images.some((image) => asset(GALLERY_FOLDER, image.src)))
@@ -55,56 +91,28 @@ export function WorkIndexPage() {
           <p className="work-lead">UI/UX case studies and visual design, from brand identity to the web.</p>
         </header>
 
-        {publishedCaseStudies.length > 0 && (
+        {featuredCaseStudies.length > 0 && (
           <section className="work-section work-section--wide" aria-labelledby="case-studies-title">
             <h2 id="case-studies-title" className="work-section__title">
               Case studies
             </h2>
-            <ul className="work-studies">
-              {publishedCaseStudies.map((study) => {
-                const cover = study.cover && asset(study.slug, study.cover.src)
-                return (
-                  <li key={study.slug} className="work-study">
-                    {cover && (
-                      <img
-                        src={cover.url}
-                        alt=""
-                        width={cover.width}
-                        height={cover.height}
-                        loading="lazy"
-                        decoding="async"
-                        className="work-study__cover"
-                      />
-                    )}
-                    <div className="work-study__text">
-                      <h3 className="work-study__title">
-                        <Link to={`/work/${study.slug}`} className="work-study__link">
-                          {study.title}
-                        </Link>
-                      </h3>
-                      {hasText(study.snapshot.role) && <p className="work-card__meta">{study.snapshot.role}</p>}
-                      {hasText(study.summary) && <p>{study.summary}</p>}
-                      <span className="work-study__cta" aria-hidden="true">
-                        Read the case study →
-                      </span>
-                    </div>
-                  </li>
-                )
-              })}
-            </ul>
+            <StudyList studies={featuredCaseStudies} />
           </section>
         )}
 
-        {pieces.length > 0 && (
-          <section className="work-section work-section--wide" aria-labelledby="gallery-title">
+        {(pieces.length > 0 || moreDesignCaseStudies.length > 0) && (
+          <section className="work-section work-section--wide" id="more-design" aria-labelledby="gallery-title">
             <h2 id="gallery-title" className="work-section__title">
               More design work
             </h2>
-            <ul className="work-gallery">
-              {pieces.map((item) => (
-                <GalleryCard key={item.title} item={item} onOpen={lightbox.open} />
-              ))}
-            </ul>
+            {moreDesignCaseStudies.length > 0 && <StudyList studies={moreDesignCaseStudies} />}
+            {pieces.length > 0 && (
+              <ul className="work-gallery">
+                {pieces.map((item) => (
+                  <GalleryCard key={item.title} item={item} onOpen={lightbox.open} />
+                ))}
+              </ul>
+            )}
           </section>
         )}
       </div>
